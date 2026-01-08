@@ -23,6 +23,16 @@
             Data Campaign
         </a>
 
+        <a href="{{ route('admin.news.index') }}" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.news.*') ? 'active-nav' : '' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2-3h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2m-2-4h2"></path></svg>
+            Manajemen Berita
+        </a>
+
+        <a href="{{ route('admin.news-categories.index') }}" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.news-categories.*') ? 'active-nav' : '' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Kategori Berita
+        </a>
+
         <a href="{{ route('admin.campaign-updates.index') }}" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.campaign-updates.*') ? 'active-nav' : '' }}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             Kabar Terbaru
@@ -55,7 +65,7 @@
             Manajemen User
         </a>
 
-        <a href="{{ route('admin.users.index', ['role' => 'donor']) }}" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request('role') == 'donor' ? 'active-nav' : '' }}">
+        <a href="{{ route('admin.donors.index') }}" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.donors.*') ? 'active-nav' : '' }}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             Data Donatur
         </a>

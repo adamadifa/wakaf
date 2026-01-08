@@ -11,9 +11,37 @@ class PublicController extends Controller
     {
         $campaigns = Campaign::where('status', 'active')
             ->latest()
+            ->take(6) // Limit for homepage
             ->get();
 
-        return view('welcome', compact('campaigns'));
+        $latestDonations = \App\Models\Donation::where('status', 'confirmed')
+            ->whereNotNull('message')
+            ->where('message', '!=', '')
+            ->with(['donor', 'campaign'])
+            ->latest()
+            ->take(10)
+            ->get();
+
+        $latestNews = \App\Models\News::whereNotNull('published_at')
+            ->latest('published_at')
+            ->take(3)
+            ->get();
+
+        return view('welcome', compact('campaigns', 'latestDonations', 'latestNews'));
+    }
+
+    public function programs(Request $request)
+    {
+        $query = Campaign::where('status', 'active');
+
+        if ($request->has('q')) {
+            $search = $request->q;
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        $campaigns = $query->latest()->paginate(9);
+
+        return view('campaigns.index', compact('campaigns'));
     }
 
     public function show(Campaign $campaign)
@@ -27,7 +55,7 @@ class PublicController extends Controller
         }, 'distributions' => function ($query) {
             $query->latest();
         }, 'donations' => function ($query) {
-            $query->where('status', 'confirmed')->latest();
+            $query->where('status', 'confirmed')->with('donor')->latest();
         }]);
 
         return view('campaigns.show', compact('campaign'));
@@ -50,16 +78,17 @@ class PublicController extends Controller
             'message' => 'nullable|string',
         ]);
 
-        // Find or create user (donor)
-        $user = \App\Models\User::firstOrCreate(
+        // Find or create donor
+        $donor = \App\Models\Donor::firstOrCreate(
             ['email' => $request->email],
             [
                 'name' => $request->name,
                 'phone' => $request->phone,
-                'role' => 'donor',
-                'password' => bcrypt(str()->random(16)), // Random password for guest donors
             ]
         );
+        
+        // Optional: Link to user if email exists, for legacy support
+        $user = \App\Models\User::where('email', $request->email)->first();
 
         $uniqueCode = rand(100, 999);
         $totalTransfer = $request->amount + $uniqueCode;
@@ -67,7 +96,9 @@ class PublicController extends Controller
         $donation = \App\Models\Donation::create([
             'invoice_number' => 'INV/' . date('Ymd') . '/' . rand(1000, 9999),
             'campaign_id' => $campaign->id,
-            'user_id' => $user->id,
+
+            'donor_id' => $donor->id,
+
             'payment_method_id' => $request->payment_method_id,
             'amount' => $request->amount,
             'unique_code' => $uniqueCode,

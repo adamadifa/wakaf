@@ -19,9 +19,11 @@ class Donation extends Model
         return $this->belongsTo(Campaign::class);
     }
 
-    public function user()
+
+
+    public function donor()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Donor::class);
     }
 
     public function paymentMethod()

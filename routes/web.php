@@ -25,11 +25,16 @@ use App\Http\Controllers\AdminController;
 
 // Public Routes
 Route::get('/', [PublicController::class, 'index'])->name('home');
+Route::get('/programs', [PublicController::class, 'programs'])->name('programs.index');
 Route::get('/campaign/{campaign:slug}', [PublicController::class, 'show'])->name('campaign.show');
 Route::get('/donasi/{campaign:slug}', [PublicController::class, 'donate'])->name('campaign.donate');
 Route::post('/donasi/{campaign:slug}', [PublicController::class, 'storeDonation'])->name('campaign.store');
 Route::get('/donasi/sukses/{invoice}', [PublicController::class, 'success'])->name('campaign.success')->where('invoice', '.*');
 Route::post('/donasi/sukses/{invoice}', [PublicController::class, 'confirmDonation'])->name('campaign.confirm')->where('invoice', '.*');
+
+// News Routes
+Route::get('/news', [App\Http\Controllers\NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{slug}', [App\Http\Controllers\NewsController::class, 'show'])->name('news.show');
 
 // Consolidated Dashboard
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -44,7 +49,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('payment-methods', App\Http\Controllers\Admin\PaymentMethodController::class);
 
         Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+        Route::resource('donors', App\Http\Controllers\Admin\DonorController::class);
         Route::resource('campaign-updates', App\Http\Controllers\Admin\CampaignUpdateController::class);
+        Route::resource('news', App\Http\Controllers\Admin\NewsController::class);
+        Route::resource('news-categories', App\Http\Controllers\Admin\NewsCategoryController::class);
     });
 });
 

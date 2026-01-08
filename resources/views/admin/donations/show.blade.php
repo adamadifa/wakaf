@@ -59,8 +59,8 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </div>
                 <div>
-                    <h3 class="font-semibold text-gray-900">{{ $donation->is_anonymous ? 'Hamba Allah' : ($donation->user->name ?? 'Guest User') }}</h3>
-                    <p class="text-sm text-gray-500">{{ $donation->user->email ?? 'No email' }}</p>
+                    <h3 class="font-semibold text-gray-900">{{ $donation->is_anonymous ? 'Hamba Allah' : ($donation->donor->name ?? 'Guest User') }}</h3>
+                    <p class="text-sm text-gray-500">{{ $donation->donor->email ?? 'No email' }}</p>
                     @if($donation->note)
                         <div class="mt-3 bg-gray-50 p-3 rounded-lg text-sm text-gray-600 italic">
                             "{{ $donation->note }}"

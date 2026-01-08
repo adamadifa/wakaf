@@ -35,8 +35,8 @@ class UserController extends Controller
 
         $users = $query->latest()->paginate(10);
         
-        $pageTitle = ($request->role == 'donor') ? 'Data Donatur' : 'Manajemen User';
-        $pageDescription = ($request->role == 'donor') ? 'Kelola data para donatur dan wakif.' : 'Kelola data pengguna, staff, dan admin.';
+        $pageTitle = 'Manajemen User';
+        $pageDescription = 'Kelola data pengguna, staff, dan admin.';
 
         return view('admin.users.index', compact('users', 'pageTitle', 'pageDescription'));
     }

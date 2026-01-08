@@ -97,8 +97,8 @@
                         <span class="font-mono text-xs font-semibold text-gray-500">#{{ $donation->invoice_code ?? substr($donation->id, 0, 8) }}</span>
                     </td>
                     <td class="py-4 px-6">
-                        <div class="font-medium text-gray-800">{{ $donation->is_anonymous ? 'Hamba Allah' : ($donation->user->name ?? 'Tamu') }}</div>
-                        <div class="text-xs text-gray-500">{{ $donation->user->email ?? '-' }}</div>
+                        <div class="font-medium text-gray-800">{{ $donation->is_anonymous ? 'Hamba Allah' : ($donation->donor->name ?? 'Tamu') }}</div>
+                        <div class="text-xs text-gray-500">{{ $donation->donor->email ?? '-' }}</div>
                     </td>
                     <td class="py-4 px-6">
                         <div class="text-sm text-gray-600 max-w-[200px] truncate" title="{{ $donation->campaign->title }}">

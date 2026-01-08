@@ -12,14 +12,14 @@ class DonationController extends Controller
 {
     public function index()
     {
-        $query = Donation::with(['campaign', 'user', 'paymentMethod'])->latest();
+        $query = Donation::with(['campaign', 'donor', 'paymentMethod'])->latest();
 
         // Keyword Search (Invoice or Donor Name)
         if (request('q')) {
             $search = request('q');
             $query->where(function($q) use ($search) {
                 $q->where('invoice_number', 'like', "%{$search}%")
-                  ->orWhereHas('user', function($q) use ($search) {
+                  ->orWhereHas('donor', function($q) use ($search) {
                       $q->where('name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%");
                   });
@@ -83,8 +83,7 @@ class DonationController extends Controller
                 }
             });
 
-            return redirect()->route('admin.donations.index')
-                ->with('success', 'Status donasi berhasil diperbarui!');
+            return back()->with('success', 'Status donasi berhasil diperbarui!');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());

@@ -4,363 +4,479 @@
 
 @push('styles')
 <style>
-    .campaign-detail {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 3rem 1rem;
+    /* 
+       Reverting to the previous Wakaf Salman-style layout.
+       Removing the :root override so it uses the global Green theme from layouts.frontend.
+    */
+    
+    body {
+        background-color: #F8F9FA;
     }
-    .detail-grid {
+
+    .container {
+        max-width: 1140px;
+    }
+
+    .campaign-wrapper {
+        padding: 3rem 0 5rem;
         display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 2rem;
+        grid-template-columns: 1fr 380px;
+        gap: 3rem;
+        align-items: start;
     }
-    @media (max-width: 768px) {
-        .detail-grid {
-            grid-template-columns: 1fr;
-        }
+
+    /* Left Column */
+    .campaign-left {
+        min-width: 0;
     }
-    .campaign-image {
-        width: 100%;
-        height: 400px;
-        object-fit: cover;
+
+    .breadcrumb {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+    }
+
+    .campaign-image-container {
         border-radius: var(--radius);
-        margin-bottom: 2rem;
-    }
-    .campaign-content {
-        background: var(--white);
-        padding: 2rem;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-    }
-    .sidebar-card {
-        background: var(--white);
-        padding: 2rem;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        position: sticky;
-        top: 2rem;
-    }
-    .progress-bar-bg {
-        background: #eee;
-        height: 10px;
-        border-radius: 5px;
-        margin-bottom: 1rem;
         overflow: hidden;
-    }
-    .progress-bar-fill {
-        background: var(--primary);
-        height: 100%;
-        border-radius: 5px;
-    }
-    .fund-stats {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 1.5rem;
-    }
-    .raised {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--primary);
-    }
-    .target {
-        color: var(--text-muted);
-        font-size: 0.9rem;
-    }
-    .stats-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1.5rem;
-        border-bottom: 1px solid #eee;
-    }
-    .stat-item {
-        text-align: center;
-    }
-    .stat-value {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--text);
-    }
-    .stat-label {
-        font-size: 0.85rem;
-        color: var(--text-muted);
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
     
-    /* Tab Styles */
-    .tabs {
-        display: flex;
-        gap: 0.5rem;
-        border-bottom: 2px solid #eee;
+    .campaign-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        aspect-ratio: 16/9;
+        object-fit: cover;
+    }
+
+    .campaign-header {
         margin-bottom: 2rem;
     }
-    .tab-button {
-        padding: 1rem 1.5rem;
+
+    .campaign-title {
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        color: var(--text-dark);
+    }
+
+    .organizer-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: white;
+        border: 1px solid #eee;
+        border-radius: var(--radius);
+        width: fit-content;
+    }
+
+    .organizer-logo {
+        width: 40px;
+        height: 40px;
+        background: var(--bg-light);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+        font-weight: bold;
+    }
+
+    /* Tabs */
+    .tabs-nav {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 2rem;
+    }
+
+    .tab-btn {
         background: none;
         border: none;
+        padding: 1rem 0;
         font-size: 1rem;
         font-weight: 600;
         color: var(--text-muted);
         cursor: pointer;
-        border-bottom: 3px solid transparent;
-        margin-bottom: -2px;
-        transition: all 0.2s;
+        position: relative;
     }
-    .tab-button:hover {
+
+    .tab-btn.active {
         color: var(--primary);
     }
-    .tab-button.active {
-        color: var(--primary);
-        border-bottom-color: var(--primary);
-    }
-    .tab-badge {
-        display: inline-block;
-        background: var(--primary);
-        color: white;
-        font-size: 0.75rem;
-        font-weight: 600;
-        padding: 0.15rem 0.5rem;
-        border-radius: 1rem;
-        margin-left: 0.5rem;
-        min-width: 1.5rem;
-        text-align: center;
-    }
-    .tab-button.active .tab-badge {
+
+    .tab-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 2px;
         background: var(--primary);
     }
-    .tab-content {
+
+    .tab-section {
         display: none;
-    }
-    .tab-content.active {
-        display: block;
+        animation: fadeIn 0.3s ease;
     }
     
-    .distribution-item, .donation-item {
-        padding: 1rem;
-        border: 1px solid #eee;
-        border-radius: 0.5rem;
-        margin-bottom: 1rem;
+    .tab-section.active {
+        display: block;
     }
-    .donor-avatar {
-        width: 48px;
-        height: 48px;
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Content Typography */
+    .prose {
+        line-height: 1.7;
+        color: var(--text-dark);
+    }
+    .prose p { margin-bottom: 1rem; }
+
+    /* Updates List */
+    .update-card {
+        border-left: 3px solid var(--primary);
+        padding-left: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Donor List */
+    .donor-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .donor-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--secondary);
         border-radius: 50%;
-        background: var(--accent);
-        color: var(--primary);
         display: flex;
         align-items: center;
         justify-content: center;
+        color: white;
+    }
+
+    /* Right Sticky Sidebar */
+    .donation-sticky {
+        position: sticky;
+        top: 6rem; /* Navbar height + gap */
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        padding: 2rem;
+        border: 1px solid #efefef;
+    }
+
+    .funding-status {
+        margin-bottom: 1.5rem;
+    }
+
+    .amount-raised {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--secondary);
+        margin-bottom: 0.25rem;
+        display: block;
+    }
+
+    .amount-target {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+    }
+
+    .progress-track {
+        background: #eee;
+        height: 8px;
+        border-radius: 4px;
+        margin: 1rem 0;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        background: var(--secondary);
+        height: 100%;
+        border-radius: 4px;
+    }
+
+    .meta-grid {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-dark);
+    }
+
+    .btn-donate {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 1rem;
+        background: var(--primary);
+        color: white;
         font-weight: 700;
-        font-size: 0.9rem;
-        flex-shrink: 0;
+        border-radius: 50px;
+        margin-bottom: 1rem;
+        transition: background 0.2s;
+    }
+
+    .btn-donate:hover {
+        background: var(--primary-light);
+        color: white;
+    }
+
+    .btn-whatsapp {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.75rem;
+        background: white;
+        border: 2px solid #25D366;
+        color: #25D366;
+        font-weight: 700;
+        border-radius: 50px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .btn-whatsapp:hover {
+        background: #f0fff4;
+    }
+
+    .share-section {
+        border-top: 1px solid #eee;
+        padding-top: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .share-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .share-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #555;
+        transition: 0.2s;
+    }
+    
+    .share-btn:hover {
+        background: #eee;
+        color: #000;
+    }
+
+    @media (max-width: 900px) {
+        .campaign-wrapper {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        .donation-sticky {
+            position: static;
+        }
     }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 @endpush
 
 @section('content')
-<div class="campaign-detail">
-    <div class="detail-grid">
-        <!-- Main Content -->
-        <div>
-            <img src="{{ Str::startsWith($campaign->image_url, 'http') ? $campaign->image_url : asset('storage/' . $campaign->image_url) }}" 
-                 alt="{{ $campaign->title }}" 
-                 class="campaign-image">
-            
-            <div class="campaign-content">
-                <span class="card-badge" style="background: var(--accent); color: var(--primary); padding: 0.25rem 0.75rem; border-radius: 2rem; font-size: 0.875rem; font-weight: 600; display: inline-block; margin-bottom: 1rem;">
-                    {{ $campaign->category->name }}
-                </span>
-                
-                <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">{{ $campaign->title }}</h1>
-                
-                <p style="color: var(--text-muted); margin-bottom: 2rem;">
-                    Dibuat oleh <strong>{{ $campaign->user->name }}</strong> • {{ $campaign->created_at->diffForHumans() }}
-                </p>
+<div class="container">
+    <div class="campaign-wrapper">
+        
+        <!-- Left Content -->
+        <div class="campaign-left">
+            <div class="breadcrumb">
+                <a href="{{ route('home') }}">Beranda</a> > Program > {{ $campaign->title }}
+            </div>
 
-                <div class="mb-8">
-                    <div style="line-height: 1.8; white-space: pre-line;">{{ $campaign->full_description }}</div>
-                </div>
+            <h1 class="campaign-title">{{ $campaign->title }}</h1>
 
-                <!-- Tabs Navigation -->
-                <div class="tabs">
-                    <button class="tab-button active" onclick="switchTab('updates')">
-                        Kabar Terbaru
-                        @if($campaign->updates && $campaign->updates->count() > 0)
-                            <span class="tab-badge">{{ $campaign->updates->count() }}</span>
-                        @endif
-                    </button>
-                    <button class="tab-button" onclick="switchTab('penyaluran')">
-                        Penyaluran Dana
-                        @if($campaign->distributions && $campaign->distributions->count() > 0)
-                            <span class="tab-badge">{{ $campaign->distributions->count() }}</span>
-                        @endif
-                    </button>
-                    <button class="tab-button" onclick="switchTab('donatur')">
-                        Donatur
-                        @if($campaign->donations && $campaign->donations->count() > 0)
-                            <span class="tab-badge">{{ $campaign->donations->count() }}</span>
-                        @endif
-                    </button>
-                </div>
+            <div class="campaign-image-container">
+                <img src="{{ Str::startsWith($campaign->image_url, 'http') ? $campaign->image_url : asset('storage/' . $campaign->image_url) }}" 
+                     alt="{{ $campaign->title }}" 
+                     class="campaign-image">
+            </div>
 
-
-
-                <!-- Tab Content: Kabar Terbaru -->
-                <div id="tab-updates" class="tab-content active">
-                    @if($campaign->updates && $campaign->updates->count() > 0)
-                        @foreach($campaign->updates as $update)
-                        <div style="border-bottom: 1px solid #f0f0f0; padding-bottom: 2rem; margin-bottom: 2rem;">
-                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
-                                <h3 style="font-weight: 700; font-size: 1.25rem; color: var(--text); margin: 0;">{{ $update->title }}</h3>
-                                <small style="color: var(--text-muted); white-space: nowrap; margin-left: 1rem;">{{ $update->published_at->format('d M Y') }}</small>
-                            </div>
-                            <div style="color: var(--text-muted); line-height: 1.8; white-space: pre-line;">{!! nl2br(e($update->content)) !!}</div>
+            <div class="campaign-header">
+                <div class="organizer-card">
+                    <div class="organizer-logo">
+                        <i class="ti ti-building-mosque"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Penggalang Dana</div>
+                        <div style="font-weight: 600; display: flex; align-items: center; gap: 0.25rem;">
+                            {{ $campaign->user->name }}
+                            <i class="ti ti-discount-check-filled" style="color: #1da1f2;"></i>
                         </div>
-                        @endforeach
-                    @else
-                        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
-                            <p>Belum ada kabar terbaru untuk program ini.</p>
-                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs-nav">
+                <button class="tab-btn active" onclick="openTab(event, 'desc')">Deskripsi</button>
+                <button class="tab-btn" onclick="openTab(event, 'updates')">
+                    Kabar Terbaru 
+                    @if($campaign->updates->count() > 0)
+                    <span style="font-size: 0.75rem; background: var(--secondary); color: white; padding: 2px 8px; border-radius: 10px; margin-left: 4px;">{{ $campaign->updates->count() }}</span>
                     @endif
-                </div>
-
-                <!-- Tab Content: Penyaluran Dana -->
-                <div id="tab-penyaluran" class="tab-content">
-                    @if($campaign->distributions && $campaign->distributions->count() > 0)
-                        @foreach($campaign->distributions as $distribution)
-                        <div style="display: flex; gap: 1rem; padding: 1.5rem 0; border-bottom: 1px solid #f0f0f0;">
-                            @if($distribution->documentation_url)
-                                <div style="flex-shrink: 0;">
-                                    @php
-                                        $ext = pathinfo($distribution->documentation_url, PATHINFO_EXTENSION);
-                                        $isImage = in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
-                                    @endphp
-                                    @if($isImage)
-                                        <img src="{{ asset('storage/' . $distribution->documentation_url) }}" 
-                                             alt="Dokumentasi" 
-                                             style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.5rem; cursor: pointer;"
-                                             onclick="window.open('{{ asset('storage/' . $distribution->documentation_url) }}', '_blank')">
-                                    @else
-                                        <a href="{{ asset('storage/' . $distribution->documentation_url) }}" target="_blank" 
-                                           style="display: flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: var(--accent); border-radius: 0.5rem; text-decoration: none;">
-                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
-                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                                <polyline points="14 2 14 8 20 8"></polyline>
-                                            </svg>
-                                        </a>
-                                    @endif
-                                </div>
-                            @endif
-                            <div style="flex: 1;">
-                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
-                                    <h3 style="font-weight: 600; font-size: 1.1rem; margin: 0;">{{ $distribution->title }}</h3>
-                                    <span style="font-weight: 700; color: var(--primary); font-size: 1.1rem; white-space: nowrap; margin-left: 1rem;">Rp {{ number_format($distribution->amount, 0, ',', '.') }}</span>
-                                </div>
-                                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem; line-height: 1.6;">{{ $distribution->description }}</p>
-                                <small style="color: var(--text-muted); font-size: 0.85rem;">{{ \Carbon\Carbon::parse($distribution->distributed_at)->format('d M Y') }}</small>
-                            </div>
-                        </div>
-                        @endforeach
-                    @else
-                        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
-                            <p>Belum ada penyaluran dana untuk program ini.</p>
-                        </div>
+                </button>
+                <button class="tab-btn" onclick="openTab(event, 'donors')">
+                    Donatur
+                    @if($campaign->donations->count() > 0)
+                    <span style="font-size: 0.75rem; background: var(--secondary); color: white; padding: 2px 8px; border-radius: 10px; margin-left: 4px;">{{ $campaign->donations->count() }}</span>
                     @endif
-                </div>
+                </button>
+            </div>
 
-                <!-- Tab Content: Donatur -->
-                <div id="tab-donatur" class="tab-content">
-                    @if($campaign->donations && $campaign->donations->count() > 0)
-                        @foreach($campaign->donations->take(20) as $donation)
-                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #f0f0f0;">
-                            <div class="donor-avatar">
-                                @php
-                                    $name = $donation->is_anonymous ? 'Hamba Allah' : $donation->user->name;
-                                    $initials = '';
-                                    $words = explode(' ', $name);
-                                    if (count($words) >= 2) {
-                                        $initials = strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1));
-                                    } else {
-                                        $initials = strtoupper(substr($name, 0, 2));
-                                    }
-                                @endphp
-                                {{ $initials }}
-                            </div>
-                            <div style="flex: 1;">
-                                <p style="font-weight: 600; margin-bottom: 0.25rem;">{{ $name }}</p>
+            <!-- Tab Content: Deskripsi -->
+            <div id="desc" class="tab-section active">
+                <div class="prose">
+                    <div style="white-space: pre-line;">
+                        {!! $campaign->full_description !!}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Updates -->
+            <div id="updates" class="tab-section">
+                @forelse($campaign->updates as $update)
+                    <div class="update-card">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <h4 style="font-size: 1.1rem; font-weight: 700;">{{ $update->title }}</h4>
+                            <small class="text-muted">{{ $update->created_at->format('d M Y') }}</small>
+                        </div>
+                        <p style="color: var(--text-dark);">{{ $update->content }}</p>
+                    </div>
+                @empty
+                    <div style="padding: 2rem; text-align: center; color: var(--text-muted); background: var(--bg-light); border-radius: var(--radius);">
+                        Belum ada kabar terbaru.
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Tab Content: Donors -->
+            <div id="donors" class="tab-section">
+                @forelse($campaign->donations->where('status', 'confirmed')->take(20) as $donation)
+                    <div class="donor-item">
+                        <div class="donor-icon">
+                            <i class="ti ti-user"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: 600; color: var(--primary);">Rp {{ number_format($donation->amount, 0, ',', '.') }}</span>
                                 <small style="color: var(--text-muted);">{{ $donation->created_at->diffForHumans() }}</small>
                             </div>
-                            <span style="font-weight: 700; color: var(--primary); font-size: 1.1rem;">Rp {{ number_format($donation->amount, 0, ',', '.') }}</span>
-                        </div>
-                        @endforeach
-                    @else
-                        <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
-                            <p>Belum ada donatur untuk program ini.</p>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <!-- Sidebar -->
-        <div>
-            <div class="sidebar-card">
-                <div class="fund-stats">
-                    <div>
-                        <div class="raised">Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}</div>
-                        <div class="target">terkumpul dari Rp {{ number_format($campaign->target_amount, 0, ',', '.') }}</div>
-                    </div>
-                </div>
-
-                @php
-                    $percentage = $campaign->target_amount > 0 ? ($campaign->current_amount / $campaign->target_amount) * 100 : 0;
-                @endphp
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: {{ min($percentage, 100) }}%"></div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-value">{{ $campaign->donations ? $campaign->donations->count() : 0 }}</div>
-                        <div class="stat-label">Donatur</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">
-                            @if($campaign->end_date)
-                                {{ max(0, \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($campaign->end_date), false)) }}
-                            @else
-                                ∞
+                            <div style="font-weight: 500;">
+                                {{ $donation->is_anonymous ? 'Hamba Allah' : ($donation->donor->name ?? 'Tamu') }}
+                            </div>
+                            @if($donation->message)
+                                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">
+                                    "{{ $donation->message }}"
+                                </div>
                             @endif
                         </div>
-                        <div class="stat-label">Hari Tersisa</div>
+                    </div>
+                @empty
+                    <div style="padding: 2rem; text-align: center; color: var(--text-muted); background: var(--bg-light); border-radius: var(--radius);">
+                        Jadilah donatur pertama!
+                    </div>
+                @endforelse
+            </div>
+
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="campaign-right">
+            <div class="donation-sticky">
+                @php
+                    $percentage = $campaign->target_amount > 0 ? ($campaign->current_amount / $campaign->target_amount) * 100 : 0;
+                    $daysLeft = $campaign->end_date ? \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($campaign->end_date), false) : null;
+                @endphp
+
+                <div class="funding-status">
+                    <span class="amount-raised">Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}</span>
+                    <span class="amount-target">terkumpul dari <strong>Rp {{ number_format($campaign->target_amount, 0, ',', '.') }}</strong></span>
+                </div>
+
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: {{ min($percentage, 100) }}%"></div>
+                </div>
+
+                <div class="meta-grid">
+                    <div>
+                        {{ $percentage < 1 ? number_format($percentage, 2) : number_format($percentage, 0) }}% <span style="font-weight: normal; color: var(--text-muted);">Tercapai</span>
+                    </div>
+                    <div>
+                        @if($daysLeft !== null && $daysLeft >= 0)
+                            <strong>{{ $daysLeft }}</strong> <span style="font-weight: normal; color: var(--text-muted);">Hari Lagi</span>
+                        @else
+                            <span style="font-weight: normal; color: var(--text-muted);">Unlimited</span>
+                        @endif
                     </div>
                 </div>
 
-                <a href="{{ route('campaign.donate', $campaign->slug) }}" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; text-align: center; display: block;">
-                    Donasi Sekarang
+                <a href="{{ route('campaign.donate', $campaign->slug) }}" class="btn-donate">
+                    WAKAF SEKARANG
                 </a>
+
+                <button class="btn-whatsapp">
+                    <i class="ti ti-brand-whatsapp" style="font-size: 1.25rem;"></i>
+                    Wakaf via WhatsApp
+                </button>
+
+                <div class="share-section">
+                    <span class="share-label">Bagikan:</span>
+                    <a href="#" class="share-btn"><i class="ti ti-brand-facebook"></i></a>
+                    <a href="#" class="share-btn"><i class="ti ti-brand-twitter"></i></a>
+                    <a href="#" class="share-btn"><i class="ti ti-brand-whatsapp"></i></a>
+                    <a href="#" class="share-btn"><i class="ti ti-link"></i></a>
+                </div>
             </div>
         </div>
+
     </div>
 </div>
 
 <script>
-function switchTab(tabName) {
-    // Hide all tab contents
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-    });
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
     
-    // Remove active class from all buttons
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('active');
-    });
+    // Hide all tab content
+    tabcontent = document.getElementsByClassName("tab-section");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+        tabcontent[i].classList.remove("active");
+    }
     
-    // Show selected tab content
-    document.getElementById('tab-' + tabName).classList.add('active');
+    // Remove active class from buttons
+    tablinks = document.getElementsByClassName("tab-btn");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
     
-    // Add active class to clicked button
-    event.target.classList.add('active');
+    // Show current tab and add active class to button
+    document.getElementById(tabName).style.display = "block";
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
 }
 </script>
 @endsection
