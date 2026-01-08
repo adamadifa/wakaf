@@ -5,53 +5,41 @@
 @section('content')
 <!-- Stats Cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-    <!-- Total Donation -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+    <!-- Total Donation Today -->
+    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(37,150,190,0.1)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
         <div class="flex items-center gap-5">
-            <div class="w-14 h-14 rounded-full flex items-center justify-center bg-blue-50 text-blue-600">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center bg-primary/10 text-primary">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
             </div>
             <div>
-                <h3 class="text-sm font-medium text-gray-500 mb-1">Total Donasi Masuk</h3>
-                <div class="text-2xl font-bold text-gray-900">Rp {{ number_format(\App\Models\Donation::where('status', 'confirmed')->sum('amount'), 0, ',', '.') }}</div>
-                <div class="text-xs font-semibold mt-1 flex items-center gap-1 text-emerald-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                    +15% dari bulan lalu
-                </div>
+                <h3 class="text-sm font-medium text-gray-500 mb-1">Total Donasi (Hari Ini)</h3>
+                <div class="text-2xl font-bold text-gray-900">Rp {{ number_format(\App\Models\Donation::where('status', 'confirmed')->whereDate('created_at', today())->sum('amount'), 0, ',', '.') }}</div>
             </div>
         </div>
     </div>
 
-    <!-- Donation Today -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+    <!-- Donation Count Today -->
+    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(37,150,190,0.1)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
         <div class="flex items-center gap-5">
-            <div class="w-14 h-14 rounded-full flex items-center justify-center bg-indigo-50 text-indigo-600">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center bg-secondary/10 text-secondary">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             </div>
             <div>
-                <h3 class="text-sm font-medium text-gray-500 mb-1">Donasi Hari Ini</h3>
-                <div class="text-2xl font-bold text-gray-900">Rp {{ number_format(\App\Models\Donation::where('status', 'confirmed')->whereDate('created_at', today())->sum('amount'), 0, ',', '.') }}</div>
-                <div class="text-xs font-semibold mt-1 flex items-center gap-1 text-emerald-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                    5 Transaksi baru
-                </div>
+                <h3 class="text-sm font-medium text-gray-500 mb-1">Transaksi (Hari Ini)</h3>
+                <div class="text-2xl font-bold text-gray-900">{{ \App\Models\Donation::where('status', 'confirmed')->whereDate('created_at', today())->count() }} Transaksi</div>
             </div>
         </div>
     </div>
 
-    <!-- Total Donors -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+    <!-- New Donors Today -->
+    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(37,150,190,0.1)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
         <div class="flex items-center gap-5">
-            <div class="w-14 h-14 rounded-full flex items-center justify-center bg-amber-50 text-amber-600">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center bg-accent/10 text-accent">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
             </div>
             <div>
-                <h3 class="text-sm font-medium text-gray-500 mb-1">Total Donatur</h3>
-                <div class="text-2xl font-bold text-gray-900">{{ \App\Models\User::where('role', 'donor')->count() }}</div>
-                <div class="text-xs font-semibold mt-1 flex items-center gap-1 text-emerald-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                    +2% dari kemarin
-                </div>
+                <h3 class="text-sm font-medium text-gray-500 mb-1">Donatur Baru (Hari Ini)</h3>
+                <div class="text-2xl font-bold text-gray-900">{{ \App\Models\User::where('role', 'donor')->whereDate('created_at', today())->count() }} Donatur</div>
             </div>
         </div>
     </div>
@@ -79,13 +67,15 @@
             <h4 class="text-lg font-bold text-gray-900">Donasi Terkini</h4>
         </div>
         <div class="space-y-4">
-             @foreach(\App\Models\Donation::latest()->take(4)->get() as $donation)
+             @foreach(\App\Models\Donation::latest()->take(7)->get() as $donation)
              <div class="flex items-center gap-4">
                  <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center font-bold text-gray-500">
-                     {{ substr($donation->user->name ?? 'G', 0, 1) }}
+                     {{ $donation->is_anonymous ? 'H' : substr($donation->donor->name ?? 'G', 0, 1) }}
                  </div>
                  <div class="flex-1">
-                     <div class="font-semibold text-sm text-gray-900">{{ $donation->user->name ?? 'Hamba Allah' }}</div>
+                     <div class="font-semibold text-sm text-gray-900">
+                        {{ $donation->is_anonymous ? 'Hamba Allah' : ($donation->donor->name ?? 'Donatur') }}
+                     </div>
                      <div class="text-xs text-gray-500">Donasi {{ Str::limit($donation->campaign->title, 20) }}</div>
                  </div>
                  <div class="font-bold text-sm text-emerald-500">+Rp {{ number_format($donation->amount/1000, 0) }}k</div>
@@ -149,16 +139,18 @@
 
 @push('scripts')
 <script>
+    const chartData = @json($chartData ?? ['labels' => [], 'data' => []]);
+
     const ctx = document.getElementById('donationChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            labels: chartData.labels,
             datasets: [{
                 label: 'Total Donation',
-                data: [12000000, 19000000, 30000000, 50000000, 20000000, 30000000, 45000000],
-                borderColor: '#10B981',
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                data: chartData.data,
+                borderColor: '#2596be',
+                backgroundColor: 'rgba(37, 150, 190, 0.1)',
                 fill: true,
                 tension: 0.4,
                 borderWidth: 2
@@ -166,10 +158,32 @@
         },
         options: {
             plugins: {
-                legend: { display: false }
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(context.parsed.y);
+                            }
+                            return label;
+                        }
+                    }
+                }
             },
             scales: {
-                y: { beginAtZero: true, grid: { borderDash: [5, 5] } },
+                y: { 
+                    beginAtZero: true, 
+                    grid: { borderDash: [5, 5] },
+                    ticks: {
+                        callback: function(value, index, values) {
+                            return 'Rp ' + (value/1000000).toFixed(0) + 'jt';
+                        }
+                    }
+                },
                 x: { grid: { display: false } }
             },
             responsive: true,

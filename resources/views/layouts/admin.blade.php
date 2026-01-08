@@ -23,9 +23,11 @@
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
                     },
                     colors: {
-                        primary: '#10B981',
-                        'primary-dark': '#059669',
-                        'primary-light': '#D1FAE5',
+                        primary: '#2596be',
+                        'primary-dark': '#1a6b8a',
+                        'primary-light': '#e0f2f7',
+                        secondary: '#dc8d17',
+                        accent: '#4EB7C7',
                     }
                 }
             }
@@ -34,7 +36,7 @@
     <style type="text/tailwindcss">
         @layer utilities {
             .active-nav {
-                @apply bg-primary text-white shadow-lg shadow-emerald-500/20;
+                @apply bg-primary text-white shadow-lg shadow-primary/30;
             }
             .form-input {
                 @apply w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring focus:ring-primary/20 transition-all outline-none;

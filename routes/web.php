@@ -36,6 +36,9 @@ Route::post('/donasi/sukses/{invoice}', [PublicController::class, 'confirmDonati
 Route::get('/news', [App\Http\Controllers\NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{slug}', [App\Http\Controllers\NewsController::class, 'show'])->name('news.show');
 
+// Laporan Routes
+Route::get('/laporan', [App\Http\Controllers\LaporanController::class, 'index'])->name('laporan.index');
+
 // Consolidated Dashboard
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -53,6 +56,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('campaign-updates', App\Http\Controllers\Admin\CampaignUpdateController::class);
         Route::resource('news', App\Http\Controllers\Admin\NewsController::class);
         Route::resource('news-categories', App\Http\Controllers\Admin\NewsCategoryController::class);
+        Route::resource('laporans', App\Http\Controllers\Admin\LaporanController::class);
+        
+        // Settings
+        Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
+        Route::put('/settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
     });
 });
 

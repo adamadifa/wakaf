@@ -62,28 +62,21 @@
         .navbar {
             background: var(--white);
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 50;
         }
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        /* .nav-content, .nav-links removed in favor of Tailwind classes for responsiveness */
         .nav-brand {
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary);
         }
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
         .nav-link {
             font-weight: 500;
             color: var(--text-dark);
+            padding: 0.5rem 0; /* meaningful tap area on mobile */
+            display: block;
         }
         .nav-link:hover { color: var(--primary); }
         .btn {
@@ -116,7 +109,11 @@
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(37, 150, 190, 0.9), rgba(37, 150, 190, 0.8)), url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            @if(isset($site_settings) && $site_settings->header_image)
+                background: linear-gradient(rgba(37, 150, 190, 0.9), rgba(37, 150, 190, 0.8)), url('{{ asset('storage/' . $site_settings->header_image) }}');
+            @else
+                background: linear-gradient(rgba(37, 150, 190, 0.9), rgba(37, 150, 190, 0.8)), url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            @endif
             background-size: cover;
             background-position: center;
             color: var(--white);
@@ -161,24 +158,44 @@
     @stack('styles')
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container nav-content">
-            <a href="{{ route('home') }}" class="nav-brand">
-                <img src="{{ asset('logo.png') }}" alt="Wakaf Baiturrahman" class="h-10 w-auto object-contain">
+    <nav class="navbar bg-white border-gray-200">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="{{ route('home') }}" class="nav-brand flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="{{ optional($site_settings)->logo ? asset('storage/' . $site_settings->logo) : asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain">
             </a>
-            <ul class="nav-links">
-                <li><a href="{{ route('home') }}" class="nav-link">Beranda</a></li>
-                <li><a href="{{ route('programs.index') }}" class="nav-link">Program</a></li>
-                <li><a href="{{ route('news.index') }}" class="nav-link">Berita</a></li>
-                <li><a href="#" class="nav-link">Laporan</a></li>
-            </ul>
-            @if(Auth::check() && Auth::user()->role !== 'donor')
-                <a href="/admin" class="btn btn-outline">Dashboard Admin</a>
-            @else
-                <a href="#" class="btn btn-primary">Masuk / Daftar</a>
-            @endif
+            <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-default" aria-expanded="false" id="navbar-toggle">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                </svg>
+            </button>
+            <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+                <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white items-center">
+                    <li><a href="{{ route('home') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('home') ? 'text-blue-700' : '' }}" aria-current="page">Beranda</a></li>
+                    <li><a href="{{ route('programs.index') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('programs.*') ? 'text-blue-700' : '' }}">Program</a></li>
+                    <li><a href="{{ route('news.index') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('news.*') ? 'text-blue-700' : '' }}">Berita</a></li>
+                    <li><a href="{{ route('laporan.index') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('laporan.*') ? 'text-primary font-bold' : '' }}">Laporan</a></li>
+                    <li class="mt-2 md:mt-0">
+                        @if(Auth::check() && Auth::user()->role !== 'donor')
+                            <a href="{{ route('dashboard') }}" class="btn btn-outline w-full md:w-auto text-center">Dashboard Admin</a>
+                        @elseif(Auth::check() && Auth::user()->role === 'donor')
+                             <!-- Optional: specific link for donor dashboard if exists, otherwise assume home or profile -->
+                             <a href="{{ route('dashboard') }}" class="btn btn-outline w-full md:w-auto text-center">Dashboard</a>
+                        @else
+                            <a href="{{ route('login') }}" class="btn btn-primary w-full md:w-auto text-center">Masuk / Daftar</a>
+                        @endif
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
+
+    <script>
+        document.getElementById('navbar-toggle').addEventListener('click', function() {
+            var target = document.getElementById('navbar-default');
+            target.classList.toggle('hidden');
+        });
+    </script>
 
     @yield('content')
 
@@ -189,7 +206,7 @@
                 <!-- Column 1: Brand & Info -->
                 <div class="space-y-6">
                     <a href="{{ route('home') }}" class="block">
-                        <img src="{{ asset('logo.png') }}" alt="Wakaf Baiturrahman" class="h-14 w-auto object-contain">
+                        <img src="{{ optional($site_settings)->logo ? asset('storage/' . $site_settings->logo) : asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-14 w-auto object-contain">
                     </a>
                     <p class="text-gray-500 text-sm leading-relaxed">
                         WakafApp Merupakan Lembaga Pengelolaan Wakaf yang telah terdaftar pada Badan Wakaf Indonesia dengan No Nazhir 3.3.00170.
@@ -231,10 +248,7 @@
                     <div class="space-y-3 text-sm text-gray-500">
                         <h4 class="font-bold text-gray-800">Alamat:</h4>
                         <p class="leading-relaxed">
-                            Komplek Area Masjid Salman ITB,<br>
-                            Jl. Ganesa No.7, Lebak Siliwangi,<br>
-                            Coblong, Bandung City,<br>
-                            West Java 40132
+                            {!! nl2br(e($site_settings->address ?? 'Alamat belum diatur.')) !!}
                         </p>
                     </div>
                 </div>
@@ -242,7 +256,7 @@
                 <!-- Column 4: Map -->
                 <div class="rounded-xl overflow-hidden h-[250px] bg-gray-100 relative shadow-sm border border-gray-100">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.246075591965!2d107.60944931477218!3d-6.891075695020464!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e65767b433e1%3A0x2863e00782787729!2sMasjid%20Salman%20ITB!5e0!3m2!1sen!2sid!4v1647846589324!5m2!1sen!2sid" 
+                        src="{{ $site_settings->maps_embed ?? '' }}" 
                         width="100%" 
                         height="100%" 
                         style="border:0;" 
