@@ -24,7 +24,13 @@ use App\Http\Controllers\AdminController;
 */
 
 // Public Routes
-Route::get('/', [PublicController::class, 'index'])->name('home');
+Route::get('/', [PublicController::class, 'home'])->name('home');
+Route::get('/wakaf', [PublicController::class, 'index'])->name('wakaf.index');
+Route::get('/zakat', [App\Http\Controllers\ZakatController::class, 'index'])->name('zakat.index');
+Route::get('/zakat/{id}', [App\Http\Controllers\ZakatController::class, 'show'])->name('zakat.show');
+Route::post('/zakat/{id}', [App\Http\Controllers\ZakatController::class, 'store'])->name('zakat.store');
+Route::get('/zakat/sukses/{invoice}', [App\Http\Controllers\ZakatController::class, 'success'])->name('zakat.success')->where('invoice', '.*');
+Route::post('/zakat/sukses/{invoice}', [App\Http\Controllers\ZakatController::class, 'confirm'])->name('zakat.confirm')->where('invoice', '.*');
 Route::get('/programs', [PublicController::class, 'programs'])->name('programs.index');
 Route::get('/campaign/{campaign:slug}', [PublicController::class, 'show'])->name('campaign.show');
 Route::get('/donasi/{campaign:slug}', [PublicController::class, 'donate'])->name('campaign.donate');
@@ -38,6 +44,23 @@ Route::get('/news/{slug}', [App\Http\Controllers\NewsController::class, 'show'])
 
 // Laporan Routes
 Route::get('/laporan', [App\Http\Controllers\LaporanController::class, 'index'])->name('laporan.index');
+
+// Donor Authentication Routes
+Route::prefix('donor')->name('donor.')->group(function () {
+    Route::get('/login', [App\Http\Controllers\DonorAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [App\Http\Controllers\DonorAuthController::class, 'sendOtp'])->name('login.send-otp');
+    Route::get('/verify', [App\Http\Controllers\DonorAuthController::class, 'showVerifyForm'])->name('verify');
+    Route::post('/verify', [App\Http\Controllers\DonorAuthController::class, 'verifyOtp'])->name('verify.otp');
+    Route::post('/logout', [App\Http\Controllers\DonorAuthController::class, 'logout'])->name('logout');
+    
+    // Protected donor routes
+    Route::middleware('donor.auth')->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\DonorDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/donations', [App\Http\Controllers\DonorDashboardController::class, 'donations'])->name('donations');
+        Route::get('/zakat', [App\Http\Controllers\DonorDashboardController::class, 'zakat'])->name('zakat');
+        Route::get('/receipt/{id}', [App\Http\Controllers\DonorDashboardController::class, 'downloadReceipt'])->name('receipt');
+    });
+});
 
 // Consolidated Dashboard
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -53,10 +76,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('users', App\Http\Controllers\Admin\UserController::class);
         Route::resource('donors', App\Http\Controllers\Admin\DonorController::class);
+        Route::resource('zakat-transactions', App\Http\Controllers\Admin\ZakatTransactionController::class);
         Route::resource('campaign-updates', App\Http\Controllers\Admin\CampaignUpdateController::class);
         Route::resource('news', App\Http\Controllers\Admin\NewsController::class);
         Route::resource('news-categories', App\Http\Controllers\Admin\NewsCategoryController::class);
         Route::resource('laporans', App\Http\Controllers\Admin\LaporanController::class);
+        
+        // Transaction Reports
+        Route::get('/reports/export', [App\Http\Controllers\Admin\ReportController::class, 'export'])->name('reports.export');
+        Route::get('/reports/zakat', [App\Http\Controllers\Admin\ReportController::class, 'zakat'])->name('reports.zakat');
+        Route::get('/reports/donation', [App\Http\Controllers\Admin\ReportController::class, 'donation'])->name('reports.donation');
+        Route::get('/reports/distribution', [App\Http\Controllers\Admin\ReportController::class, 'distribution'])->name('reports.distribution');
+        Route::get('/reports/distribution/export', [App\Http\Controllers\Admin\ReportController::class, 'exportDistribution'])->name('reports.distribution.export');
+
+        Route::resource('zakat-types', App\Http\Controllers\Admin\ZakatTypeController::class);
         
         // Settings
         Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');

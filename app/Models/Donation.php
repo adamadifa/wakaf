@@ -12,6 +12,8 @@ class Donation extends Model
     protected $casts = [
         'confirmed_at' => 'datetime',
         'is_anonymous' => 'boolean',
+        'amount' => 'decimal:2',
+        'admin_fee' => 'decimal:2',
     ];
 
     public function campaign()

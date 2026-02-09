@@ -45,8 +45,24 @@
              <hr class="my-6 border-dashed border-gray-200">
              
              <div>
-                 <span class="block text-gray-500 mb-1">Nominal Donasi</span>
-                 <span class="text-3xl font-bold text-emerald-600">Rp {{ number_format($donation->amount, 0, ',', '.') }}</span>
+                 <span class="block text-gray-500 mb-1">Nominal Pokok</span>
+                 <span class="text-lg font-semibold text-gray-800">Rp {{ number_format($donation->amount, 0, ',', '.') }}</span>
+             </div>
+             @if($donation->unique_code > 0)
+             <div class="mt-2">
+                 <span class="block text-gray-500 mb-1">Kode Unik</span>
+                 <span class="text-sm font-semibold text-gray-800">{{ $donation->unique_code }}</span>
+             </div>
+             @endif
+             @if($donation->admin_fee > 0)
+             <div class="mt-2">
+                 <span class="block text-gray-500 mb-1">Biaya Admin</span>
+                 <span class="text-sm font-semibold text-gray-800">Rp {{ number_format($donation->admin_fee, 0, ',', '.') }}</span>
+             </div>
+             @endif
+             <div class="mt-4 pt-4 border-t border-gray-100">
+                 <span class="block text-gray-500 mb-1">Total Transfer (Wajib Dicek)</span>
+                 <span class="text-3xl font-bold text-emerald-600">Rp {{ number_format($donation->total_transfer, 0, ',', '.') }}</span>
              </div>
         </div>
 

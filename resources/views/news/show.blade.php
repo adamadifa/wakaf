@@ -1,10 +1,10 @@
-@extends('layouts.frontend')
+@extends('layouts.home_layout')
 
 @section('title', $news->title)
 
 @section('content')
 <!-- Hero Section (Mini) -->
-<header class="relative py-20 bg-gray-900 text-white overflow-hidden">
+<header class="relative py-20 bg-gray-900 text-white overflow-hidden rounded-b-[2rem] mb-12">
     @if($news->image)
         <div class="absolute inset-0">
             <img src="{{ asset('storage/' . $news->image) }}" class="w-full h-full object-cover opacity-30 blur-sm">

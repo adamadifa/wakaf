@@ -10,22 +10,45 @@
         <p style="color: var(--text-muted); margin-bottom: 2rem;">Mohon segera selesaikan pembayaran agar donasi Anda tercatat.</p>
 
         <div style="background: #e9ecef; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 2rem;">
-            <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">Total yang harus ditransfer:</p>
-            <h2 style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">Rp {{ number_format($donation->total_transfer, 0, ',', '.') }}</h2>
-            <p style="font-size: 0.85rem; color: #dc3545; background: #fff; display: inline-block; padding: 0.2rem 0.5rem; border-radius: 0.25rem;">PENTING: Transfer TEPAT sampai 3 digit terakhir</p>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span>Nominal Donasi</span>
+                <span style="font-weight: 600;">Rp {{ number_format($donation->amount, 0, ',', '.') }}</span>
+            </div>
+            @if($donation->admin_fee > 0)
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: #666;">
+                <span>Biaya Admin</span>
+                <span>Rp {{ number_format($donation->admin_fee, 0, ',', '.') }}</span>
+            </div>
+            @endif
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 1.25rem; font-weight: 700;">
+                <span>Total Bayar</span>
+                <span style="color: #0066cc;">Rp {{ number_format($donation->total_transfer, 0, ',', '.') }}</span>
+            </div>
+            @if(!$donation->snap_token)
+                <p style="font-size: 0.85rem; color: #dc3545; background: #fff; display: inline-block; padding: 0.2rem 0.5rem; border-radius: 0.25rem;">PENTING: Transfer TEPAT sampai 3 digit terakhir</p>
+            @endif
         </div>
 
-        <div style="text-align: left; border: 1px solid #ddd; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 2rem;">
-            <p style="margin-bottom: 1rem; font-weight: 600;">Silakan transfer ke:</p>
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                <!-- <img src="{{ Storage::url($donation->paymentMethod->logo_url) }}" style="height: 40px; border-radius: 4px;"> -->
-                <div>
-                    <p style="font-weight: 700; font-size: 1.1rem;">{{ $donation->paymentMethod->bank_name }}</p>
-                    <p style="font-size: 1.25rem; font-family: monospace; letter-spacing: 1px;">{{ $donation->paymentMethod->account_number }}</p>
-                    <p style="font-size: 0.9rem; color: var(--text-muted);">a.n {{ $donation->paymentMethod->account_name }}</p>
+        @if($donation->snap_token)
+            <!-- Payment Gateway Button -->
+            <div style="margin-bottom: 2rem;">
+                <button id="pay-button" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; font-weight: bold; background-color: #0066cc; border: none;">
+                    Bayar Sekarang
+                </button>
+            </div>
+        @else
+            <div style="text-align: left; border: 1px solid #ddd; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 2rem;">
+                <p style="margin-bottom: 1rem; font-weight: 600;">Silakan transfer ke:</p>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                    <!-- <img src="{{ Storage::url($donation->paymentMethod->logo_url) }}" style="height: 40px; border-radius: 4px;"> -->
+                    <div>
+                        <p style="font-weight: 700; font-size: 1.1rem;">{{ $donation->paymentMethod->bank_name }}</p>
+                        <p style="font-size: 1.25rem; font-family: monospace; letter-spacing: 1px;">{{ $donation->paymentMethod->account_number }}</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">a.n {{ $donation->paymentMethod->account_name }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
         @if(session('success'))
             <div style="background: #d1e7dd; color: #0f5132; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 2rem; text-align: center;">
@@ -98,4 +121,38 @@
         }
     }
 </script>
+
+@if($donation->snap_token)
+    <script src="{{ config('services.midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
+    <script type="text/javascript">
+      document.getElementById('pay-button').onclick = function(){
+        // SnapToken acquired from previous step
+        snap.pay('{{ $donation->snap_token }}', {
+          // Optional
+          onSuccess: function(result){
+            /* You may add your own implementation here */
+            // alert("payment success!"); 
+            window.location.reload();
+          },
+          onPending: function(result){
+            /* You may add your own implementation here */
+            // alert("wating your payment!"); 
+            window.location.reload();
+          },
+          onError: function(result){
+            /* You may add your own implementation here */
+            alert("payment failed!"); 
+            window.location.reload();
+          },
+          onClose: function(){
+            /* You may add your own implementation here */
+            // alert('you closed the popup without finishing the payment');
+          }
+        });
+      };
+      
+      // Auto open snap if status is pending
+      // document.getElementById('pay-button').click();
+    </script>
+@endif
 @endsection

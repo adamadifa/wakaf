@@ -70,6 +70,60 @@
                     </div>
                 @endif
             </div>
+            
+            <!-- Payment Gateway -->
+            <div class="mb-8 border-t border-gray-50 pt-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Pengaturan Pembayaran</h3>
+                
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100 mb-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-800">Midtrans Payment Gateway</h4>
+                        <p class="text-sm text-gray-500 mt-1">Aktifkan fitur pembayaran otomatis menggunakan Midtrans.</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="is_payment_gateway_active" value="1" class="sr-only peer" {{ $setting->is_payment_gateway_active ? 'checked' : '' }} onchange="document.getElementById('midtrans-settings').classList.toggle('hidden')">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    </label>
+                </div>
+
+                <div id="midtrans-settings" class="{{ $setting->is_payment_gateway_active ? '' : 'hidden' }} space-y-6 p-6 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Merchant ID</label>
+                        <input type="text" name="midtrans_merchant_id" value="{{ old('midtrans_merchant_id', $setting->midtrans_merchant_id) }}" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-mono text-sm">
+                        @error('midtrans_merchant_id') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Client Key</label>
+                        <input type="text" name="midtrans_client_key" value="{{ old('midtrans_client_key', $setting->midtrans_client_key) }}" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-mono text-sm">
+                        @error('midtrans_client_key') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Server Key</label>
+                        <input type="text" name="midtrans_server_key" value="{{ old('midtrans_server_key', $setting->midtrans_server_key) }}" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-mono text-sm">
+                        @error('midtrans_server_key') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Mode Production</h4>
+                            <p class="text-xs text-gray-500 mt-1">Aktifkan jika menggunakan Key Production. Matikan untuk Sandbox (Test).</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="midtrans_is_production" value="1" class="sr-only peer" {{ $setting->midtrans_is_production ? 'checked' : '' }}>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Biaya Admin (Rp)</label>
+                        <input type="number" name="midtrans_admin_fee" value="{{ old('midtrans_admin_fee', $setting->midtrans_admin_fee) }}" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-mono text-sm" placeholder="Contoh: 4000">
+                        <p class="text-xs text-gray-500 mt-1">Biaya tambahan yang akan dibebankan ke donatur saat menggunakan Midtrans.</p>
+                        @error('midtrans_admin_fee') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+            </div>
 
             <!-- Action -->
             <div class="flex items-center justify-end pt-6 border-t border-gray-50">

@@ -128,6 +128,37 @@
     .search-btn:hover {
         background: var(--primary-light);
     }
+    /* Category Filter Styles */
+    .category-filter {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+    }
+    .badge-filter {
+        padding: 0.6rem 1.5rem;
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(4px);
+    }
+    .badge-filter:hover {
+        background: rgba(255, 255, 255, 0.25);
+        color: white;
+        transform: translateY(-2px);
+    }
+    .badge-filter.active {
+        background: white;
+        color: #2596be; /* Matches the header blue */
+        font-weight: 700;
+        border-color: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 @endpush
@@ -144,6 +175,19 @@
             <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari program kebaikan..." class="search-input">
             <button type="submit" class="search-btn">Cari</button>
         </form>
+
+        <div class="category-filter">
+            <a href="{{ route('programs.index', request()->except('category_id', 'page')) }}" 
+               class="badge-filter {{ !request('category_id') ? 'active' : '' }}">
+                Semua
+            </a>
+            @foreach($categories as $category)
+                <a href="{{ route('programs.index', array_merge(request()->except('page'), ['category_id' => $category->id])) }}" 
+                   class="badge-filter {{ request('category_id') == $category->id ? 'active' : '' }}">
+                   {{ $category->name }}
+                </a>
+            @endforeach
+        </div>
     </div>
 </header>
 

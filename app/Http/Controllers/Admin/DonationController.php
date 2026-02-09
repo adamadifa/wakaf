@@ -7,6 +7,8 @@ use App\Models\Donation;
 use App\Models\Campaign;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DonationConfirmedMail;
 
 class DonationController extends Controller
 {
@@ -77,6 +79,15 @@ class DonationController extends Controller
                 if ($newStatus === 'confirmed' && $oldStatus !== 'confirmed') {
                     // Increment campaign amount if confirmed
                     $donation->campaign->increment('current_amount', $donation->amount);
+                    
+                    // Send Confirmation Email
+                    try {
+                        if ($donation->donor && $donation->donor->email) {
+                            Mail::to($donation->donor->email)->send(new DonationConfirmedMail($donation));
+                        }
+                    } catch (\Exception $e) {
+                         \Illuminate\Support\Facades\Log::error('Email Error: ' . $e->getMessage());
+                    }
                 } elseif ($oldStatus === 'confirmed' && $newStatus !== 'confirmed') {
                     // Decrement if changing from confirmed to something else (rollback)
                     $donation->campaign->decrement('current_amount', $donation->amount);

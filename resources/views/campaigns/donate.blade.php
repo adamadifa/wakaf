@@ -27,10 +27,31 @@
 
             <div style="margin-bottom: 2rem;">
                 <h3 style="font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Metode Pembayaran</h3>
-                <div style="display: grid; gap: 1rem;">
+                
+                <!-- Payment Type Selection -->
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    @if(isset($setting) && $setting->is_payment_gateway_active)
+                    <label style="flex: 1; text-align: center; padding: 1rem; border: 1px solid #ddd; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s;" class="payment-type-option">
+                        <input type="radio" name="payment_type" value="online" onchange="togglePaymentMethod('online')" checked style="display: none;">
+                        <i class="ti ti-credit-card" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block; color: var(--primary);"></i>
+                        <span style="font-weight: 600; display: block;">Otomatis</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">QRIS, E-Wallet, VA</span>
+                    </label>
+                    @endif
+                    
+                    <label style="flex: 1; text-align: center; padding: 1rem; border: 1px solid #ddd; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s;" class="payment-type-option">
+                        <input type="radio" name="payment_type" value="manual" onchange="togglePaymentMethod('manual')" {{ (!isset($setting) || !$setting->is_payment_gateway_active) ? 'checked' : '' }} style="display: none;">
+                        <i class="ti ti-building-bank" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block; color: var(--primary);"></i>
+                        <span style="font-weight: 600; display: block;">Transfer Manual</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Cek Manual Admin</span>
+                    </label>
+                </div>
+
+                <!-- Manual Payment Options -->
+                <div id="manual-payment-options" style="display: {{ (!isset($setting) || !$setting->is_payment_gateway_active) ? 'grid' : 'none' }}; gap: 1rem;">
                     @foreach($paymentMethods as $method)
-                    <label style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid #ddd; border-radius: 0.5rem; cursor: pointer;">
-                        <input type="radio" name="payment_method_id" value="{{ $method->id }}" required>
+                    <label style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid #ddd; border-radius: 0.5rem; cursor: pointer;" class="bank-option">
+                        <input type="radio" name="payment_method_id" value="{{ $method->id }}">
                         @if($method->logo_url)
                             <img src="{{ Storage::url($method->logo_url) }}" style="height: 30px; object-fit: contain;">
                         @else
@@ -39,6 +60,13 @@
                         <span style="color: var(--text-muted); font-size: 0.9rem;">{{ $method->account_number }} (a.n {{ $method->account_name }})</span>
                     </label>
                     @endforeach
+                </div>
+                
+                <!-- Online Payment Info -->
+                <div id="online-payment-info" style="display: {{ (isset($setting) && $setting->is_payment_gateway_active) ? 'block' : 'none' }}; text-align: center; padding: 2rem; background: #f8f9fa; border-radius: 0.5rem;">
+                    <i class="ti ti-shield-check" style="font-size: 2rem; color: #198754; margin-bottom: 0.5rem;"></i>
+                    <p style="font-weight: 600; margin-bottom: 0.25rem;">Pembayaran Aman & Otomatis</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Anda akan diarahkan ke halaman pembayaran Midtrans. Status donasi akan otomatis terupdate setelah pembayaran berhasil.</p>
                 </div>
             </div>
 
@@ -84,5 +112,56 @@
     function setAmount(value) {
         document.querySelector('input[name="amount"]').value = value;
     }
+
+    function togglePaymentMethod(type) {
+        const manualOptions = document.getElementById('manual-payment-options');
+        const onlineInfo = document.getElementById('online-payment-info');
+        const bankInputs = document.querySelectorAll('input[name="payment_method_id"]');
+        
+        // Update UI
+        document.querySelectorAll('.payment-type-option').forEach(el => {
+            const input = el.querySelector('input');
+            if(input.checked) {
+                el.style.borderColor = 'var(--primary)';
+                el.style.backgroundColor = '#f0f9ff';
+            } else {
+                el.style.borderColor = '#ddd';
+                el.style.backgroundColor = 'white';
+            }
+        });
+
+        if (type === 'manual') {
+            manualOptions.style.display = 'grid';
+            onlineInfo.style.display = 'none';
+            // Enable required for bank inputs
+            bankInputs.forEach(input => input.required = true);
+        } else {
+            manualOptions.style.display = 'none';
+            onlineInfo.style.display = 'block';
+            // Disable required and uncheck bank inputs
+            bankInputs.forEach(input => {
+                input.required = false;
+                input.checked = false;
+            });
+        }
+    }
+
+    // Initialize styling
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkedInput = document.querySelector('input[name="payment_type"]:checked');
+        if(checkedInput) {
+            togglePaymentMethod(checkedInput.value);
+        }
+    });
+
+    // Add CSS for active state
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .bank-option:has(input:checked) {
+            border-color: var(--primary) !important;
+            background-color: #f0f9ff !important;
+        }
+    `;
+    document.head.appendChild(style);
 </script>
 @endsection

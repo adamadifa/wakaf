@@ -89,7 +89,18 @@ class CampaignController extends Controller
 
     public function show(Campaign $campaign)
     {
-        return view('admin.campaigns.show', compact('campaign'));
+        $campaign->load(['category', 'user', 'donations.donor', 'distributions.user', 'updates']);
+        
+        // Get confirmed donations with donors
+        $donations = $campaign->donations()->with('donor')->where('status', 'confirmed')->latest()->get();
+        
+        // Get distributions
+        $distributions = $campaign->distributions()->with('user')->latest()->get();
+        
+        // Get campaign updates
+        $updates = $campaign->updates()->latest()->get();
+        
+        return view('admin.campaigns.show', compact('campaign', 'donations', 'distributions', 'updates'));
     }
 
     public function edit(Campaign $campaign)

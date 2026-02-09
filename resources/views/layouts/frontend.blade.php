@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
     <script>
         tailwind.config = {
             theme: {
@@ -182,7 +184,7 @@
                              <!-- Optional: specific link for donor dashboard if exists, otherwise assume home or profile -->
                              <a href="{{ route('dashboard') }}" class="btn btn-outline w-full md:w-auto text-center">Dashboard</a>
                         @else
-                            <a href="{{ route('login') }}" class="btn btn-primary w-full md:w-auto text-center">Masuk / Daftar</a>
+                            <a href="{{ route('donor.login') }}" class="btn btn-primary w-full md:w-auto text-center">Masuk</a>
                         @endif
                     </li>
                 </ul>
@@ -274,6 +276,57 @@
             </div>
         </div>
     </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 z-50 w-full bg-white border-t border-gray-200 md:hidden pb-safe">
+        <div class="grid h-16 max-w-lg grid-cols-5 mx-auto font-medium">
+            <a href="{{ route('home') }}" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group {{ request()->routeIs('home') ? 'text-primary' : 'text-gray-500' }}">
+                <i class="ti ti-home text-2xl mb-1 group-hover:text-primary"></i>
+                <span class="text-[10px] group-hover:text-primary">Beranda</span>
+            </a>
+            <a href="{{ route('programs.index') }}" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group {{ request()->routeIs('programs.*') ? 'text-primary' : 'text-gray-500' }}">
+                <i class="ti ti-heart-handshake text-2xl mb-1 group-hover:text-primary"></i>
+                <span class="text-[10px] group-hover:text-primary">Program</span>
+            </a>
+            <a href="{{ route('news.index') }}" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group {{ request()->routeIs('news.*') ? 'text-primary' : 'text-gray-500' }}">
+                <i class="ti ti-news text-2xl mb-1 group-hover:text-primary"></i>
+                <span class="text-[10px] group-hover:text-primary">Berita</span>
+            </a>
+            <a href="{{ route('laporan.index') }}" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group {{ request()->routeIs('laporan.*') ? 'text-primary' : 'text-gray-500' }}">
+                <i class="ti ti-chart-pie text-2xl mb-1 group-hover:text-primary"></i>
+                <span class="text-[10px] group-hover:text-primary">Laporan</span>
+            </a>
+            @if(Auth::check() && Auth::user()->role !== 'donor')
+                <a href="{{ route('dashboard') }}" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group">
+                    <i class="ti ti-layout-dashboard text-2xl mb-1 group-hover:text-primary"></i>
+                    <span class="text-[10px] group-hover:text-primary">Admin</span>
+                </a>
+            @elseif(Auth::check() && Auth::user()->role === 'donor')
+                <a href="{{ route('dashboard') }}" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group">
+                    <i class="ti ti-user text-2xl mb-1 group-hover:text-primary"></i>
+                    <span class="text-[10px] group-hover:text-primary">Akun</span>
+                </a>
+            @else
+                <a href="{{ route('login') }}" class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group">
+                    <i class="ti ti-login text-2xl mb-1 group-hover:text-primary"></i>
+                    <span class="text-[10px] group-hover:text-primary">Masuk</span>
+                </a>
+            @endif
+        </div>
+    </nav>
+    <style>
+        /* Add safe area padding for iPhones with home indicator */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        /* Add padding to body to prevent content from being hidden behind bottom nav on mobile */
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 5rem;
+            }
+        }
+    </style>
+
     @stack('scripts')
 </body>
 </html>

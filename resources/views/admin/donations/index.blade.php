@@ -106,7 +106,16 @@
                         </div>
                     </td>
                     <td class="py-4 px-6">
-                        <div class="font-bold text-gray-800">Rp {{ number_format($donation->amount, 0, ',', '.') }}</div>
+                        <div class="font-bold text-gray-800">Rp {{ number_format($donation->total_transfer, 0, ',', '.') }}</div>
+                        @if($donation->unique_code > 0)
+                        <div class="text-xs text-gray-500">
+                            (Kode Unik: <span class="text-gray-700 font-semibold">{{ $donation->unique_code }}</span>)
+                        </div>
+                        @else
+                        <div class="text-xs text-gray-500">
+                            (Tanpa Kode Unik)
+                        </div>
+                        @endif
                     </td>
                     <td class="py-4 px-6">
                         @if($donation->status == 'confirmed')

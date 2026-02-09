@@ -30,9 +30,17 @@ class SettingController extends Controller
             'maps_embed' => 'nullable|string',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
             'header_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'is_payment_gateway_active' => 'nullable|boolean',
+            'midtrans_merchant_id' => 'nullable|string',
+            'midtrans_client_key' => 'nullable|string',
+            'midtrans_server_key' => 'nullable|string',
+            'midtrans_is_production' => 'nullable|boolean',
+            'midtrans_admin_fee' => 'nullable|numeric|min:0',
         ]);
 
-        $data = $request->only(['address', 'maps_embed']);
+        $data = $request->only(['address', 'maps_embed', 'midtrans_merchant_id', 'midtrans_client_key', 'midtrans_server_key', 'midtrans_admin_fee']);
+        $data['is_payment_gateway_active'] = $request->has('is_payment_gateway_active');
+        $data['midtrans_is_production'] = $request->has('midtrans_is_production');
 
         if ($request->hasFile('logo')) {
             if ($setting->logo) {
