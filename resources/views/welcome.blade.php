@@ -106,8 +106,12 @@
                     <div>
                         <span class="card-badge">{{ $campaign->category->name ?? 'Umum' }}</span>
                     </div>
-                    <h3 class="card-title">{{ $campaign->title }}</h3>
-                    <p class="card-desc">{{ Str::limit($campaign->short_description, 100) }}</p>
+                    <h3 class="card-title">
+                    <a href="{{ route('campaign.show', $campaign->slug) }}" style="text-decoration: none; color: inherit;">
+                        {{ $campaign->title }}
+                    </a>
+                </h3>
+                <p class="card-desc">{!! Str::limit(strip_tags($campaign->short_description), 100) !!}</p>
                     
                     <div class="progress-section">
                         @php

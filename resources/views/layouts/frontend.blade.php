@@ -10,6 +10,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
+    <!-- SEO & Open Graph -->
+    @stack('meta')
+    @if(!View::hasSection('meta_og'))
+        <meta property="og:site_name" content="{{ config('app.name') }}">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="@yield('title', 'Wakaf & Donasi') - Platform Kebaikan">
+        <meta property="og:description" content="Platform wakaf dan donasi terpercaya. Salurkan kebaikan Anda sekarang.">
+        <meta property="og:image" content="{{ asset('logo.png') }}">
+    @endif
+
     <script>
         tailwind.config = {
             theme: {

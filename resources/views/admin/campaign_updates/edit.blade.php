@@ -63,6 +63,28 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('textarea[name="content"]'), {
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h2', title: 'Heading 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h3', title: 'Heading 2', class: 'ck-heading_heading2' }
+                ]
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+<style>
+    .ck-editor__editable {
+        min-height: 300px;
+    }
+</style>
 <script>
     $(document).ready(function() {
         // Init Select2

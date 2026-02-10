@@ -3,17 +3,28 @@
 @section('title', 'Manajemen Berita')
 
 @section('content')
-<div class="mb-6 flex justify-between items-center">
+<div class="mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
     <div>
         <h1 class="text-2xl font-bold text-gray-800">Manajemen Berita</h1>
         <p class="text-gray-500 text-sm mt-1">Kelola artikel dan berita terbaru.</p>
     </div>
-    <a href="{{ route('admin.news.create') }}" class="btn btn-primary bg-primary text-white hover:bg-primary-dark px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-blue-500/30">
-        <div class="flex items-center gap-2">
+    
+    <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+        <form action="{{ route('admin.news.index') }}" method="GET" class="flex gap-2">
+            <div class="relative">
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari berita..." class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-full md:w-64">
+                <svg class="absolute left-3 top-2.5 text-gray-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+            <button type="submit" class="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">
+                Cari
+            </button>
+        </form>
+
+        <a href="{{ route('admin.news.create') }}" class="btn btn-primary bg-primary text-white hover:bg-primary-dark px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             Buat Berita Baru
-        </div>
-    </a>
+        </a>
+    </div>
 </div>
 
 <!-- News Table -->

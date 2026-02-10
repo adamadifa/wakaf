@@ -2,6 +2,15 @@
 
 @section('title', $news->title)
 
+@push('meta')
+    @section('meta_og', true)
+    <meta property="og:title" content="{{ $news->title }}">
+    <meta property="og:description" content="{{ Str::limit(strip_tags($news->content), 150) }}">
+    <meta property="og:image" content="{{ $news->image ? asset('storage/' . $news->image) : asset('logo.png') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="article">
+@endpush
+
 @section('content')
 <!-- Hero Section (Mini) -->
 <header class="relative py-20 bg-gray-900 text-white overflow-hidden rounded-b-[2rem] mb-12">
@@ -37,7 +46,7 @@
             @endif
 
             <div class="prose prose-lg prose-blue max-w-none text-gray-700">
-                {!! nl2br(e($news->content)) !!}
+                {!! $news->content !!}
             </div>
 
             <!-- Share Section (Optional Placeholder) -->

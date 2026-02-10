@@ -2,6 +2,15 @@
 
 @section('title', $campaign->title)
 
+@push('meta')
+    @section('meta_og', true)
+    <meta property="og:title" content="{{ $campaign->title }}">
+    <meta property="og:description" content="{{ Str::limit(strip_tags($campaign->description), 150) }}">
+    <meta property="og:image" content="{{ Str::startsWith($campaign->image_url, 'http') ? $campaign->image_url : asset('storage/' . $campaign->image_url) }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
+@endpush
+
 @push('styles')
 <style>
     /* 
@@ -292,6 +301,54 @@
         .donation-sticky {
             position: static;
         }
+        /* Hide global mobile nav on this page */
+        nav.fixed.bottom-0 {
+            display: none !important;
+        }
+        /* Add padding for custom bottom bar */
+        body {
+            padding-bottom: 80px !important;
+        }
+    }
+
+    /* Mobile Sticky Action Bar */
+    .mobile-action-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+        padding: 1rem 1.5rem;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        z-index: 100;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .btn-mobile-share {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: none;
+        border: none;
+        min-width: 60px;
+    }
+    
+    .btn-mobile-donate {
+        flex: 1;
+        background: var(--primary);
+        color: white;
+        font-weight: 700;
+        padding: 0.75rem;
+        border-radius: 50px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(37, 150, 190, 0.3);
     }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
@@ -350,7 +407,7 @@
             <!-- Tab Content: Deskripsi -->
             <div id="desc" class="tab-section active">
                 <div class="prose">
-                    <div style="white-space: pre-line;">
+                    <div>
                         {!! $campaign->full_description !!}
                     </div>
                 </div>
@@ -364,7 +421,9 @@
                             <h4 style="font-size: 1.1rem; font-weight: 700;">{{ $update->title }}</h4>
                             <small class="text-muted">{{ $update->created_at->format('d M Y') }}</small>
                         </div>
-                        <p style="color: var(--text-dark);">{{ $update->content }}</p>
+                        <div style="color: var(--text-dark);" class="prose">
+                            {!! $update->content !!}
+                        </div>
                     </div>
                 @empty
                     <div style="padding: 2rem; text-align: center; color: var(--text-muted); background: var(--bg-light); border-radius: var(--radius);">
@@ -438,21 +497,40 @@
                     WAKAF SEKARANG
                 </a>
 
-                <button class="btn-whatsapp">
+                <a href="https://wa.me/?text={{ urlencode($campaign->title . ' ' . url()->current()) }}" target="_blank" class="btn-whatsapp" style="text-decoration: none;">
                     <i class="ti ti-brand-whatsapp" style="font-size: 1.25rem;"></i>
                     Wakaf via WhatsApp
-                </button>
+                </a>
 
                 <div class="share-section">
                     <span class="share-label">Bagikan:</span>
-                    <a href="#" class="share-btn"><i class="ti ti-brand-facebook"></i></a>
-                    <a href="#" class="share-btn"><i class="ti ti-brand-twitter"></i></a>
-                    <a href="#" class="share-btn"><i class="ti ti-brand-whatsapp"></i></a>
-                    <a href="#" class="share-btn"><i class="ti ti-link"></i></a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank" class="share-btn" title="Bagikan ke Facebook">
+                        <i class="ti ti-brand-facebook"></i>
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?text={{ urlencode($campaign->title) }}&url={{ urlencode(url()->current()) }}" target="_blank" class="share-btn" title="Bagikan ke Twitter">
+                        <i class="ti ti-brand-twitter"></i>
+                    </a>
+                    <a href="https://wa.me/?text={{ urlencode($campaign->title . ' ' . url()->current()) }}" target="_blank" class="share-btn" title="Bagikan ke WhatsApp">
+                        <i class="ti ti-brand-whatsapp"></i>
+                    </a>
+                    <button type="button" class="share-btn" id="btn-copy-link" data-url="{{ url()->current() }}" onclick="copyToClipboard(this)" title="Salin Tautan">
+                        <i class="ti ti-link"></i>
+                    </button>
                 </div>
             </div>
         </div>
 
+    </div>
+
+    <!-- Mobile Sticky Action Bar -->
+    <div class="mobile-action-bar md:hidden">
+        <button type="button" class="btn-mobile-share" onclick="shareCampaignMobile()">
+            <i class="ti ti-share" style="font-size: 1.5rem;"></i>
+            Bagikan
+        </button>
+        <a href="{{ route('campaign.donate', $campaign->slug) }}" class="btn-mobile-donate">
+            WAKAF SEKARANG
+        </a>
     </div>
 </div>
 
@@ -477,6 +555,75 @@ function openTab(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     document.getElementById(tabName).classList.add("active");
     evt.currentTarget.classList.add("active");
+}
+
+function copyToClipboard(btn) {
+    const url = btn.getAttribute('data-url');
+    
+    if (navigator.clipboard && window.isSecureContext) {
+        // Use the Clipboard API
+        navigator.clipboard.writeText(url).then(() => {
+            showCopyFeedback(btn);
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+            fallbackCopyTextToClipboard(url, btn);
+        });
+    } else {
+        // Fallback
+        fallbackCopyTextToClipboard(url, btn);
+    }
+}
+
+function fallbackCopyTextToClipboard(text, btn) {
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        var successful = document.execCommand('copy');
+        if (successful) {
+            showCopyFeedback(btn);
+        }
+    } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+    }
+
+    document.body.removeChild(textArea);
+}
+
+function showCopyFeedback(btn) {
+    const originalIcon = btn.innerHTML;
+    btn.innerHTML = '<i class="ti ti-check" style="color: var(--primary);"></i>';
+    btn.style.borderColor = 'var(--primary)';
+    
+    setTimeout(() => {
+        btn.innerHTML = originalIcon;
+        btn.style.borderColor = ''; // Revert to original style (or removed inline style)
+    }, 2000);
+}
+
+
+function shareCampaignMobile() {
+    if (navigator.share) {
+        navigator.share({
+            title: '{{ $campaign->title }}',
+            text: 'Ayo bantu program kebaikan ini: {{ $campaign->title }}',
+            url: '{{ url()->current() }}',
+        })
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    } else {
+        // Fallback: Open WhatsApp share
+        window.open('https://wa.me/?text={{ urlencode("Ayo bantu: " . $campaign->title . " " . url()->current()) }}', '_blank');
+    }
 }
 </script>
 @endsection
