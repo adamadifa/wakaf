@@ -29,6 +29,11 @@ class NewsController extends Controller
         $news = $query->latest('published_at')->paginate(9)->withQueryString();
         $categories = \App\Models\NewsCategory::all(); // Get all categories for filter
         
+        $agent = new \Jenssegers\Agent\Agent();
+        if ($agent->isMobile()) {
+            return view('mobile.news.index', compact('news', 'categories'));
+        }
+
         return view('news.index', compact('news', 'categories'));
     }
 
@@ -43,6 +48,11 @@ class NewsController extends Controller
             ->take(3)
             ->get();
             
+        $agent = new \Jenssegers\Agent\Agent();
+        if ($agent->isMobile()) {
+            return view('mobile.news.show', compact('news', 'relatedNews'));
+        }
+
         return view('news.show', compact('news', 'relatedNews'));
     }
 }
