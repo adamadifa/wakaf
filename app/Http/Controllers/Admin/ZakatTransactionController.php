@@ -67,7 +67,7 @@ class ZakatTransactionController extends Controller
         // Send Confirmation Email
         if ($request->status == 'confirmed' && $transaction->email) {
             try {
-                \Illuminate\Support\Facades\Mail::to($transaction->email)->send(new \App\Mail\ZakatConfirmedMail($transaction));
+                dispatch(new \App\Jobs\SendEmailJob($transaction->email, new \App\Mail\ZakatConfirmedMail($transaction)));
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::error('Zakat Confirmation Email Error: ' . $e->getMessage());
             }

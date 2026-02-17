@@ -39,7 +39,7 @@
             </div>
             <div>
                 <h3 class="text-sm font-medium text-gray-500 mb-1">Donatur Baru (Hari Ini)</h3>
-                <div class="text-2xl font-bold text-gray-900">{{ \App\Models\User::where('role', 'donor')->whereDate('created_at', today())->count() }} Donatur</div>
+                <div class="text-2xl font-bold text-gray-900">{{ \App\Models\Donor::whereDate('created_at', today())->count() }} Donatur</div>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
             <h4 class="text-lg font-bold text-gray-900">Donasi Terkini</h4>
         </div>
         <div class="space-y-4">
-             @foreach(\App\Models\Donation::latest()->take(7)->get() as $donation)
+             @foreach(\App\Models\Donation::where('status', 'confirmed')->latest()->take(7)->get() as $donation)
              <div class="flex items-center gap-4">
                  <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center font-bold text-gray-500">
                      {{ $donation->is_anonymous ? 'H' : substr($donation->donor->name ?? 'G', 0, 1) }}

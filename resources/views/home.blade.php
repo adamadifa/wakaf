@@ -174,7 +174,7 @@
 
 @section('content')
     <!-- Hero Slider -->
-    <div class="w-full bg-gray-50 pb-8">
+    <div class="w-full bg-gray-50 pb-8 overflow-hidden">
         <div class="hero-slider swiper heroSwiper">
             <div class="swiper-wrapper">
                 @forelse($sliderCampaigns as $campaign)

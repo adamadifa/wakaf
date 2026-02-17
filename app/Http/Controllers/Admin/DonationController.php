@@ -83,7 +83,7 @@ class DonationController extends Controller
                     // Send Confirmation Email
                     try {
                         if ($donation->donor && $donation->donor->email) {
-                            Mail::to($donation->donor->email)->send(new DonationConfirmedMail($donation));
+                            dispatch(new \App\Jobs\SendEmailJob($donation->donor->email, new DonationConfirmedMail($donation)));
                         }
                     } catch (\Exception $e) {
                          \Illuminate\Support\Facades\Log::error('Email Error: ' . $e->getMessage());

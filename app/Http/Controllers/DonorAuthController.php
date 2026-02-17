@@ -39,10 +39,10 @@ class DonorAuthController extends Controller
 
         // Send OTP via email
         try {
-            Mail::to($donor->email)->send(new DonorOtpMail($donor, $otpRecord->otp));
+            dispatch(new \App\Jobs\SendEmailJob($donor->email, new DonorOtpMail($donor, $otpRecord->otp)));
         } catch (\Exception $e) {
             return back()->withErrors([
-                'email' => 'Gagal mengirim OTP. Silakan coba lagi.',
+                'email' => 'Gagal mengirim OTP ke antrian. Silakan coba lagi.',
             ])->withInput();
         }
 

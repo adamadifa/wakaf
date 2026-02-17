@@ -246,11 +246,11 @@ class PublicController extends Controller
             }
         }
 
-        // Send Payment Instruction Email
+        // Send Payment Instruction Email via Queue
         try {
-            Mail::to($request->email)->send(new PaymentInstructionMail($donation));
+            dispatch(new \App\Jobs\SendEmailJob($request->email, new PaymentInstructionMail($donation)));
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Email Error: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Job Dispatch Error: ' . $e->getMessage());
         }
 
         return redirect()->route('campaign.success', $donation->invoice_number);

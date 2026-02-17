@@ -208,7 +208,7 @@ class ZakatController extends Controller
 
         // Send Payment Instruction Email
         try {
-            \Illuminate\Support\Facades\Mail::to($request->email)->send(new \App\Mail\ZakatPaymentInstructionMail($transaction));
+            dispatch(new \App\Jobs\SendEmailJob($request->email, new \App\Mail\ZakatPaymentInstructionMail($transaction)));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Zakat Email Error: ' . $e->getMessage());
         }
