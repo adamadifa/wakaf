@@ -195,9 +195,7 @@
                                 <li>
                                     <a href="{{ route('infaq.index') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('infaq.*') ? 'text-primary font-bold' : '' }}">Infaq / Sedekah</a>
                                 </li>
-                                <li>
-                                    <a href="{{ route('programs.index') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('programs.*') ? 'text-primary font-bold' : '' }}">Program Wakaf</a>
-                                </li>
+                                
                             </ul>
                         </div>
                     </li>
@@ -348,6 +346,110 @@
             }
         }
     </style>
+
+    <!-- Floating WhatsApp Button -->
+    @if(isset($site_settings) && $site_settings->phone_number)
+    @php
+        $waNumber = preg_replace('/[^0-9]/', '', $site_settings->phone_number);
+        if (str_starts_with($waNumber, '0')) {
+            $waNumber = '62' . substr($waNumber, 1);
+        }
+    @endphp
+    <a href="https://wa.me/{{ $waNumber }}?text={{ urlencode('Assalamu\'alaikum, saya ingin bertanya...') }}" 
+       target="_blank" 
+       class="wa-float-btn group"
+       title="Chat via WhatsApp">
+        <!-- Pulse Ring -->
+        <span class="wa-pulse-ring"></span>
+        <!-- Character Image -->
+        <img src="{{ asset('images/wa_cs_character.png') }}" alt="Customer Service" class="wa-character-img">
+        <!-- Tooltip -->
+        <span class="wa-tooltip">Chat Kami 💬</span>
+    </a>
+
+    <style>
+        .wa-float-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+        }
+        .wa-float-btn:hover {
+            transform: scale(1.08);
+        }
+        .wa-character-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #25D366;
+            padding: 4px;
+            border: 3px solid white;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+        }
+        .wa-float-btn:hover .wa-character-img {
+            box-shadow: 0 6px 28px rgba(37, 211, 102, 0.6);
+        }
+        .wa-pulse-ring {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(37, 211, 102, 0.3);
+            animation: wa-pulse 2s ease-out infinite;
+        }
+        @keyframes wa-pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        .wa-tooltip {
+            position: absolute;
+            right: 90px;
+            bottom: 20px;
+            background: white;
+            color: #333;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 12px;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .wa-tooltip::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 6px solid transparent;
+            border-left-color: white;
+        }
+        .wa-float-btn:hover .wa-tooltip {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        @media (max-width: 768px) {
+            .wa-float-btn { bottom: 90px; right: 16px; }
+            .wa-character-img { width: 64px; height: 64px; }
+            .wa-pulse-ring { width: 64px; height: 64px; }
+            .wa-tooltip { display: none; }
+        }
+    </style>
+    @endif
 
     @stack('scripts')
 </body>

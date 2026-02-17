@@ -102,8 +102,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Transaction Reports
         Route::get('/reports/export', [App\Http\Controllers\Admin\ReportController::class, 'export'])->name('reports.export');
+        Route::get('/reports/print', [App\Http\Controllers\Admin\ReportController::class, 'printReport'])->name('reports.print');
         Route::get('/reports/zakat', [App\Http\Controllers\Admin\ReportController::class, 'zakat'])->name('reports.zakat');
         Route::get('/reports/donation', [App\Http\Controllers\Admin\ReportController::class, 'donation'])->name('reports.donation');
+        Route::get('/reports/infaq', [App\Http\Controllers\Admin\ReportController::class, 'infaq'])->name('reports.infaq');
         Route::get('/reports/distribution', [App\Http\Controllers\Admin\ReportController::class, 'distribution'])->name('reports.distribution');
         Route::get('/reports/distribution/export', [App\Http\Controllers\Admin\ReportController::class, 'exportDistribution'])->name('reports.distribution.export');
         

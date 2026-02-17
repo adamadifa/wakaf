@@ -369,5 +369,29 @@
             }
         }
     </script>
+
+    <!-- Floating WhatsApp Button -->
+    @if(isset($site_settings) && $site_settings->phone_number)
+    @php
+        $waNumber = preg_replace('/[^0-9]/', '', $site_settings->phone_number);
+        if (str_starts_with($waNumber, '0')) {
+            $waNumber = '62' . substr($waNumber, 1);
+        }
+    @endphp
+    <a href="https://wa.me/{{ $waNumber }}?text={{ urlencode('Assalamu\'alaikum, saya ingin bertanya...') }}" 
+       target="_blank" 
+       style="position:fixed; bottom:90px; right:16px; z-index:9999; text-decoration:none; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15));"
+       title="Chat via WhatsApp">
+        <span style="position:absolute; bottom:0; right:0; width:60px; height:60px; border-radius:50%; background:rgba(37,211,102,0.3); animation:wa-mob-pulse 2s ease-out infinite;"></span>
+        <img src="{{ asset('images/wa_cs_character.png') }}" alt="CS" 
+             style="width:60px; height:60px; object-fit:contain; border-radius:50%; background:#25D366; padding:3px; border:2px solid white; box-shadow:0 4px 20px rgba(37,211,102,0.4);">
+    </a>
+    <style>
+        @keyframes wa-mob-pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+    </style>
+    @endif
 </body>
 </html>
