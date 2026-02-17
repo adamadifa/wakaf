@@ -26,11 +26,21 @@ use App\Http\Controllers\AdminController;
 // Public Routes
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/wakaf', [PublicController::class, 'index'])->name('wakaf.index');
+Route::get('/about', [PublicController::class, 'about'])->name('about');
+Route::get('/vision-mission', [PublicController::class, 'visionMission'])->name('vision-mission');
+Route::get('/managers', [PublicController::class, 'managers'])->name('managers');
+Route::get('/rekening', [PublicController::class, 'rekening'])->name('rekening');
+Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 Route::get('/zakat', [App\Http\Controllers\ZakatController::class, 'index'])->name('zakat.index');
 Route::get('/zakat/{id}', [App\Http\Controllers\ZakatController::class, 'show'])->name('zakat.show');
 Route::post('/zakat/{id}', [App\Http\Controllers\ZakatController::class, 'store'])->name('zakat.store');
 Route::get('/zakat/sukses/{invoice}', [App\Http\Controllers\ZakatController::class, 'success'])->name('zakat.success')->where('invoice', '.*');
 Route::post('/zakat/sukses/{invoice}', [App\Http\Controllers\ZakatController::class, 'confirm'])->name('zakat.confirm')->where('invoice', '.*');
+Route::get('/infaq', [App\Http\Controllers\InfaqController::class, 'index'])->name('infaq.index');
+Route::get('/infaq/{id}', [App\Http\Controllers\InfaqController::class, 'show'])->name('infaq.show');
+Route::post('/infaq/{id}', [App\Http\Controllers\InfaqController::class, 'store'])->name('infaq.store');
+Route::get('/infaq/sukses/{invoice}', [App\Http\Controllers\InfaqController::class, 'success'])->name('infaq.success')->where('invoice', '.*');
+Route::post('/infaq/sukses/{invoice}', [App\Http\Controllers\InfaqController::class, 'confirm'])->name('infaq.confirm')->where('invoice', '.*');
 Route::get('/programs', [PublicController::class, 'programs'])->name('programs.index');
 Route::get('/campaign/{campaign:slug}', [PublicController::class, 'show'])->name('campaign.show');
 Route::get('/donasi/{campaign:slug}', [PublicController::class, 'donate'])->name('campaign.donate');
@@ -68,7 +78,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // Admin Resources
     Route::middleware(['can:admin'])->prefix('dashboard')->name('admin.')->group(function () {
-        Route::resource('campaigns', App\Http\Controllers\Admin\CampaignController::class);
+        Route::post('/campaigns/upload-image', [App\Http\Controllers\Admin\ImageUploadController::class, 'upload'])->name('campaigns.upload_image');
+    Route::resource('campaigns', App\Http\Controllers\Admin\CampaignController::class);
         Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
         Route::resource('donations', App\Http\Controllers\Admin\DonationController::class);
         Route::resource('distributions', App\Http\Controllers\Admin\DistributionController::class);
@@ -76,24 +87,40 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('users', App\Http\Controllers\Admin\UserController::class);
         Route::resource('donors', App\Http\Controllers\Admin\DonorController::class);
-        Route::resource('zakat-transactions', App\Http\Controllers\Admin\ZakatTransactionController::class);
         Route::resource('campaign-updates', App\Http\Controllers\Admin\CampaignUpdateController::class);
         Route::resource('news', App\Http\Controllers\Admin\NewsController::class);
         Route::resource('news-categories', App\Http\Controllers\Admin\NewsCategoryController::class);
         Route::resource('laporans', App\Http\Controllers\Admin\LaporanController::class);
-        
+
+        // Zakat Management
+        Route::resource('zakat-types', App\Http\Controllers\Admin\ZakatTypeController::class);
+        Route::resource('zakat-transactions', App\Http\Controllers\Admin\ZakatTransactionController::class)->only(['index', 'show', 'update', 'destroy']);
+
+        // Infaq Management
+        Route::resource('infaq-categories', App\Http\Controllers\Admin\InfaqCategoryController::class);
+        Route::resource('infaq-transactions', App\Http\Controllers\Admin\InfaqTransactionController::class)->only(['index', 'show', 'update', 'destroy']);
+
         // Transaction Reports
         Route::get('/reports/export', [App\Http\Controllers\Admin\ReportController::class, 'export'])->name('reports.export');
         Route::get('/reports/zakat', [App\Http\Controllers\Admin\ReportController::class, 'zakat'])->name('reports.zakat');
         Route::get('/reports/donation', [App\Http\Controllers\Admin\ReportController::class, 'donation'])->name('reports.donation');
         Route::get('/reports/distribution', [App\Http\Controllers\Admin\ReportController::class, 'distribution'])->name('reports.distribution');
         Route::get('/reports/distribution/export', [App\Http\Controllers\Admin\ReportController::class, 'exportDistribution'])->name('reports.distribution.export');
-
-        Route::resource('zakat-types', App\Http\Controllers\Admin\ZakatTypeController::class);
         
         // Settings
         Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+
+        // Vision & Mission
+        Route::get('/vision-mission', [App\Http\Controllers\Admin\VisionMissionController::class, 'index'])->name('vision-mission.index');
+        Route::put('/vision-mission', [App\Http\Controllers\Admin\VisionMissionController::class, 'update'])->name('vision-mission.update');
+
+        // Managers
+        Route::resource('managers', App\Http\Controllers\Admin\ManagerController::class);
+
+        // About Us
+        Route::get('/about', [App\Http\Controllers\Admin\AboutController::class, 'index'])->name('about.index');
+        Route::put('/about', [App\Http\Controllers\Admin\AboutController::class, 'update'])->name('about.update');
     });
 });
 

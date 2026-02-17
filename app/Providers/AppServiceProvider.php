@@ -21,13 +21,15 @@ class AppServiceProvider extends ServiceProvider
     {
         \Illuminate\Pagination\Paginator::useTailwind();
         try {
-            $settings = \App\Models\Setting::get();
+            $settings = \App\Models\Setting::first();
             if (!$settings) {
-                $settings = new \App\Models\Setting();
+                 // Prevent error if table exists but empty, though controller creates it.
+                 // Ideally create a dummy object or handle it in view.
+                 $settings = new \App\Models\Setting();
             }
             \Illuminate\Support\Facades\View::share('site_settings', $settings);
         } catch (\Exception $e) {
-            // Fails gracefully during migration
+            // Fails gracefully during migration or if table missing
         }
     }
 }

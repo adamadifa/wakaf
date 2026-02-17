@@ -236,7 +236,7 @@
                 <h3 class="service-title">Zakat</h3>
                 <p class="service-desc">Tunaikan kewajiban zakat Anda untuk membersihkan harta.</p>
             </a>
-            <a href="{{ route('programs.index', ['category_id' => 3]) }}" class="service-card group">
+            <a href="{{ route('infaq.index') }}" class="service-card group">
                 <div class="service-icon">
                     <i class="ti ti-heart-handshake"></i>
                 </div>
@@ -364,6 +364,59 @@
             </div>
         </div>
     </div>
+
+    <!-- Managers Section -->
+    <div class="py-16 bg-white">
+        <div class="container">
+            <div class="text-center mb-12">
+                <h2 class="section-title">Struktur Pengurus</h2>
+                <p class="section-subtitle">Tim profesional yang berdedikasi mengelola amanah wakaf.</p>
+            </div>
+
+            @if($managers->count() > 0)
+            @if($managers->count() > 0)
+            <div class="swiper managerSwiper !pb-12">
+                <div class="swiper-wrapper">
+                    @foreach($managers as $manager)
+                    <div class="swiper-slide">
+                        <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all group text-center h-full">
+                            <div class="relative h-64 overflow-hidden bg-gray-100">
+                                @if($manager->image_url)
+                                    <img src="{{ asset('storage/' . $manager->image_url) }}" alt="{{ $manager->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                        <i class="ti ti-user text-5xl"></i>
+                                    </div>
+                                @endif
+                                 <!-- Social Overlay -->
+                                 <div class="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent">
+                                    <div class="flex justify-center gap-3">
+                                         @if($manager->facebook)
+                                            <a href="{{ $manager->facebook }}" target="_blank" class="text-white hover:text-blue-400"><i class="ti ti-brand-facebook"></i></a>
+                                        @endif
+                                        @if($manager->instagram)
+                                            <a href="{{ $manager->instagram }}" target="_blank" class="text-white hover:text-pink-400"><i class="ti ti-brand-instagram"></i></a>
+                                        @endif
+                                        @if($manager->linkedin)
+                                            <a href="{{ $manager->linkedin }}" target="_blank" class="text-white hover:text-blue-600"><i class="ti ti-brand-linkedin"></i></a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">{{ $manager->name }}</h3>
+                                <p class="text-primary font-medium text-xs uppercase tracking-wide">{{ $manager->position }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+            @endif
+            @endif
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -418,6 +471,35 @@
         },
         autoplay: {
             delay: 4000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+        },
+    });
+
+    var managerSwiper = new Swiper(".managerSwiper", {
+        slidesPerView: 1,
+        spaceBetween: 24,
+        grabCursor: true,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 2,
+                spaceBetween: 24,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+            },
+            1280: {
+                slidesPerView: 4,
+                spaceBetween: 30,
+            },
+        },
+        autoplay: {
+            delay: 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
         },

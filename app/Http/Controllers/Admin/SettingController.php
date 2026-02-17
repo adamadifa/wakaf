@@ -27,6 +27,7 @@ class SettingController extends Controller
 
         $request->validate([
             'address' => 'nullable|string',
+            'phone_number' => 'nullable|string|max:20',
             'maps_embed' => 'nullable|string',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
             'header_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
@@ -36,9 +37,20 @@ class SettingController extends Controller
             'midtrans_server_key' => 'nullable|string',
             'midtrans_is_production' => 'nullable|boolean',
             'midtrans_admin_fee' => 'nullable|numeric|min:0',
+            'facebook' => 'nullable|url',
+            'instagram' => 'nullable|url',
+            'twitter' => 'nullable|url',
+            'linkedin' => 'nullable|url',
+            'youtube' => 'nullable|url',
+            'short_description' => 'nullable|string',
         ]);
 
-        $data = $request->only(['address', 'maps_embed', 'midtrans_merchant_id', 'midtrans_client_key', 'midtrans_server_key', 'midtrans_admin_fee']);
+        $data = $request->only([
+            'address', 'phone_number', 'maps_embed', 
+            'midtrans_merchant_id', 'midtrans_client_key', 'midtrans_server_key', 'midtrans_admin_fee',
+            'facebook', 'instagram', 'twitter', 'linkedin', 'youtube',
+            'short_description'
+        ]);
         $data['is_payment_gateway_active'] = $request->has('is_payment_gateway_active');
         $data['midtrans_is_production'] = $request->has('midtrans_is_production');
 

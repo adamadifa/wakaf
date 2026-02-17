@@ -15,7 +15,8 @@
             @csrf
             @method('PUT')
             
-            <!-- Logo -->
+            <!-- Logo & Hero Image (Disabled temporarily) -->
+            {{--
             <div class="mb-8 pb-8 border-b border-gray-50">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Identitas Visual</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -44,6 +45,7 @@
                     </div>
                 </div>
             </div>
+            --}}
 
             <!-- Informasi Kontak -->
             <div class="mb-8">
@@ -54,6 +56,20 @@
                     <textarea name="address" rows="3" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all">{{ old('address', $setting->address) }}</textarea>
                     <p class="text-xs text-gray-500 mt-1">Akan ditampilkan di footer website.</p>
                     @error('address') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor Telepon / WhatsApp</label>
+                    <input type="text" name="phone_number" value="{{ old('phone_number', $setting->phone_number) }}" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Contoh: 081234567890">
+                    <p class="text-xs text-gray-500 mt-1">Nomor kontak resmi yayasan.</p>
+                    @error('phone_number') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi Singkat Footer</label>
+                    <textarea name="short_description" rows="3" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all">{{ old('short_description', $setting->short_description) }}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">Teks pendek yang muncul di footer sebelum lencana akreditasi.</p>
+                    @error('short_description') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="mb-6">
@@ -70,7 +86,41 @@
                     </div>
                 @endif
             </div>
+
+
             
+            <!-- Social Media -->
+            <div class="mb-8 border-t border-gray-50 pt-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Media Sosial</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Facebook</label>
+                        <input type="url" name="facebook" value="{{ old('facebook', $setting->facebook) }}" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-mono text-sm" placeholder="https://facebook.com/username">
+                        @error('facebook') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Instagram</label>
+                        <input type="url" name="instagram" value="{{ old('instagram', $setting->instagram) }}" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-mono text-sm" placeholder="https://instagram.com/username">
+                        @error('instagram') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Twitter (X)</label>
+                        <input type="url" name="twitter" value="{{ old('twitter', $setting->twitter) }}" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-mono text-sm" placeholder="https://twitter.com/username">
+                        @error('twitter') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">LinkedIn</label>
+                        <input type="url" name="linkedin" value="{{ old('linkedin', $setting->linkedin) }}" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-mono text-sm" placeholder="https://linkedin.com/in/username">
+                        @error('linkedin') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">YouTube</label>
+                        <input type="url" name="youtube" value="{{ old('youtube', $setting->youtube) }}" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-mono text-sm" placeholder="https://youtube.com/c/username">
+                        @error('youtube') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+            </div>
+
             <!-- Payment Gateway -->
             <div class="mb-8 border-t border-gray-50 pt-8">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Pengaturan Pembayaran</h3>

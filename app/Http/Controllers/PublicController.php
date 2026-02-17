@@ -46,14 +46,17 @@ class PublicController extends Controller
             ->with(['donor', 'campaign'])
             ->latest()
             ->take(10)
+            ->take(10)
             ->get();
+
+        $managers = \App\Models\Manager::orderBy('order')->get();
 
         $agent = new \Jenssegers\Agent\Agent();
         if ($agent->isMobile()) {
-            return view('mobile.home', compact('latestNews', 'sliderCampaigns', 'latestDonations'));
+            return view('mobile.home', compact('latestNews', 'sliderCampaigns', 'latestDonations', 'managers'));
         }
 
-        return view('home', compact('latestNews', 'sliderCampaigns', 'latestDonations'));
+        return view('home', compact('latestNews', 'sliderCampaigns', 'latestDonations', 'managers'));
     }
 
     public function index()
@@ -288,5 +291,65 @@ class PublicController extends Controller
         }
 
         return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload! Admin akan segera memverifikasi donasi Anda.');
+    }
+
+    public function about()
+    {
+        $about = \App\Models\About::first();
+        
+        $agent = new \Jenssegers\Agent\Agent();
+        if ($agent->isMobile()) {
+            return view('mobile.about', compact('about'));
+        }
+
+        return view('about', compact('about'));
+    }
+
+    public function visionMission()
+    {
+        $visionMission = \App\Models\VisionMission::first();
+
+        $agent = new \Jenssegers\Agent\Agent();
+        if ($agent->isMobile()) {
+            return view('mobile.vision_mission', compact('visionMission'));
+        }
+
+        return view('vision_mission', compact('visionMission'));
+    }
+
+    public function managers()
+    {
+        $managers = \App\Models\Manager::orderBy('order')->get();
+
+        $agent = new \Jenssegers\Agent\Agent();
+        if ($agent->isMobile()) {
+            return view('mobile.managers', compact('managers'));
+        }
+
+        return view('managers', compact('managers'));
+    }
+
+    public function contact()
+    {
+        $setting = \App\Models\Setting::first();
+
+        $agent = new \Jenssegers\Agent\Agent();
+        if ($agent->isMobile()) {
+            return view('mobile.contact', compact('setting'));
+        }
+
+        return view('contact', compact('setting'));
+    }
+
+    public function rekening()
+    {
+        $accounts = \App\Models\PaymentMethod::where('is_active', true)->get();
+
+        $agent = new \Jenssegers\Agent\Agent();
+        if ($agent->isMobile()) {
+            return view('mobile.rekening', compact('accounts'));
+        }
+
+        return view('rekening', compact('accounts'));
     }
 }

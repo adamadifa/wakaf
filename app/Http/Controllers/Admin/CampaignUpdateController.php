@@ -58,6 +58,14 @@ class CampaignUpdateController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(CampaignUpdate $campaignUpdate)
+    {
+        return view('admin.campaign_updates.show', compact('campaignUpdate'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(CampaignUpdate $campaignUpdate)

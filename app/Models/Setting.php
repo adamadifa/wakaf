@@ -12,6 +12,7 @@ class Setting extends Model
     protected $fillable = [
         'logo',
         'address',
+        'phone_number',
         'maps_embed',
         'header_image',
         'is_payment_gateway_active',
@@ -20,7 +21,13 @@ class Setting extends Model
         'midtrans_server_key',
         'midtrans_server_key',
         'midtrans_is_production',
+        'facebook',
+        'instagram',
+        'twitter',
+        'linkedin',
+        'youtube',
         'midtrans_admin_fee',
+        'short_description',
     ];
 
     protected $casts = [

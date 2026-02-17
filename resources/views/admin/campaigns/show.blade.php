@@ -116,12 +116,9 @@
             <div id="tab-info" class="tab-content">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-3">Deskripsi Singkat</h3>
-                        <p class="text-gray-700 leading-relaxed mb-6">{{ $campaign->short_description }}</p>
-
                         <h3 class="text-lg font-bold text-gray-900 mb-3">Deskripsi Lengkap</h3>
                         <div class="prose prose-sm max-w-none text-gray-700 leading-relaxed">
-                            {!! nl2br(e($campaign->full_description)) !!}
+                            {!! $campaign->full_description !!}
                         </div>
                     </div>
                     <div>
@@ -158,7 +155,7 @@
                             <h4 class="font-bold text-gray-900">{{ $update->title }}</h4>
                             <span class="text-xs text-gray-500">{{ $update->created_at->format('d M Y') }}</span>
                         </div>
-                        <p class="text-gray-600 text-sm leading-relaxed">{{ $update->content }}</p>
+                        <div class="prose prose-sm max-w-none text-gray-600 text-sm leading-relaxed">{!! $update->content !!}</div>
                         @if($update->image_url)
                         <img src="{{ asset('storage/' . $update->image_url) }}" class="mt-3 rounded-lg max-h-48 object-cover" alt="">
                         @endif

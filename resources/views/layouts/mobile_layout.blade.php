@@ -167,14 +167,109 @@
     @stack('styles')
 </head>
 <body>
-    <nav class="fixed top-0 left-0 w-full z-50 bg-white border-b border-gray-200 shadow-md">
-        <div class="flex items-center justify-center mx-auto p-4 relative">
-            <a href="{{ route('home') }}" class="nav-brand flex items-center">
-                <img src="{{ optional($site_settings)->logo ? asset('storage/' . $site_settings->logo) : asset('images/logo-baiturrahman.png') }}" alt="{{ config('app.name') }}" class="h-8 w-auto object-contain">
+    <nav class="fixed top-0 left-0 w-full z-50 bg-white border-b border-gray-200 shadow-sm transition-all duration-300" id="main-navbar">
+        <div class="flex items-center justify-between mx-auto px-4 py-3 relative">
+            <!-- Hamburger Button -->
+            <button id="mobile-menu-btn" class="w-10 h-10 flex items-center justify-center text-gray-600 rounded-full hover:bg-gray-100 focus:outline-none transition-colors">
+                <i class="ti ti-menu-2 text-2xl"></i>
+            </button>
+
+            <!-- Logo (Centered) -->
+            <a href="{{ route('home') }}" class="nav-brand flex items-center absolute left-1/2 transform -translate-x-1/2">
+                @if(request()->routeIs('wakaf.index'))
+                    <img src="{{ asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-8 w-auto object-contain">
+                @else
+                    <img src="{{ optional($site_settings)->logo ? asset('storage/' . $site_settings->logo) : asset('images/logo-baiturrahman.png') }}" alt="{{ config('app.name') }}" class="h-8 w-auto object-contain">
+                @endif
             </a>
+
+            <!-- Right Placeholder for Balance -->
+            <div class="w-10"></div> 
         </div>
     </nav>
     <div class="h-16"></div> <!-- Spacer for fixed header -->
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity duration-300 opacity-0 backdrop-blur-sm"></div>
+    
+    <!-- Mobile Sidebar -->
+    <div id="mobile-menu" class="fixed inset-y-0 left-0 w-[280px] bg-white z-[70] transform -translate-x-full transition-transform duration-300 shadow-2xl flex flex-col rounded-r-2xl">
+        <!-- Sidebar Header -->
+        <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-white rounded-tr-2xl">
+            <div class="flex items-center gap-2">
+                @if(request()->routeIs('wakaf.index'))
+                    <img src="{{ asset('logo.png') }}" alt="Logo" class="h-8 w-auto">
+                @else
+                    <img src="{{ optional($site_settings)->logo ? asset('storage/' . $site_settings->logo) : asset('images/logo-baiturrahman.png') }}" alt="Logo" class="h-8 w-auto">
+                @endif
+            </div>
+            <button id="mobile-menu-close" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all">
+                <i class="ti ti-x text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Sidebar Content -->
+        <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
+             <ul class="space-y-1">
+                <li>
+                    <a href="{{ route('home') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary/5 {{ request()->routeIs('home') ? 'bg-primary/10 text-primary font-bold' : 'text-gray-700 font-medium' }}">
+                        <i class="ti ti-home text-xl {{ request()->routeIs('home') ? 'text-primary' : 'text-gray-400' }}"></i>
+                        Beranda
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('news.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary/5 {{ request()->routeIs('news.*') ? 'bg-primary/10 text-primary font-bold' : 'text-gray-700 font-medium' }}">
+                        <i class="ti ti-news text-xl {{ request()->routeIs('news.*') ? 'text-primary' : 'text-gray-400' }}"></i>
+                        Berita
+                    </a>
+                </li>
+                
+                <!-- Dropdown for Tentang Kami -->
+                <li class="relative">
+                    <button onclick="toggleSubmenu('submenu-about')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-primary/5 text-gray-700 font-medium group transition-colors">
+                        <div class="flex items-center gap-3">
+                            <i class="ti ti-info-circle text-xl text-gray-400 group-hover:text-primary transition-colors"></i>
+                            <span>Tentang Kami</span>
+                        </div>
+                        <i class="ti ti-chevron-down text-gray-400 transition-transform duration-300" id="arrow-about"></i>
+                    </button>
+                    <ul id="submenu-about" class="hidden pl-12 pr-2 space-y-1 mt-1 pb-2">
+                        <li><a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Profile</a></li>
+                        <li><a href="{{ route('vision-mission') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Visi Misi</a></li>
+                        <li><a href="{{ route('managers') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Pengurus</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{{ route('rekening') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary/5 {{ request()->routeIs('rekening') ? 'bg-primary/10 text-primary font-bold' : 'text-gray-700 font-medium' }}">
+                        <i class="ti ti-credit-card text-xl {{ request()->routeIs('rekening') ? 'text-primary' : 'text-gray-400' }}"></i>
+                        Rekening Donasi
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('contact') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primary/5 {{ request()->routeIs('contact') ? 'bg-primary/10 text-primary font-bold' : 'text-gray-700 font-medium' }}">
+                        <i class="ti ti-phone text-xl {{ request()->routeIs('contact') ? 'text-primary' : 'text-gray-400' }}"></i>
+                        Kontak
+                    </a>
+                </li>
+             </ul>
+        </div>
+        
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-gray-100 bg-gray-50 rounded-br-2xl">
+             @if(Auth::check())
+                <a href="{{ route('dashboard') }}" class="btn btn-primary w-full text-center flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+                    <i class="ti ti-layout-dashboard"></i>
+                    Dashboard
+                </a>
+             @else
+                <a href="{{ route('donor.login') }}" class="btn btn-primary w-full text-center flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+                    <i class="ti ti-login"></i>
+                    Masuk / Daftar
+                </a>
+             @endif
+        </div>
+    </div>
     @yield('content')
 
     @unless(View::hasSection('hide_bottom_nav'))
@@ -227,5 +322,52 @@
     </style>
 
     @stack('scripts')
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const closeBtn = document.getElementById('mobile-menu-close');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            const menu = document.getElementById('mobile-menu');
+            const body = document.body;
+
+            function openMenu() {
+                overlay.classList.remove('hidden');
+                // Trigger reflow for transition
+                void overlay.offsetWidth; 
+                overlay.classList.remove('opacity-0');
+                
+                menu.classList.remove('-translate-x-full');
+                body.style.overflow = 'hidden'; // Prevent scrolling
+            }
+
+            function closeMenu() {
+                overlay.classList.add('opacity-0');
+                menu.classList.add('-translate-x-full');
+                
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    body.style.overflow = ''; // Restore scrolling
+                }, 300);
+            }
+
+            if(menuBtn) menuBtn.addEventListener('click', openMenu);
+            if(closeBtn) closeBtn.addEventListener('click', closeMenu);
+            if(overlay) overlay.addEventListener('click', closeMenu);
+        });
+
+        function toggleSubmenu(id) {
+            const submenu = document.getElementById(id);
+            const arrow = document.getElementById('arrow-about');
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-180');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            }
+        }
+    </script>
 </body>
 </html>

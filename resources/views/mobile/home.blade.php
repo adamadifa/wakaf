@@ -330,6 +330,44 @@
                 <div class="swiper-pagination"></div>
             </div>
         </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Managers Section -->
+    <div class="py-12 bg-white">
+        <div class="text-left mb-6 px-4">
+            <h2 class="font-bold text-gray-900 text-xl">Struktur Pengurus</h2>
+        </div>
+
+        @if($managers->count() > 0)
+        <div class="container px-4">
+            <div class="swiper managerSwiper !pb-12">
+                <div class="swiper-wrapper">
+                    @foreach($managers as $manager)
+                    <div class="swiper-slide w-[70%] sm:w-[50%]">
+                        <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all group text-center h-full">
+                            <div class="relative h-48 overflow-hidden bg-gray-100">
+                                @if($manager->image_url)
+                                    <img src="{{ asset('storage/' . $manager->image_url) }}" alt="{{ $manager->name }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                        <i class="ti ti-user text-4xl"></i>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-base font-bold text-gray-900 mb-1">{{ $manager->name }}</h3>
+                                <p class="text-primary font-medium text-[10px] uppercase tracking-wide">{{ $manager->position }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        @endif
     </div>
 @endsection
 
@@ -375,6 +413,22 @@
         grabCursor: true,
         autoplay: {
             delay: 4000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+        },
+    });
+
+    var managerSwiper = new Swiper(".managerSwiper", {
+        slidesPerView: "auto",
+        spaceBetween: 16,
+        grabCursor: true,
+        centeredSlides: false,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        autoplay: {
+            delay: 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
         },

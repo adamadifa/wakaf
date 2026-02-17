@@ -82,6 +82,8 @@ class CampaignController extends Controller
             $validated['start_date'] = now();
         }
 
+        $validated['is_featured'] = $request->has('is_featured');
+
         Campaign::create($validated);
 
         return redirect()->route('admin.campaigns.index')->with('success', 'Program wakaf berhasil dibuat!');
@@ -131,6 +133,8 @@ class CampaignController extends Controller
             $path = $request->file('image')->store('campaigns', 'public');
             $validated['image_url'] = $path;
         }
+
+        $validated['is_featured'] = $request->has('is_featured');
 
         $validated['slug'] = \Illuminate\Support\Str::slug($request->title);
         $validated['short_description'] = \Illuminate\Support\Str::limit($request->description, 150);

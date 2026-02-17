@@ -171,11 +171,15 @@
 </head>
 <body>
     <nav class="navbar bg-white border-gray-200">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between md:justify-between justify-center mx-auto p-4">
             <a href="{{ route('home') }}" class="nav-brand flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="{{ optional($site_settings)->logo ? asset('storage/' . $site_settings->logo) : asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain">
+                @if(request()->routeIs('wakaf.index'))
+                    <img src="{{ asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain">
+                @else
+                    <img src="{{ optional($site_settings)->logo ? asset('storage/' . $site_settings->logo) : asset('images/logo-baiturrahman.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain">
+                @endif
             </a>
-            <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-default" aria-expanded="false" id="navbar-toggle">
+            <button data-collapse-toggle="navbar-default" type="button" class="hidden inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-default" aria-expanded="false" id="navbar-toggle">
                 <span class="sr-only">Open main menu</span>
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
@@ -183,10 +187,32 @@
             </button>
             <div class="hidden w-full md:block md:w-auto" id="navbar-default">
                 <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white items-center">
-                    <li><a href="{{ route('home') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('home') ? 'text-blue-700' : '' }}" aria-current="page">Beranda</a></li>
-                    <li><a href="{{ route('programs.index') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('programs.*') ? 'text-blue-700' : '' }}">Program</a></li>
-                    <li><a href="{{ route('news.index') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('news.*') ? 'text-blue-700' : '' }}">Berita</a></li>
-                    <li><a href="{{ route('laporan.index') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('laporan.*') ? 'text-primary font-bold' : '' }}">Laporan</a></li>
+                    <li><a href="{{ route('home') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('home') ? 'text-secondary' : '' }}" aria-current="page">Beranda</a></li>
+                    <li><a href="{{ route('news.index') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('news.*') ? 'text-secondary' : '' }}">Berita</a></li>
+                    <li class="relative group">
+                        <button class="nav-link block py-2 px-3 flex items-center gap-1 group-hover:text-primary">
+                            Tentang Kami
+                            <svg class="w-2.5 h-2.5 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div class="absolute z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 group-hover:block transition-all duration-300 transform origin-top-left">
+                            <ul class="py-2 text-sm text-gray-700">
+                                <li>
+                                    <a href="{{ route('about') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('about') ? 'text-primary font-bold' : '' }}">Profile</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('vision-mission') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('vision-mission') ? 'text-primary font-bold' : '' }}">Visi Misi</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('managers') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('managers') ? 'text-primary font-bold' : '' }}">Pengurus</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="{{ route('rekening') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('rekening') ? 'text-secondary' : '' }}">Rekening</a></li>
+                    <li><a href="{{ route('contact') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('contact') ? 'text-secondary' : '' }}">Kontak</a></li>
                     <li class="mt-2 md:mt-0">
                         @if(Auth::check() && Auth::user()->role !== 'donor')
                             <a href="{{ route('dashboard') }}" class="btn btn-outline w-full md:w-auto text-center">Dashboard Admin</a>
@@ -221,25 +247,19 @@
                         <img src="{{ optional($site_settings)->logo ? asset('storage/' . $site_settings->logo) : asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-14 w-auto object-contain">
                     </a>
                     <p class="text-gray-500 text-sm leading-relaxed">
-                        WakafApp Merupakan Lembaga Pengelolaan Wakaf yang telah terdaftar pada Badan Wakaf Indonesia dengan No Nazhir 3.3.00170.
+                        {{ $site_settings->short_description ?? 'WakafApp Merupakan Lembaga Pengelolaan Wakaf yang telah terdaftar pada Badan Wakaf Indonesia dengan No Nazhir 3.3.00170.' }}
                     </p>
-                    <div class="flex gap-4">
-                        <!-- Accreditation Icons (Placeholders) -->
-                        <div class="h-12 w-12 bg-gray-100 rounded flex items-center justify-center text-[10px] text-center text-gray-400">WTP</div>
-                        <div class="h-12 w-12 bg-gray-100 rounded flex items-center justify-center text-[10px] text-center text-gray-400">Top CSR</div>
-                        <div class="h-12 w-12 bg-gray-100 rounded flex items-center justify-center text-[10px] text-center text-gray-400">Forum Wakaf</div>
-                    </div>
+
                 </div>
 
                 <!-- Column 2: Links -->
                 <div>
-                    <h3 class="font-bold text-gray-800 mb-6 text-lg">Learn More</h3>
+                    <h3 class="font-bold text-gray-800 mb-6 text-lg">Layanan</h3>
                     <ul class="space-y-3 text-sm text-gray-500">
-                        <li><a href="#" class="hover:text-primary transition-colors">Tentang Kami</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors">Milestone</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors">Syarat & Ketentuan</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors">Laporan Tahunan</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors">Karir</a></li>
+                        <li><a href="{{ route('wakaf.index') }}" class="hover:text-primary transition-colors">Wakaf</a></li>
+                        <li><a href="{{ route('zakat.index') }}" class="hover:text-primary transition-colors">Zakat</a></li>
+                        <li><a href="{{ route('infaq.index') }}" class="hover:text-primary transition-colors">Infaq / Sedekah</a></li>
+                        <li><a href="{{ route('programs.index') }}" class="hover:text-primary transition-colors">Program</a></li>
                     </ul>
                 </div>
 
@@ -247,15 +267,31 @@
                 <div>
                     <h3 class="font-bold text-gray-800 mb-6 text-lg">Temukan Kami</h3>
                     <div class="flex gap-3 mb-6">
-                        <a href="#" class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all">
+                        @if($site_settings->facebook)
+                        <a href="{{ $site_settings->facebook }}" target="_blank" class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all">
                             <i class="ti ti-brand-facebook text-xl"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all">
+                        @endif
+                        @if($site_settings->instagram)
+                        <a href="{{ $site_settings->instagram }}" target="_blank" class="w-10 h-10 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all">
                             <i class="ti ti-brand-instagram text-xl"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-50 text-gray-800 flex items-center justify-center hover:bg-gray-800 hover:text-white transition-all">
+                        @endif
+                        @if($site_settings->twitter)
+                        <a href="{{ $site_settings->twitter }}" target="_blank" class="w-10 h-10 rounded-full bg-gray-50 text-gray-800 flex items-center justify-center hover:bg-gray-800 hover:text-white transition-all">
                             <i class="ti ti-brand-x text-xl"></i>
                         </a>
+                        @endif
+                        @if($site_settings->linkedin)
+                        <a href="{{ $site_settings->linkedin }}" target="_blank" class="w-10 h-10 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center hover:bg-blue-700 hover:text-white transition-all">
+                            <i class="ti ti-brand-linkedin text-xl"></i>
+                        </a>
+                        @endif
+                        @if($site_settings->youtube)
+                        <a href="{{ $site_settings->youtube }}" target="_blank" class="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-all">
+                            <i class="ti ti-brand-youtube text-xl"></i>
+                        </a>
+                        @endif
                     </div>
                     <div class="space-y-3 text-sm text-gray-500">
                         <h4 class="font-bold text-gray-800">Alamat:</h4>

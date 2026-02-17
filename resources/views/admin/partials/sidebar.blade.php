@@ -13,8 +13,26 @@
             Dashboard
         </a>
         
-        <!-- Program Management -->
-        <div class="pt-3 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Manajemen Program</div>
+        <!-- Manajemen Infaq -->
+        <div class="pt-3 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Manajemen Infaq</div>
+
+        <a href="{{ route('admin.infaq-categories.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.infaq-categories.*') ? 'active-nav' : '' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Program Infaq
+        </a>
+
+        <a href="{{ route('admin.infaq-transactions.index') }}" class="flex items-center justify-between px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.infaq-transactions.*') ? 'active-nav' : '' }}">
+            <div class="flex items-center gap-3.5">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Verifikasi Infaq
+            </div>
+            @if(isset($pendingInfaqCount) && $pendingInfaqCount > 0)
+                <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ $pendingInfaqCount }}</span>
+            @endif
+        </a>
+        
+        <!-- Wakaf Management -->
+        <div class="pt-3 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Manajemen Wakaf</div>
 
         <a href="{{ route('admin.campaigns.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.campaigns.*') ? 'active-nav' : '' }}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
@@ -26,60 +44,24 @@
             Kategori Program
         </a>
 
-        <a href="{{ route('admin.zakat-types.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.zakat-types.*') ? 'active-nav' : '' }}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            Jenis Zakat
-        </a>
-        
         <a href="{{ route('admin.campaign-updates.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.campaign-updates.*') ? 'active-nav' : '' }}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             Kabar Terbaru
         </a>
 
-        <!-- Donation Management -->
-        <div class="pt-3 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Manajemen Donasi</div>
-
-        <a href="{{ route('admin.zakat-transactions.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.zakat-transactions.*') ? 'active-nav' : '' }}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            Verifikasi Zakat
-        </a>
-
-        <a href="{{ route('admin.donations.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.donations.*') ? 'active-nav' : '' }}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            Verifikasi Donasi
+        <a href="{{ route('admin.donations.index') }}" class="flex items-center justify-between px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.donations.*') ? 'active-nav' : '' }}">
+            <div class="flex items-center gap-3.5">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Verifikasi Donasi
+            </div>
+            @if(isset($pendingDonationsCount) && $pendingDonationsCount > 0)
+                <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ $pendingDonationsCount }}</span>
+            @endif
         </a>
 
         <a href="{{ route('admin.distributions.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.distributions.*') ? 'active-nav' : '' }}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
             Data Penyaluran
-        </a>
-
-        <a href="{{ route('admin.payment-methods.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.payment-methods.*') ? 'active-nav' : '' }}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-            Metode Pembayaran
-        </a>
-
-        <!-- Content & Reports -->
-        <div class="pt-3 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Konten & Laporan</div>
-
-        <a href="{{ route('admin.news.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.news.*') ? 'active-nav' : '' }}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2-3h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2m-2-4h2"></path></svg>
-            Manajemen Berita
-        </a>
-
-        <a href="{{ route('admin.news-categories.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.news-categories.*') ? 'active-nav' : '' }}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            Kategori Berita
-        </a>
-
-        <a href="{{ route('admin.laporans.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.laporans.*') ? 'active-nav' : '' }}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            Laporan Bulanan
-        </a>
-        
-        <a href="{{ route('admin.reports.zakat') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.reports.zakat') ? 'active-nav' : '' }}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            Laporan Zakat
         </a>
 
         <a href="{{ route('admin.reports.donation') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.reports.donation') ? 'active-nav' : '' }}">
@@ -90,6 +72,29 @@
         <a href="{{ route('admin.reports.distribution') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.reports.distribution') ? 'active-nav' : '' }}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
             Laporan Penyaluran
+        </a>
+
+        <!-- Zakat Management -->
+        <div class="pt-3 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Manajemen Zakat</div>
+
+        <a href="{{ route('admin.zakat-types.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.zakat-types.*') ? 'active-nav' : '' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Jenis Zakat
+        </a>
+
+        <a href="{{ route('admin.zakat-transactions.index') }}" class="flex items-center justify-between px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.zakat-transactions.*') ? 'active-nav' : '' }}">
+            <div class="flex items-center gap-3.5">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Verifikasi Zakat
+            </div>
+            @if(isset($pendingZakatsCount) && $pendingZakatsCount > 0)
+                <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{{ $pendingZakatsCount }}</span>
+            @endif
+        </a>
+
+        <a href="{{ route('admin.reports.zakat') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.reports.zakat') ? 'active-nav' : '' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Laporan Zakat
         </a>
         
         <!-- Users -->
@@ -107,6 +112,11 @@
 
         <!-- Settings -->
         <div class="pt-3 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Lainnya</div>
+
+        <a href="{{ route('admin.payment-methods.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.payment-methods.*') ? 'active-nav' : '' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+            Metode Pembayaran
+        </a>
 
         <a href="{{ route('admin.settings.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.settings.*') ? 'active-nav' : '' }}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>

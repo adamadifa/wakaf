@@ -150,12 +150,6 @@
                     Dengan menunaikan zakat, Anda membersihkan harta dan membantu mereka yang membutuhkan.
                     Pastikan niat Anda ikhlas karena Allah Ta'ala.
                 </p>
-
-                <div class="bg-gray-50 border-l-4 border-primary p-4 my-6">
-                    <h4 class="font-bold text-gray-800 mb-1">Niat Zakat</h4>
-                    <p class="italic text-gray-600">"Nawaitu an ukhrija zakata maali fardhan lillahi ta'ala."</p>
-                    <p class="text-sm text-gray-500 mt-1">(Saya berniat mengeluarkan zakat mal saya fardhu karena Allah Ta'ala)</p>
-                </div>
             </div>
         </div>
 

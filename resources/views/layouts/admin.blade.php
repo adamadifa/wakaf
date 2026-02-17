@@ -139,9 +139,6 @@
             sidebar.classList.toggle('-translate-x-full');
             overlay.classList.toggle('hidden');
         }
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
-        }
 
         // Toast Notification Logic
         const Toast = Swal.mixin({
@@ -159,14 +156,20 @@
         @if(session('success'))
             Toast.fire({
                 icon: 'success',
-                title: '{{ session('success') }}'
+                title: '{{ session('success') }}',
+                background: '#10B981', // Emerald-500
+                color: '#ffffff',
+                iconColor: '#ffffff'
             });
         @endif
 
         @if(session('error'))
             Toast.fire({
                 icon: 'error',
-                title: '{{ session('error') }}'
+                title: '{{ session('error') }}',
+                background: '#EF4444', // Red-500
+                color: '#ffffff',
+                iconColor: '#ffffff'
             });
         @endif
     </script>

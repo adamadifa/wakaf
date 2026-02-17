@@ -52,39 +52,35 @@
 <!-- List -->
 <div class="grid grid-cols-1 gap-6">
     @forelse($updates as $update)
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
-        <div class="p-6">
-            <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
-                <div>
-                     <span class="text-xs font-semibold uppercase tracking-wider text-primary mb-2 block">
-                        {{ $update->campaign->title }}
-                    </span>
-                    <h3 class="text-lg font-bold text-gray-900 leading-tight group-hover:text-primary transition-colors">
-                        {{ $update->title }}
-                    </h3>
-                </div>
-                <div class="shrink-0 flex items-center gap-2">
-                     <a href="{{ route('admin.campaign-updates.edit', $update->id) }}" class="p-2 rounded-lg text-gray-400 hover:text-primary hover:bg-emerald-50 transition-all border border-gray-100">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                    </a>
-                    <form action="{{ route('admin.campaign-updates.destroy', $update->id) }}" method="POST" onsubmit="return confirm('Hapus update ini?');" class="inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all border border-gray-100">
-                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                        </button>
-                    </form>
-                </div>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow group flex items-center justify-between p-6">
+        <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-primary mb-1 block">
+                {{ $update->campaign->title }}
+            </span>
+            <h3 class="text-lg font-bold text-gray-900 leading-tight group-hover:text-primary transition-colors">
+                {{ $update->title }}
+            </h3>
+            <div class="text-sm text-gray-400 mt-2 flex items-center gap-2">
+                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                {{ $update->published_at->format('d M Y') }}
             </div>
-            
-            <div class="prose prose-sm text-gray-600 mb-4 line-clamp-3">
-                {!! nl2br(e($update->content)) !!}
-            </div>
-
-            <div class="flex items-center text-sm text-gray-400 border-t border-gray-50 pt-4">
-                <svg class="w-4 h-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                Dipublikasikan: {{ $update->published_at->format('d M Y') }}
-            </div>
+        </div>
+        
+        <div class="shrink-0 flex items-center gap-2">
+             <a href="{{ route('admin.campaign-updates.show', $update->id) }}" class="px-4 py-2 bg-sky-50 text-sky-600 rounded-lg font-semibold hover:bg-sky-100 transition-colors flex items-center gap-2 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                Detail
+            </a>
+             <a href="{{ route('admin.campaign-updates.edit', $update->id) }}" class="p-2 rounded-lg text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 transition-all border border-gray-100">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+            </a>
+            <form action="{{ route('admin.campaign-updates.destroy', $update->id) }}" method="POST" onsubmit="return confirm('Hapus update ini?');" class="inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all border border-gray-100">
+                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+            </form>
         </div>
     </div>
     @empty
