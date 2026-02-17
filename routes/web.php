@@ -48,6 +48,10 @@ Route::post('/donasi/{campaign:slug}', [PublicController::class, 'storeDonation'
 Route::get('/donasi/sukses/{invoice}', [PublicController::class, 'success'])->name('campaign.success')->where('invoice', '.*');
 Route::post('/donasi/sukses/{invoice}', [PublicController::class, 'confirmDonation'])->name('campaign.confirm')->where('invoice', '.*');
 
+// Gallery Routes
+Route::get('/gallery', [App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
+Route::get('/gallery/{id}', [App\Http\Controllers\GalleryController::class, 'show'])->name('gallery.show');
+
 // News Routes
 Route::get('/news', [App\Http\Controllers\NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{slug}', [App\Http\Controllers\NewsController::class, 'show'])->name('news.show');
@@ -98,6 +102,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Infaq Management
         Route::resource('infaq-categories', App\Http\Controllers\Admin\InfaqCategoryController::class);
+        Route::resource('infaq-transactions', App\Http\Controllers\Admin\InfaqTransactionController::class); // Assuming this exists or will exist
+
+        // Album / Gallery Management
+        Route::post('/albums/{album}/photos', [App\Http\Controllers\Admin\AlbumController::class, 'storePhoto'])->name('albums.photos.store');
+        Route::delete('/albums/photos/{photo}', [App\Http\Controllers\Admin\AlbumController::class, 'destroyPhoto'])->name('albums.photos.destroy');
+        Route::resource('albums', App\Http\Controllers\Admin\AlbumController::class);
         Route::resource('infaq-transactions', App\Http\Controllers\Admin\InfaqTransactionController::class)->only(['index', 'show', 'update', 'destroy']);
 
         // Transaction Reports

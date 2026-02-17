@@ -224,9 +224,25 @@
                     </a>
                 </li>
                 
+                <!-- Dropdown for Layanan -->
+                <li class="relative">
+                    <button onclick="toggleSubmenu('submenu-layanan', 'arrow-layanan')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-primary/5 text-gray-700 font-medium group transition-colors">
+                        <div class="flex items-center gap-3">
+                            <i class="ti ti-grid-dots text-xl text-gray-400 group-hover:text-primary transition-colors"></i>
+                            <span>Layanan</span>
+                        </div>
+                        <i class="ti ti-chevron-down text-gray-400 transition-transform duration-300" id="arrow-layanan"></i>
+                    </button>
+                    <ul id="submenu-layanan" class="hidden pl-12 pr-2 space-y-1 mt-1 pb-2">
+                        <li><a href="{{ route('wakaf.index') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Wakaf</a></li>
+                        <li><a href="{{ route('zakat.index') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Zakat</a></li>
+                        <li><a href="{{ route('infaq.index') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Infaq / Sedekah</a></li>
+                    </ul>
+                </li>
+
                 <!-- Dropdown for Tentang Kami -->
                 <li class="relative">
-                    <button onclick="toggleSubmenu('submenu-about')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-primary/5 text-gray-700 font-medium group transition-colors">
+                    <button onclick="toggleSubmenu('submenu-about', 'arrow-about')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-primary/5 text-gray-700 font-medium group transition-colors">
                         <div class="flex items-center gap-3">
                             <i class="ti ti-info-circle text-xl text-gray-400 group-hover:text-primary transition-colors"></i>
                             <span>Tentang Kami</span>
@@ -237,6 +253,7 @@
                         <li><a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Profile</a></li>
                         <li><a href="{{ route('vision-mission') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Visi Misi</a></li>
                         <li><a href="{{ route('managers') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Pengurus</a></li>
+                        <li><a href="{{ route('gallery.index') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Galeri</a></li>
                     </ul>
                 </li>
 
@@ -356,9 +373,9 @@
             if(overlay) overlay.addEventListener('click', closeMenu);
         });
 
-        function toggleSubmenu(id) {
+        function toggleSubmenu(id, arrowId) {
             const submenu = document.getElementById(id);
-            const arrow = document.getElementById('arrow-about');
+            const arrow = document.getElementById(arrowId);
             
             if (submenu.classList.contains('hidden')) {
                 submenu.classList.remove('hidden');

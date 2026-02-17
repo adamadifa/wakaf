@@ -189,15 +189,17 @@
                 <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white items-center">
                     <li><a href="{{ route('home') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('home') ? 'text-secondary' : '' }}" aria-current="page">Beranda</a></li>
                     <li><a href="{{ route('news.index') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('news.*') ? 'text-secondary' : '' }}">Berita</a></li>
-                    <li class="relative group">
-                        <button class="nav-link block py-2 px-3 flex items-center gap-1 group-hover:text-primary">
+                    
+                    <!-- Tentang Kami Dropdown -->
+                    <li class="relative group w-full md:w-auto">
+                        <button class="dropdown-toggle nav-link w-full md:w-auto flex items-center justify-between md:justify-start py-2 px-3 gap-1 md:group-hover:text-primary">
                             Tentang Kami
-                            <svg class="w-2.5 h-2.5 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <svg class="w-2.5 h-2.5 ms-1 transition-transform duration-200 dropdown-arrow" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                             </svg>
                         </button>
                         <!-- Dropdown menu -->
-                        <div class="absolute z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 group-hover:block transition-all duration-300 transform origin-top-left">
+                        <div class="dropdown-menu hidden md:absolute z-10 font-normal bg-white divide-y divide-gray-100 rounded-lg md:shadow w-full md:w-44 md:group-hover:block transition-all duration-300 transform origin-top-left border md:border-none border-gray-100 mt-2 md:mt-0">
                             <ul class="py-2 text-sm text-gray-700">
                                 <li>
                                     <a href="{{ route('about') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('about') ? 'text-primary font-bold' : '' }}">Profile</a>
@@ -211,16 +213,16 @@
                             </ul>
                         </div>
                     </li>
+
                     <li><a href="{{ route('rekening') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('rekening') ? 'text-secondary' : '' }}">Rekening</a></li>
                     <li><a href="{{ route('contact') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('contact') ? 'text-secondary' : '' }}">Kontak</a></li>
-                    <li class="mt-2 md:mt-0">
+                    <li class="mt-2 md:mt-0 w-full md:w-auto">
                         @if(Auth::check() && Auth::user()->role !== 'donor')
-                            <a href="{{ route('dashboard') }}" class="btn btn-outline w-full md:w-auto text-center">Dashboard Admin</a>
+                            <a href="{{ route('dashboard') }}" class="btn btn-outline w-full md:w-auto text-center block">Dashboard Admin</a>
                         @elseif(Auth::check() && Auth::user()->role === 'donor')
-                             <!-- Optional: specific link for donor dashboard if exists, otherwise assume home or profile -->
-                             <a href="{{ route('dashboard') }}" class="btn btn-outline w-full md:w-auto text-center">Dashboard</a>
+                             <a href="{{ route('dashboard') }}" class="btn btn-outline w-full md:w-auto text-center block">Dashboard</a>
                         @else
-                            <a href="{{ route('donor.login') }}" class="btn btn-primary w-full md:w-auto text-center">Masuk</a>
+                            <a href="{{ route('donor.login') }}" class="btn btn-primary w-full md:w-auto text-center block">Masuk</a>
                         @endif
                     </li>
                 </ul>
@@ -232,6 +234,20 @@
         document.getElementById('navbar-toggle').addEventListener('click', function() {
             var target = document.getElementById('navbar-default');
             target.classList.toggle('hidden');
+        });
+
+        // Mobile Dropdown Toggle (Generic Class-Based)
+        document.querySelectorAll('.dropdown-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                // Only trigger on mobile/tablet where hover doesn't work well or structure is different
+                if (window.innerWidth < 768) {
+                    const menu = this.nextElementSibling;
+                    const arrow = this.querySelector('.dropdown-arrow'); // Use class instead of ID
+                    
+                    menu.classList.toggle('hidden');
+                    arrow.classList.toggle('rotate-180');
+                }
+            });
         });
     </script>
 

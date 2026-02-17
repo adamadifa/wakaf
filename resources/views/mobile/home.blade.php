@@ -212,7 +212,7 @@
                 </div>
                 <h3 class="service-title !text-sm !mb-0">Zakat</h3>
             </a>
-            <a href="{{ route('programs.index', ['category_id' => 3]) }}" class="service-card group !p-4">
+            <a href="{{ route('infaq.index') }}" class="service-card group !p-4">
                 <div class="service-icon !mb-2 !w-12 !h-12 !text-xl">
                     <i class="ti ti-heart-handshake"></i>
                 </div>
