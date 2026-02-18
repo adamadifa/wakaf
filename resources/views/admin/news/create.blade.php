@@ -54,7 +54,7 @@
             <!-- Isi Berita -->
             <div class="mb-6">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Konten Berita</label>
-                <textarea name="content" required rows="10" 
+                <textarea name="content" rows="10" 
                           placeholder="Tulis isi berita di sini..." 
                           class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all @error('content') border-red-500 @enderror">{{ old('content') }}</textarea>
                 @error('content')
