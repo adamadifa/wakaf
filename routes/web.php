@@ -28,6 +28,7 @@ Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/wakaf', [PublicController::class, 'index'])->name('wakaf.index');
 Route::get('/about', [PublicController::class, 'about'])->name('about');
 Route::get('/vision-mission', [PublicController::class, 'visionMission'])->name('vision-mission');
+Route::get('/vision-mission-wakaf', [PublicController::class, 'visionMissionWakaf'])->name('vision-mission-wakaf');
 Route::get('/managers', [PublicController::class, 'managers'])->name('managers');
 Route::get('/rekening', [PublicController::class, 'rekening'])->name('rekening');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
@@ -126,6 +127,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Vision & Mission
         Route::get('/vision-mission', [App\Http\Controllers\Admin\VisionMissionController::class, 'index'])->name('vision-mission.index');
         Route::put('/vision-mission', [App\Http\Controllers\Admin\VisionMissionController::class, 'update'])->name('vision-mission.update');
+
+        // Vision & Mission Wakaf
+        Route::get('/vision-mission-wakaf', [App\Http\Controllers\Admin\VisionMissionWakafController::class, 'index'])->name('vision-mission-wakaf.index');
+        Route::put('/vision-mission-wakaf', [App\Http\Controllers\Admin\VisionMissionWakafController::class, 'update'])->name('vision-mission-wakaf.update');
 
         // Managers
         Route::resource('managers', App\Http\Controllers\Admin\ManagerController::class);

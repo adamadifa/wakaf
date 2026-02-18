@@ -204,8 +204,11 @@
                                 <li>
                                     <a href="{{ route('about') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('about') ? 'text-primary font-bold' : '' }}">Profile</a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a href="{{ route('vision-mission') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('vision-mission') ? 'text-primary font-bold' : '' }}">Visi Misi</a>
+                                </li> -->
+                                <li>
+                                    <a href="{{ route('vision-mission-wakaf') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('vision-mission-wakaf') ? 'text-primary font-bold' : '' }}">Visi Misi Wakaf</a>
                                 </li>
                                 <li>
                                     <a href="{{ route('managers') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('managers') ? 'text-primary font-bold' : '' }}">Pengurus</a>

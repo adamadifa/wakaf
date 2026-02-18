@@ -317,6 +317,18 @@ class PublicController extends Controller
         return view('vision_mission', compact('visionMission'));
     }
 
+    public function visionMissionWakaf()
+    {
+        $visionMission = \App\Models\VisionMissionWakaf::first();
+
+        $agent = new \Jenssegers\Agent\Agent();
+        if ($agent->isMobile()) {
+            return view('mobile.vision_mission_wakaf', compact('visionMission'));
+        }
+
+        return view('vision_mission_wakaf', compact('visionMission'));
+    }
+
     public function managers()
     {
         $managers = \App\Models\Manager::orderBy('order')->get();

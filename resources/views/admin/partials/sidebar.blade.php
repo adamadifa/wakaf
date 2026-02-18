@@ -44,6 +44,8 @@
             Data Campaign
         </a>
 
+
+
         <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.categories.*') ? 'active-nav' : '' }}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             Kategori Program
@@ -123,6 +125,11 @@
         <a href="{{ route('admin.vision-mission.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.vision-mission.*') ? 'active-nav' : '' }}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
             Visi & Misi
+        </a>
+
+        <a href="{{ route('admin.vision-mission-wakaf.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.vision-mission-wakaf.*') ? 'active-nav' : '' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+            Visi & Misi Wakaf
         </a>
 
         <a href="{{ route('admin.managers.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.managers.*') ? 'active-nav' : '' }}">
