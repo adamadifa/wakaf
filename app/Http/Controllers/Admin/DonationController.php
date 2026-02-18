@@ -99,6 +99,33 @@ class DonationController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+
+    }
+
+    public function cancel(Donation $donation)
+    {
+        try {
+            DB::transaction(function () use ($donation) {
+                // Ensure only confirmed transactions can be cancelled/reverted
+                if ($donation->status !== 'confirmed') {
+                    throw new \Exception('Hanya donasi yang sudah dikonfirmasi yang bisa dibatalkan.');
+                }
+
+                // Revert Donation Status
+                $donation->update([
+                    'status' => 'pending',
+                    'confirmed_at' => null,
+                ]);
+
+                // Decrement campaign amount (rollback)
+                $donation->campaign->decrement('current_amount', $donation->amount);
+            });
+
+            return back()->with('success', 'Status donasi dikembalikan ke Pending dan saldo campaign disesuaikan.');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal membatalkan: ' . $e->getMessage());
+        }
     }
 
     public function destroy(Donation $donation)

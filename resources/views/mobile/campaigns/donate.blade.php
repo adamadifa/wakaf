@@ -82,7 +82,7 @@
                         <input type="radio" name="payment_method_id" value="{{ $method->id }}" class="text-primary focus:ring-primary border-gray-300">
                         <div class="flex-1">
                             @if($method->logo_url)
-                                <img src="{{ Storage::url($method->logo_url) }}" alt="{{ $method->bank_name }}" class="h-6 object-contain mb-1">
+                                <img src="{{ $method->logo_url }}" alt="{{ $method->bank_name }}" class="h-6 object-contain mb-1">
                             @else
                                 <p class="font-bold text-sm text-gray-900">{{ $method->bank_name }}</p>
                             @endif

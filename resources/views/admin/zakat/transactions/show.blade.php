@@ -117,6 +117,21 @@
         </div>
         @endif
 
+        @if($transaction->status == 'confirmed')
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] p-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">Tindakan</h2>
+            <p class="text-sm text-gray-500 mb-6">Transaksi ini sudah diverifikasi.</p>
+            
+            <form action="{{ route('admin.zakat-transactions.cancel', $transaction->id) }}" method="POST" class="w-full">
+                @csrf
+                @method('PUT')
+                <button type="submit" class="w-full py-2.5 bg-white text-red-600 border border-red-200 rounded-xl font-semibold hover:bg-red-50 transition-colors" onclick="return confirm('Apakah Anda yakin ingin membatalkan verifikasi ini? Status akan kembali menjadi PENDING.')">
+                    Batalkan Verifikasi (Kembali ke Pending)
+                </button>
+            </form>
+        </div>
+        @endif
+
         <!-- Proof Image -->
         <div class="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] p-6">
             <h2 class="text-lg font-bold text-gray-800 mb-4">Bukti Pembayaran</h2>

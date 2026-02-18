@@ -3,6 +3,20 @@
 @section('title', $news->title)
 
 @section('content')
+
+@push('meta')
+    <meta property="og:title" content="{{ $news->title }}">
+    <meta property="og:description" content="{{ Str::limit(strip_tags($news->content), 150) }}">
+    <meta property="og:image" content="{{ $news->image ? asset('storage/' . $news->image) : asset('logo.png') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="article">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $news->title }}">
+    <meta name="twitter:description" content="{{ Str::limit(strip_tags($news->content), 150) }}">
+    <meta name="twitter:image" content="{{ $news->image ? asset('storage/' . $news->image) : asset('logo.png') }}">
+@endpush
 <div class="min-h-screen bg-gray-50 pb-24">
     <!-- Hero Image -->
     <div class="relative h-64 bg-gray-900">

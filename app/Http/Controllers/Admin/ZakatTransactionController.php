@@ -76,6 +76,23 @@ class ZakatTransactionController extends Controller
         return redirect()->back()->with('success', 'Status transaksi berhasil diperbarui');
     }
 
+    public function cancel($id)
+    {
+        $transaction = \App\Models\ZakatTransaction::findOrFail($id);
+        
+        // Ensure only confirmed transactions can be cancelled/reverted
+        if ($transaction->status !== 'confirmed') {
+             return redirect()->back()->with('error', 'Hanya transaksi yang sudah dikonfirmasi yang bisa dibatalkan.');
+        }
+
+        $transaction->update([
+            'status' => 'pending',
+            'confirmed_at' => null, 
+        ]);
+
+        return redirect()->back()->with('success', 'Status transaksi dikembalikan ke Pending');
+    }
+
     public function destroy($id)
     {
         $transaction = \App\Models\ZakatTransaction::findOrFail($id);

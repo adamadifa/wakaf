@@ -86,6 +86,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/campaigns/upload-image', [App\Http\Controllers\Admin\ImageUploadController::class, 'upload'])->name('campaigns.upload_image');
     Route::resource('campaigns', App\Http\Controllers\Admin\CampaignController::class);
         Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
+        
+        Route::put('/donations/{donation}/cancel', [App\Http\Controllers\Admin\DonationController::class, 'cancel'])->name('donations.cancel');
         Route::resource('donations', App\Http\Controllers\Admin\DonationController::class);
         Route::resource('distributions', App\Http\Controllers\Admin\DistributionController::class);
         Route::resource('payment-methods', App\Http\Controllers\Admin\PaymentMethodController::class);
@@ -99,16 +101,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Zakat Management
         Route::resource('zakat-types', App\Http\Controllers\Admin\ZakatTypeController::class);
+        
+        Route::put('/zakat-transactions/{id}/cancel', [App\Http\Controllers\Admin\ZakatTransactionController::class, 'cancel'])->name('zakat-transactions.cancel');
         Route::resource('zakat-transactions', App\Http\Controllers\Admin\ZakatTransactionController::class)->only(['index', 'show', 'update', 'destroy']);
 
         // Infaq Management
         Route::resource('infaq-categories', App\Http\Controllers\Admin\InfaqCategoryController::class);
-        Route::resource('infaq-transactions', App\Http\Controllers\Admin\InfaqTransactionController::class); // Assuming this exists or will exist
-
         // Album / Gallery Management
         Route::post('/albums/{album}/photos', [App\Http\Controllers\Admin\AlbumController::class, 'storePhoto'])->name('albums.photos.store');
         Route::delete('/albums/photos/{photo}', [App\Http\Controllers\Admin\AlbumController::class, 'destroyPhoto'])->name('albums.photos.destroy');
         Route::resource('albums', App\Http\Controllers\Admin\AlbumController::class);
+
+        Route::put('/infaq-transactions/{id}/cancel', [App\Http\Controllers\Admin\InfaqTransactionController::class, 'cancel'])->name('infaq-transactions.cancel');
         Route::resource('infaq-transactions', App\Http\Controllers\Admin\InfaqTransactionController::class)->only(['index', 'show', 'update', 'destroy']);
 
         // Transaction Reports

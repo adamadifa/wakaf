@@ -53,7 +53,7 @@
                     <label style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid #ddd; border-radius: 0.5rem; cursor: pointer;" class="bank-option">
                         <input type="radio" name="payment_method_id" value="{{ $method->id }}">
                         @if($method->logo_url)
-                            <img src="{{ Storage::url($method->logo_url) }}" style="height: 30px; object-fit: contain;">
+                            <img src="{{ $method->logo_url }}" style="height: 30px; object-fit: contain;">
                         @else
                             <span style="font-weight: 600;">{{ $method->bank_name }}</span>
                         @endif
