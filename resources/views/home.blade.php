@@ -305,9 +305,6 @@
                         </div>
                         <div class="p-4">
                             <h3 class="font-bold text-gray-900 text-sm md:text-base mb-2 line-clamp-2 group-hover:text-primary transition-colors">{{ $program->title }}</h3>
-                            @if($program->description)
-                                <p class="text-gray-500 text-xs md:text-sm line-clamp-2">{{ $program->description }}</p>
-                            @endif
                         </div>
                     </a>
                 @empty

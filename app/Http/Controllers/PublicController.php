@@ -111,7 +111,7 @@ class PublicController extends Controller
                 'url' => route('infaq.show', $infaq->id),
                 'badge' => 'Infaq',
                 'badge_color' => 'blue',
-                'description' => $infaq->description ? \Illuminate\Support\Str::limit(strip_tags($infaq->description), 100) : null,
+                'description' => $infaq->description ? \Illuminate\Support\Str::limit($infaq->description, 200) : null,
                 'created_at' => $infaq->created_at,
             ]);
         }
