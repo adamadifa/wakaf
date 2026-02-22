@@ -70,6 +70,18 @@
                 </div>
             </div>
 
+            <!-- Featured Toggle -->
+            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
+                <div>
+                    <h3 class="font-semibold text-gray-800">Program Unggulan (Slider)</h3>
+                    <p class="text-xs text-gray-500 mt-1">Jika aktif, program ini akan muncul di slider halaman utama.</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" name="is_featured" class="sr-only peer" value="1" {{ old('is_featured', $infaqCategory->is_featured ?? false) ? 'checked' : '' }}>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+            </div>
+
             <!-- Submit -->
             <div class="pt-6 border-t border-gray-50 flex items-center justify-end gap-3">
                 <a href="{{ route('admin.infaq-categories.index') }}" class="px-5 py-2.5 rounded-xl text-gray-600 font-semibold hover:bg-gray-50 transition-colors">Batal</a>

@@ -29,6 +29,7 @@ class InfaqCategoryController extends Controller
         ]);
 
         $data = $request->except('image');
+        $data['is_featured'] = $request->has('is_featured');
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('infaq-categories', 'public');
@@ -74,6 +75,7 @@ class InfaqCategoryController extends Controller
         ]);
 
         $data = $request->except('image');
+        $data['is_featured'] = $request->has('is_featured');
 
         if ($request->hasFile('image')) {
             if ($infaqCategory->image && !str_starts_with($infaqCategory->image, 'http')) {

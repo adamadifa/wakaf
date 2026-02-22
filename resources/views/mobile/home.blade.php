@@ -155,13 +155,19 @@
     <div class="w-full bg-gray-50 pb-8">
         <div class="hero-slider swiper heroSwiper">
             <div class="swiper-wrapper">
-                @forelse($sliderCampaigns as $campaign)
+                @forelse($sliderItems as $item)
+                    @php
+                        $imgUrl = $item->image_url;
+                        if ($imgUrl && !Str::startsWith($imgUrl, 'http')) {
+                            $imgUrl = Str::startsWith($imgUrl, '/storage') ? asset($imgUrl) : asset('storage/' . $imgUrl);
+                        }
+                    @endphp
                     <div class="swiper-slide">
-                        <div class="hero-slide-bg" style="background-image: url('{{ Str::startsWith($campaign->image_url, 'http') ? $campaign->image_url : asset('storage/' . $campaign->image_url) }}')">
+                        <div class="hero-slide-bg" style="background-image: url('{{ $imgUrl }}')">
                             <div class="hero-content">
-                                <span class="inline-block px-2.5 py-0.5 bg-secondary text-white text-[10px] font-bold rounded-full mb-1">{{ $campaign->category->name ?? 'Program Unggulan' }}</span>
-                                <h2 class="text-lg md:text-2xl font-bold mb-1 leading-tight">{{ $campaign->title }}</h2>
-                                <a href="{{ route('campaign.show', $campaign->slug) }}" class="btn btn-xs btn-primary bg-primary border-0 text-white mt-1 text-[10px] px-3 py-1">Lihat Detail</a>
+                                <span class="inline-block px-2.5 py-0.5 bg-secondary text-white text-[10px] font-bold rounded-full mb-1">{{ $item->badge }}</span>
+                                <h2 class="text-lg md:text-2xl font-bold mb-1 leading-tight">{{ $item->title }}</h2>
+                                <a href="{{ $item->url }}" class="btn btn-xs btn-primary bg-primary border-0 text-white mt-1 text-[10px] px-3 py-1">Lihat Detail</a>
                             </div>
                         </div>
                     </div>
@@ -224,6 +230,58 @@
                 </div>
                 <h3 class="service-title !text-sm !mb-0">Wakaf</h3>
             </a>
+        </div>
+    </div>
+
+    <!-- Program Terbaru -->
+    <div class="py-12 mb-4">
+        <div class="flex justify-between items-center mb-6 px-4">
+            <h2 class="font-bold text-gray-900 text-xl">Program Terbaru</h2>
+            <div class="flex items-center gap-2">
+                <a href="{{ route('wakaf.index') }}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 text-emerald-600 font-semibold text-[10px] rounded-full">
+                    <i class="ti ti-building-mosque"></i> Wakaf
+                </a>
+                <a href="{{ route('infaq.index') }}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-600 font-semibold text-[10px] rounded-full">
+                    <i class="ti ti-heart-handshake"></i> Infaq
+                </a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 px-4">
+            @forelse($latestPrograms as $program)
+                @php
+                    $imgUrl = $program->image_url;
+                    if ($imgUrl && !str_starts_with($imgUrl, 'http')) {
+                        $imgUrl = str_starts_with($imgUrl, '/storage') ? asset($imgUrl) : asset('storage/' . $imgUrl);
+                    }
+                @endphp
+                <a href="{{ $program->url }}" class="block bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 active:scale-[0.98] transition-transform h-full">
+                    <div class="relative h-28 overflow-hidden bg-gray-100">
+                        @if($imgUrl)
+                            <img src="{{ $imgUrl }}" alt="{{ $program->title }}" class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                <i class="ti ti-photo text-3xl"></i>
+                            </div>
+                        @endif
+                        <div class="absolute top-2 left-2">
+                            @if($program->type === 'campaign')
+                                <span class="inline-block px-2 py-0.5 bg-emerald-500/90 backdrop-blur-sm text-white text-[9px] font-bold rounded-full">{{ $program->badge }}</span>
+                            @else
+                                <span class="inline-block px-2 py-0.5 bg-blue-500/90 backdrop-blur-sm text-white text-[9px] font-bold rounded-full">{{ $program->badge }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-bold text-gray-900 text-xs leading-tight line-clamp-2">{{ $program->title }}</h3>
+                    </div>
+                </a>
+            @empty
+                <div class="col-span-full text-center py-8 text-gray-500 bg-white rounded-xl border border-dashed border-gray-300">
+                    <i class="ti ti-mood-empty text-2xl mb-2 block"></i>
+                    Belum ada program.
+                </div>
+            @endforelse
         </div>
     </div>
 
@@ -403,8 +461,10 @@
         slidesPerView: "auto",
         spaceBetween: 16,
         grabCursor: true,
-        centeredSlides: false, // Ensure left alignment starting position if desired, or true for center
+        centeredSlides: false,
     });
+
+
 
     var doaSwiper = new Swiper(".doaSwiper", {
         slidesPerView: 1.2, // Show part of next slide

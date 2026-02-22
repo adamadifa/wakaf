@@ -28,16 +28,42 @@ class PublicController extends Controller
              $sliderCampaigns = Campaign::where('status', 'active')->latest()->take(5)->get();
         }
 
+        // Get featured infaq categories for slider
+        $featuredInfaq = \App\Models\InfaqCategory::where('is_featured', true)->get();
+
+        // Build unified slider items collection
+        $sliderItems = collect();
+
+        foreach ($sliderCampaigns as $campaign) {
+            $sliderItems->push((object) [
+                'type' => 'campaign',
+                'title' => $campaign->title,
+                'image_url' => $campaign->image_url,
+                'url' => route('campaign.show', $campaign->slug),
+                'badge' => $campaign->category->name ?? 'Program Unggulan',
+            ]);
+        }
+
+        foreach ($featuredInfaq as $infaq) {
+            $sliderItems->push((object) [
+                'type' => 'infaq',
+                'title' => $infaq->name,
+                'image_url' => $infaq->image,
+                'url' => route('infaq.show', $infaq->id),
+                'badge' => 'Program Infaq',
+            ]);
+        }
+
         // Feature: Ensure enough slides for infinite loop smoothness (Safe Duplication)
         // If we have valid slides but fewer than 6, duplicate them to support Swiper loop
-        $count = $sliderCampaigns->count();
+        $count = $sliderItems->count();
         if ($count > 0 && $count < 6) {
-            $cloned = clone $sliderCampaigns;
-            $sliderCampaigns = $sliderCampaigns->merge($cloned);
+            $cloned = $sliderItems->values();
+            $sliderItems = $sliderItems->merge($cloned);
             
             // If still less than 6 (e.g., started with 2, now 4), merge one more time
-            if ($sliderCampaigns->count() < 6) {
-                $sliderCampaigns = $sliderCampaigns->merge($cloned);
+            if ($sliderItems->count() < 6) {
+                $sliderItems = $sliderItems->merge($cloned);
             }
         }
         $latestDonations = \App\Models\Donation::where('status', 'confirmed')
@@ -51,12 +77,54 @@ class PublicController extends Controller
 
         $managers = \App\Models\Manager::orderBy('order')->get();
 
-        $agent = new \Jenssegers\Agent\Agent();
-        if ($agent->isMobile()) {
-            return view('mobile.home', compact('latestNews', 'sliderCampaigns', 'latestDonations', 'managers'));
+        // Build latest programs (combined wakaf + infaq), sorted by newest first, take 8
+        $latestPrograms = collect();
+
+        $latestCampaigns = Campaign::where('status', 'active')->latest()->take(8)->get();
+        foreach ($latestCampaigns as $campaign) {
+            $imgUrl = $campaign->image_url;
+            if ($imgUrl && !str_starts_with($imgUrl, 'http')) {
+                $imgUrl = str_starts_with($imgUrl, '/storage') ? $imgUrl : '/storage/' . $imgUrl;
+            }
+            $latestPrograms->push((object) [
+                'type' => 'campaign',
+                'title' => $campaign->title,
+                'image_url' => $imgUrl,
+                'url' => route('campaign.show', $campaign->slug),
+                'badge' => $campaign->category->name ?? 'Wakaf',
+                'badge_color' => 'emerald',
+                'description' => $campaign->short_description,
+                'created_at' => $campaign->created_at,
+            ]);
         }
 
-        return view('home', compact('latestNews', 'sliderCampaigns', 'latestDonations', 'managers'));
+        $latestInfaq = \App\Models\InfaqCategory::latest()->take(8)->get();
+        foreach ($latestInfaq as $infaq) {
+            $imgUrl = $infaq->image;
+            if ($imgUrl && !str_starts_with($imgUrl, 'http')) {
+                $imgUrl = str_starts_with($imgUrl, '/storage') ? $imgUrl : '/storage/' . $imgUrl;
+            }
+            $latestPrograms->push((object) [
+                'type' => 'infaq',
+                'title' => $infaq->name,
+                'image_url' => $imgUrl,
+                'url' => route('infaq.show', $infaq->id),
+                'badge' => 'Infaq',
+                'badge_color' => 'blue',
+                'description' => $infaq->description ? \Illuminate\Support\Str::limit(strip_tags($infaq->description), 100) : null,
+                'created_at' => $infaq->created_at,
+            ]);
+        }
+
+        // Sort by created_at descending to interleave, then take 8
+        $latestPrograms = $latestPrograms->sortByDesc('created_at')->take(8)->values();
+
+        $agent = new \Jenssegers\Agent\Agent();
+        if ($agent->isMobile()) {
+            return view('mobile.home', compact('latestNews', 'sliderItems', 'latestDonations', 'managers', 'latestPrograms'));
+        }
+
+        return view('home', compact('latestNews', 'sliderItems', 'latestDonations', 'managers', 'latestPrograms'));
     }
 
     public function index()

@@ -190,6 +190,29 @@
                     <li><a href="{{ route('home') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('home') ? 'text-secondary' : '' }}" aria-current="page">Beranda</a></li>
                     <li><a href="{{ route('news.index') }}" class="nav-link block py-2 px-3 {{ request()->routeIs('news.*') ? 'text-secondary' : '' }}">Berita</a></li>
                     
+                    <!-- Layanan Dropdown -->
+                    <li class="relative group w-full md:w-auto">
+                        <button class="dropdown-toggle nav-link w-full md:w-auto flex items-center justify-between md:justify-start py-2 px-3 gap-1 md:group-hover:text-primary {{ request()->routeIs('wakaf.*') || request()->routeIs('zakat.*') || request()->routeIs('infaq.*') || request()->routeIs('programs.*') ? 'text-secondary' : '' }}">
+                            Layanan
+                            <svg class="w-2.5 h-2.5 ms-1 transition-transform duration-200 dropdown-arrow" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu hidden md:absolute z-10 font-normal bg-white divide-y divide-gray-100 rounded-lg md:shadow w-full md:w-48 md:group-hover:block transition-all duration-300 transform origin-top-left border md:border-none border-gray-100 mt-2 md:mt-0">
+                            <ul class="py-2 text-sm text-gray-700">
+                                <li>
+                                    <a href="{{ route('wakaf.index') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('wakaf.*') ? 'text-primary font-bold' : '' }}">Wakaf</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('zakat.index') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('zakat.*') ? 'text-primary font-bold' : '' }}">Zakat</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('infaq.index') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('infaq.*') ? 'text-primary font-bold' : '' }}">Infaq / Sedekah</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
                     <!-- Tentang Kami Dropdown -->
                     <li class="relative group w-full md:w-auto">
                         <button class="dropdown-toggle nav-link w-full md:w-auto flex items-center justify-between md:justify-start py-2 px-3 gap-1 md:group-hover:text-primary">

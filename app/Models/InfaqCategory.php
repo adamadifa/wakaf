@@ -9,6 +9,10 @@ class InfaqCategory extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'is_featured' => 'boolean',
+    ];
+
     public function transactions()
     {
         return $this->hasMany(InfaqTransaction::class);
