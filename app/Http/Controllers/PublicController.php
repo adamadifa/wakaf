@@ -432,4 +432,15 @@ class PublicController extends Controller
 
         return view('rekening', compact('accounts'));
     }
+    public function aboutWakaf()
+    {
+        $about = \App\Models\AboutWakaf::first();
+        
+        $agent = new \Jenssegers\Agent\Agent();
+        if ($agent->isMobile()) {
+            return view('mobile.about-wakaf', compact('about'));
+        }
+
+        return view('about-wakaf', compact('about'));
+    }
 }

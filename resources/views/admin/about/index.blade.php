@@ -4,8 +4,20 @@
 
 @section('content')
 <div class="mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Tentang Kami</h1>
-    <p class="text-gray-500 text-sm mt-1">Kelola halaman profil atau sejarah organisasi.</p>
+    <h1 class="text-2xl font-bold text-gray-800">Tentang Kami & Wakaf</h1>
+    <p class="text-gray-500 text-sm mt-1">Kelola halaman profil organisasi dan edukasi wakaf.</p>
+</div>
+
+<!-- Tabs Navigation -->
+<div class="flex items-center gap-2 mb-6 bg-gray-100/50 p-1.5 rounded-2xl w-fit border border-gray-100">
+    <a href="{{ route('admin.about.index', ['tab' => 'umum']) }}" 
+       class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all {{ $tab === 'umum' ? 'bg-white text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+        Profil Umum
+    </a>
+    <a href="{{ route('admin.about.index', ['tab' => 'wakaf']) }}" 
+       class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all {{ $tab === 'wakaf' ? 'bg-white text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+        Tentang Wakaf
+    </a>
 </div>
 
 <div class="max-w-4xl">
@@ -15,8 +27,10 @@
             @csrf
             @method('PUT')
             
+            <input type="hidden" name="tab" value="{{ $tab }}">
+
             <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Judul Halaman</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Judul Halaman ({{ ucfirst($tab) }})</label>
                 <input type="text" name="judul" value="{{ old('judul', $about->judul) }}" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all @error('judul') border-red-500 @enderror" placeholder="Contoh: Sejarah Yayasan">
                 @error('judul') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
             </div>
@@ -35,7 +49,7 @@
 
             <div class="mb-6">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi Lengkap</label>
-                <textarea name="deskripsi" rows="10" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Tuliskan sejarah atau profil organisasi...">{{ old('deskripsi', $about->deskripsi) }}</textarea>
+                <textarea name="deskripsi" rows="10" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Tuliskan isi konten di sini...">{{ old('deskripsi', $about->deskripsi) }}</textarea>
                 @error('deskripsi') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
             </div>
 

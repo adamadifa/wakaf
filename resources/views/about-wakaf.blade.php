@@ -1,14 +1,14 @@
 @extends('layouts.home_layout')
 
-@section('title', 'Tentang Kami')
+@section('title', 'Tentang Wakaf')
 
 @section('content')
 <!-- Hero Section -->
 <section class="relative py-20 bg-primary/10 overflow-hidden">
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-10"></div>
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1590076176736-459efd7863bf?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center opacity-10"></div>
     <div class="container relative z-10 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Tentang Kami</h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Mengenal lebih dekat lembaga pengelola wakaf yang amanah dan profesional.</p>
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Tentang Wakaf</h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Pelajari lebih dalam mengenai keutamaan dan keberkahan berwakaf.</p>
     </div>
 </section>
 
@@ -30,7 +30,7 @@
                     @else
                         <div class="text-center py-12">
                             <i class="ti ti-info-circle text-4xl text-gray-300 mb-4 block"></i>
-                            <p>Konten "Tentang Kami" belum diatur oleh admin.</p>
+                            <p>Konten "Tentang Wakaf" belum diatur oleh admin.</p>
                         </div>
                     @endif
                 </div>

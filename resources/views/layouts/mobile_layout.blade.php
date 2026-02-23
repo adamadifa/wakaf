@@ -238,6 +238,7 @@
                         <li><a href="{{ route('wakaf.index') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Wakaf</a></li>
                         <li><a href="{{ route('zakat.index') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Zakat</a></li>
                         <li><a href="{{ route('infaq.index') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Infaq / Sedekah</a></li>
+                        <li><a href="{{ route('about-wakaf') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Tentang Wakaf</a></li>
                     </ul>
                 </li>
 
@@ -396,7 +397,7 @@
             $waNumber = '62' . substr($waNumber, 1);
         }
     @endphp
-    <a href="https://wa.me/{{ $waNumber }}?text={{ urlencode('Assalamu\'alaikum, saya ingin bertanya...') }}" 
+    <a href="https://wa.me/{{ $waNumber }}?text={{ urlencode('Assalamualaikum. Saya ingin berdonasi. Mohon info program yang tersedia. Terima kasih') }}" 
        target="_blank" 
        style="position:fixed; bottom:90px; right:16px; z-index:9999; text-decoration:none; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15));"
        title="Chat via WhatsApp">

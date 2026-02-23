@@ -5,7 +5,19 @@
 @section('content')
 <div class="mb-6">
     <h1 class="text-2xl font-bold text-gray-800">Visi & Misi</h1>
-    <p class="text-gray-500 text-sm mt-1">Kelola Visi dan Misi organisasi.</p>
+    <p class="text-gray-500 text-sm mt-1">Kelola visi dan misi organisasi secara umum maupun program wakaf.</p>
+</div>
+
+<!-- Tabs Navigation -->
+<div class="flex items-center gap-2 mb-6 bg-gray-100/50 p-1.5 rounded-2xl w-fit border border-gray-100">
+    <a href="{{ route('admin.vision-mission.index', ['tab' => 'umum']) }}" 
+       class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all {{ $tab === 'umum' ? 'bg-white text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+        Visi Misi Umum
+    </a>
+    <a href="{{ route('admin.vision-mission.index', ['tab' => 'wakaf']) }}" 
+       class="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all {{ $tab === 'wakaf' ? 'bg-white text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+        Visi Misi Wakaf
+    </a>
 </div>
 
 <div class="max-w-4xl">
@@ -15,17 +27,17 @@
             @csrf
             @method('PUT')
             
+            <input type="hidden" name="tab" value="{{ $tab }}">
+
             <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Visi Organisasi</label>
-                <textarea name="visi" rows="3" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Masukkan visi organisasi...">{{ old('visi', $visionMission->visi ?? '') }}</textarea>
-                <p class="text-xs text-gray-500 mt-1">Visi jangka panjang organisasi.</p>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Visi ({{ ucfirst($tab) }})</label>
+                <textarea name="visi" rows="3" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Masukkan visi di sini...">{{ old('visi', $visionMission->visi ?? '') }}</textarea>
                 @error('visi') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
             </div>
 
             <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Misi Organisasi</label>
-                <textarea name="misi" rows="10" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Masukkan misi organisasi...">{{ old('misi', $visionMission->misi ?? '') }}</textarea>
-                <p class="text-xs text-gray-500 mt-1">Misi / langkah-langkah organisasi.</p>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Misi ({{ ucfirst($tab) }})</label>
+                <textarea name="misi" rows="10" class="form-input w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Masukkan misi di sini...">{{ old('misi', $visionMission->misi ?? '') }}</textarea>
                 @error('misi') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
             </div>
 

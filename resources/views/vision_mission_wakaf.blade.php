@@ -1,4 +1,4 @@
-@extends('layouts.frontend')
+@extends('layouts.home_layout')
 
 @section('title', 'Visi & Misi Wakaf')
 

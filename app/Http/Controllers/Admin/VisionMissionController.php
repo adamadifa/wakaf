@@ -4,24 +4,38 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\VisionMission;
+use App\Models\VisionMissionWakaf;
 use Illuminate\Http\Request;
 
 class VisionMissionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $visionMission = VisionMission::first();
-        if (!$visionMission) {
-            $visionMission = VisionMission::create(['visi' => '', 'misi' => '']);
+        $tab = $request->query('tab', 'umum');
+        
+        if ($tab === 'wakaf') {
+            $visionMission = VisionMissionWakaf::first();
+            if (!$visionMission) {
+                $visionMission = VisionMissionWakaf::create(['visi' => '', 'misi' => '']);
+            }
+        } else {
+            $visionMission = VisionMission::first();
+            if (!$visionMission) {
+                $visionMission = VisionMission::create(['visi' => '', 'misi' => '']);
+            }
         }
-        return view('admin.vision_mission.index', compact('visionMission'));
+
+        return view('admin.vision_mission.index', compact('visionMission', 'tab'));
     }
 
     public function update(Request $request)
     {
-        $visionMission = VisionMission::first();
+        $tab = $request->input('tab', 'umum');
+        
+        $model = ($tab === 'wakaf') ? VisionMissionWakaf::class : VisionMission::class;
+        $visionMission = $model::first();
         if (!$visionMission) {
-            $visionMission = VisionMission::create([]);
+            $visionMission = $model::create([]);
         }
 
         $request->validate([
@@ -31,6 +45,7 @@ class VisionMissionController extends Controller
 
         $visionMission->update($request->only(['visi', 'misi']));
 
-        return redirect()->back()->with('success', 'Visi dan Misi berhasil diperbarui.');
+        return redirect()->route('admin.vision-mission.index', ['tab' => $tab])
+            ->with('success', 'Visi dan Misi ' . ($tab === 'wakaf' ? 'Wakaf ' : '') . 'berhasil diperbarui.');
     }
 }

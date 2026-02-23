@@ -4,29 +4,47 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\About;
+use App\Models\AboutWakaf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class AboutController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $about = About::first();
-        if (!$about) {
-            $about = About::create([
-                'judul' => 'Tentang Kami',
-                'deskripsi' => 'Deskripsi tentang organisasi Anda.',
-                'gambar' => null,
-            ]);
+        $tab = $request->query('tab', 'umum');
+        
+        if ($tab === 'wakaf') {
+            $about = AboutWakaf::first();
+            if (!$about) {
+                $about = AboutWakaf::create([
+                    'judul' => 'Tentang Wakaf',
+                    'deskripsi' => 'Deskripsi tentang program wakaf Anda.',
+                    'gambar' => null,
+                ]);
+            }
+        } else {
+            $about = About::first();
+            if (!$about) {
+                $about = About::create([
+                    'judul' => 'Tentang Kami',
+                    'deskripsi' => 'Deskripsi tentang organisasi Anda.',
+                    'gambar' => null,
+                ]);
+            }
         }
-        return view('admin.about.index', compact('about'));
+
+        return view('admin.about.index', compact('about', 'tab'));
     }
 
     public function update(Request $request)
     {
-        $about = About::first();
+        $tab = $request->input('tab', 'umum');
+        
+        $model = ($tab === 'wakaf') ? AboutWakaf::class : About::class;
+        $about = $model::first();
         if (!$about) {
-            $about = About::create([]);
+            $about = $model::create([]);
         }
 
         $request->validate([
@@ -40,7 +58,8 @@ class AboutController extends Controller
         if ($request->file('gambar')) {
             $file = $request->file('gambar');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('about', $filename, 'public');
+            $folder = ($tab === 'wakaf') ? 'about_wakaf' : 'about';
+            $path = $file->storeAs($folder, $filename, 'public');
             $input['gambar'] = 'storage/' . $path;
 
             // Delete old image
@@ -51,6 +70,7 @@ class AboutController extends Controller
 
         $about->update($input);
 
-        return redirect()->back()->with('success', 'Data Tentang Kami berhasil diperbarui.');
+        return redirect()->route('admin.about.index', ['tab' => $tab])
+            ->with('success', 'Data ' . ($tab === 'wakaf' ? 'Tentang Wakaf' : 'Tentang Kami') . ' berhasil diperbarui.');
     }
 }
