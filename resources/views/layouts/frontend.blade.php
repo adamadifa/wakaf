@@ -176,7 +176,7 @@
                 <i class="ti ti-menu-2 text-2xl"></i>
             </button>
             <a href="{{ route('home') }}" class="nav-brand flex items-center space-x-3 rtl:space-x-reverse absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0">
-                @if(request()->routeIs('wakaf.index'))
+                @if(request()->routeIs('wakaf.index') || request()->routeIs('about-wakaf') || request()->routeIs('vision-mission-wakaf') || request()->routeIs('programs.index') || request()->routeIs('campaign.show') || request()->routeIs('campaign.donate') || request()->routeIs('campaign.success'))
                     <img src="{{ asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain">
                 @else
                     <img src="{{ optional($site_settings)->logo ? asset('storage/' . $site_settings->logo) : asset('images/logo-baiturrahman.png') }}" alt="{{ config('app.name') }}" class="h-10 w-auto object-contain">
@@ -189,7 +189,7 @@
                     
                     <!-- Layanan Dropdown -->
                     <li class="relative group w-full md:w-auto">
-                        <button class="dropdown-toggle nav-link w-full md:w-auto flex items-center justify-between md:justify-start py-2 px-3 gap-1 md:group-hover:text-primary {{ request()->routeIs('wakaf.*') || request()->routeIs('zakat.*') || request()->routeIs('infaq.*') || request()->routeIs('programs.*') ? 'text-secondary' : '' }}">
+                        <button class="dropdown-toggle nav-link w-full md:w-auto flex items-center justify-between md:justify-start py-2 px-3 gap-1 md:group-hover:text-primary {{ request()->routeIs('wakaf.*') || request()->routeIs('zakat.*') || request()->routeIs('infaq.*') || request()->routeIs('programs.*') || request()->routeIs('about-wakaf') || request()->routeIs('vision-mission-wakaf') ? 'text-secondary' : '' }}">
                             Layanan
                             <svg class="w-2.5 h-2.5 ms-1 transition-transform duration-200 dropdown-arrow" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -225,7 +225,7 @@
                         <div class="dropdown-menu hidden md:absolute z-10 font-normal bg-white divide-y divide-gray-100 rounded-lg md:shadow w-full md:w-44 md:group-hover:block transition-all duration-300 transform origin-top-left border md:border-none border-gray-100 mt-2 md:mt-0">
                             <ul class="py-2 text-sm text-gray-700">
                                 <li>
-                                    <a href="{{ route('about') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('about') ? 'text-primary font-bold' : '' }}">Profile</a>
+                                    <a href="{{ request()->routeIs('wakaf.index') || request()->routeIs('about-wakaf') || request()->routeIs('vision-mission-wakaf') || request()->routeIs('programs.index') || request()->routeIs('campaign.show') || request()->routeIs('campaign.donate') || request()->routeIs('campaign.success') ? route('about-wakaf') : route('about') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('about-wakaf') || (request()->routeIs('about') && !request()->routeIs('about-wakaf')) ? 'text-primary font-bold' : '' }}">Profile</a>
                                 </li>
                                 <!-- <li>
                                     <a href="{{ route('vision-mission') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('vision-mission') ? 'text-primary font-bold' : '' }}">Visi Misi</a>
@@ -264,7 +264,7 @@
         <!-- Sidebar Header -->
         <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-white rounded-tr-2xl">
             <div class="flex items-center gap-2">
-                @if(request()->routeIs('wakaf.index'))
+                @if(request()->routeIs('wakaf.index') || request()->routeIs('about-wakaf') || request()->routeIs('vision-mission-wakaf') || request()->routeIs('programs.index') || request()->routeIs('campaign.show') || request()->routeIs('campaign.donate') || request()->routeIs('campaign.success'))
                     <img src="{{ asset('logo.png') }}" alt="Logo" class="h-8 w-auto">
                 @else
                     <img src="{{ optional($site_settings)->logo ? asset('storage/' . $site_settings->logo) : asset('images/logo-baiturrahman.png') }}" alt="Logo" class="h-8 w-auto">
@@ -318,7 +318,7 @@
                         <i class="ti ti-chevron-down text-gray-400 transition-transform duration-300" id="arrow-about"></i>
                     </button>
                     <ul id="submenu-about" class="hidden pl-12 pr-2 space-y-1 mt-1 pb-2">
-                        <li><a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Profile</a></li>
+                        <li><a href="{{ request()->routeIs('wakaf.index') || request()->routeIs('about-wakaf') || request()->routeIs('vision-mission-wakaf') || request()->routeIs('programs.index') || request()->routeIs('campaign.show') || request()->routeIs('campaign.donate') || request()->routeIs('campaign.success') ? route('about-wakaf') : route('about') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Profile</a></li>
                         <li><a href="{{ route('vision-mission-wakaf') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Visi Misi</a></li>
                         <li><a href="{{ route('managers') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Pengurus</a></li>
                     </ul>
@@ -415,7 +415,7 @@
     @yield('content')
 
     <!-- Footer -->
-    <footer class="bg-white pt-16 pb-8 border-t border-gray-100 mt-auto">
+    <footer class="bg-white pt-16 pb-8 border-t border-gray-100 mt-auto hidden md:block">
         <div class="container">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
                 <!-- Column 1: Brand & Info -->
@@ -500,6 +500,7 @@
         </div>
     </footer>
 
+    @unless(View::hasSection('hide_bottom_nav'))
     <!-- Mobile Bottom Navigation -->
     <nav class="fixed bottom-0 left-0 z-50 w-full bg-white border-t border-gray-200 md:hidden pb-safe">
         <div class="grid h-16 max-w-lg grid-cols-5 mx-auto font-medium">
@@ -549,6 +550,7 @@
             }
         }
     </style>
+    @endunless
 
     <!-- Floating WhatsApp Button -->
     @if(isset($site_settings) && $site_settings->phone_number)

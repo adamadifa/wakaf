@@ -252,7 +252,7 @@
                         <i class="ti ti-chevron-down text-gray-400 transition-transform duration-300" id="arrow-about"></i>
                     </button>
                     <ul id="submenu-about" class="hidden pl-12 pr-2 space-y-1 mt-1 pb-2">
-                        <li><a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Profile</a></li>
+                        <li><a href="{{ request()->routeIs('wakaf.index') ? route('about-wakaf') : route('about') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Profile</a></li>
                         <li><a href="{{ route('vision-mission') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Visi Misi</a></li>
                         <li><a href="{{ route('managers') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Pengurus</a></li>
                         <li><a href="{{ route('gallery.index') }}" class="block px-3 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-gray-50">Galeri</a></li>

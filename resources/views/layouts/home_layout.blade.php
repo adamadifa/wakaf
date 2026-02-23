@@ -216,7 +216,7 @@
                         <div class="dropdown-menu hidden md:absolute z-10 font-normal bg-white divide-y divide-gray-100 rounded-lg md:shadow w-full md:w-44 md:group-hover:block transition-all duration-300 transform origin-top-left border md:border-none border-gray-100 mt-2 md:mt-0">
                             <ul class="py-2 text-sm text-gray-700">
                                 <li>
-                                    <a href="{{ route('about') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('about') ? 'text-primary font-bold' : '' }}">Profile</a>
+                                    <a href="{{ request()->routeIs('wakaf.index') ? route('about-wakaf') : route('about') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('about-wakaf') || request()->routeIs('about') ? 'text-primary font-bold' : '' }}">Profile</a>
                                 </li>
                                 <li>
                                     <a href="{{ route('vision-mission') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('vision-mission') ? 'text-primary font-bold' : '' }}">Visi Misi</a>

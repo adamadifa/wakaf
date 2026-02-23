@@ -1,4 +1,4 @@
-@extends('layouts.mobile_layout')
+@extends('layouts.frontend')
 
 @section('title', 'Daftar Program')
 

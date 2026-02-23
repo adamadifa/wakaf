@@ -1,4 +1,4 @@
-@extends('layouts.home_layout')
+@extends('layouts.frontend')
 
 @section('title', $campaign->title)
 
@@ -416,13 +416,15 @@
             <!-- Tab Content: Updates -->
             <div id="updates" class="tab-section">
                 @forelse($campaign->updates as $update)
-                    <div class="update-card">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                            <h4 style="font-size: 1.1rem; font-weight: 700;">{{ $update->title }}</h4>
-                            <small class="text-muted">{{ $update->created_at->format('d M Y') }}</small>
+                    <div class="mb-8 pb-8 border-b border-gray-100 last:border-0">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                            <h4 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark);">{{ $update->title }}</h4>
+                            <small style="color: var(--text-muted);">{{ $update->created_at->format('d M Y') }}</small>
                         </div>
-                        <div style="color: var(--text-dark);" class="prose">
-                            {!! $update->content !!}
+                        <div class="prose">
+                            <div>
+                                {!! $update->content !!}
+                            </div>
                         </div>
                     </div>
                 @empty

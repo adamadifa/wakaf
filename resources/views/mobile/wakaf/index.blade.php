@@ -2,161 +2,722 @@
 
 @section('title', 'Wakaf')
 
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<style>
+    /* ===== App-Like Mobile Wakaf Page ===== */
+
+    .wakaf-app {
+        background: #f0f4f8;
+        min-height: 100vh;
+        padding-bottom: 6rem;
+        max-width: 100vw;
+        overflow-x: hidden;
+    }
+
+    /* --- Greeting Header --- */
+    .greeting-section {
+        background: linear-gradient(135deg, #2596be 0%, #1a7a9e 50%, #0d5f7e 100%);
+        padding: 1.5rem 1.25rem 2.5rem;
+        border-radius: 0 0 1.75rem 1.75rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .greeting-section::before {
+        content: '';
+        position: absolute;
+        top: -40%;
+        right: -20%;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.06);
+    }
+
+    .greeting-section::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -10%;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.04);
+    }
+
+    .greeting-text h2 {
+        color: rgba(255,255,255,0.7);
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+    }
+
+    .greeting-text h1 {
+        color: white;
+        font-size: 1.35rem;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    .greeting-text h1 span {
+        color: #fbbf24;
+    }
+
+    /* --- Search Bar --- */
+    .search-bar {
+        margin: -1.25rem 1.25rem 0;
+        position: relative;
+        z-index: 10;
+    }
+
+    .search-bar a {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: white;
+        padding: 0.875rem 1rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        color: #9ca3af;
+        font-size: 0.875rem;
+        text-decoration: none;
+        transition: box-shadow 0.2s;
+    }
+
+    .search-bar a i {
+        color: #2596be;
+        font-size: 1.25rem;
+    }
+
+    /* --- Quick Actions --- */
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+        padding: 1.5rem 1.25rem 0.5rem;
+    }
+
+    .quick-action-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+
+    .quick-action-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .quick-action-item:active .quick-action-icon {
+        transform: scale(0.92);
+    }
+
+    .quick-action-label {
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: #374151;
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    /* --- Section Headers --- */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 1.25rem 0.75rem;
+    }
+
+    .section-header h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .section-header a {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #2596be;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    /* --- Featured Campaign Carousel --- */
+    .featured-wrap {
+        padding: 0 1.25rem;
+    }
+
+    .featured-campaign {
+        overflow: hidden;
+        border-radius: 1.25rem;
+    }
+
+    .featured-card {
+        position: relative;
+        overflow: hidden;
+        height: 200px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    }
+
+    .featured-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .featured-card .overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+    }
+
+    .featured-card .card-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1.25rem;
+        color: white;
+    }
+
+    .featured-card .badge {
+        display: inline-block;
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 0.2rem 0.6rem;
+        border-radius: 0.5rem;
+        font-size: 0.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+    }
+
+    .featured-card .card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 0.75rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .featured-progress {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .featured-progress .bar {
+        flex: 1;
+        height: 5px;
+        background: rgba(255,255,255,0.25);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .featured-progress .bar-fill {
+        height: 100%;
+        background: #fbbf24;
+        border-radius: 3px;
+    }
+
+    .featured-progress .amount {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #fbbf24;
+        white-space: nowrap;
+    }
+
+    .featured-campaign .swiper-pagination-bullet {
+        background: #2596be;
+        opacity: 0.3;
+    }
+
+    .featured-campaign .swiper-pagination-bullet-active {
+        background: #2596be;
+        opacity: 1;
+        width: 20px;
+        border-radius: 4px;
+    }
+
+    /* --- Campaign Grid --- */
+    .campaign-grid-mobile {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        padding: 0 1.25rem;
+    }
+
+    .campaign-card-mini {
+        background: white;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s;
+    }
+
+    .campaign-card-mini:active {
+        transform: scale(0.97);
+    }
+
+    .campaign-card-mini .card-img {
+        height: 100px;
+        overflow: hidden;
+    }
+
+    .campaign-card-mini .card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .campaign-card-mini .card-body {
+        padding: 0.75rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .campaign-card-mini .card-cat {
+        font-size: 0.55rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #2596be;
+        background: rgba(37, 150, 190, 0.08);
+        padding: 0.15rem 0.4rem;
+        border-radius: 0.3rem;
+        display: inline-block;
+        margin-bottom: 0.4rem;
+        width: fit-content;
+    }
+
+    .campaign-card-mini .card-title {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #1f2937;
+        line-height: 1.35;
+        margin-bottom: 0.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        flex: 1;
+    }
+
+    .campaign-card-mini .mini-progress {
+        height: 4px;
+        background: #f3f4f6;
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 0.4rem;
+    }
+
+    .campaign-card-mini .mini-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        border-radius: 2px;
+    }
+
+    .campaign-card-mini .card-amount {
+        font-size: 0.6rem;
+        font-weight: 700;
+        color: #dc8d17;
+    }
+
+    .campaign-card-mini .card-amount span {
+        font-weight: 500;
+        color: #9ca3af;
+    }
+
+    /* --- News Section --- */
+    .news-swiper {
+        overflow: hidden;
+    }
+
+    .news-swiper .swiper-slide {
+        width: 280px;
+    }
+
+    .news-card {
+        background: white;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        display: flex;
+        flex-direction: row;
+        height: 100px;
+        transition: transform 0.2s;
+    }
+
+    .news-card:active {
+        transform: scale(0.97);
+    }
+
+    .news-card .news-img {
+        width: 100px;
+        min-width: 100px;
+        overflow: hidden;
+    }
+
+    .news-card .news-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .news-card .news-body {
+        padding: 0.75rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0;
+    }
+
+    .news-card .news-date {
+        font-size: 0.6rem;
+        font-weight: 500;
+        color: #9ca3af;
+        margin-bottom: 0.25rem;
+    }
+
+    .news-card .news-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #1f2937;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* --- Doa Section --- */
+    .doa-section {
+        padding: 1.5rem 0 2rem;
+    }
+
+    .doa-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.25rem;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        position: relative;
+    }
+
+    .doa-card::before {
+        content: '"';
+        position: absolute;
+        top: 0.5rem;
+        right: 1rem;
+        font-size: 3rem;
+        font-family: Georgia, serif;
+        color: rgba(37, 150, 190, 0.1);
+        line-height: 1;
+    }
+
+    .doa-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .doa-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2596be, #4EB7C7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .doa-name {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .doa-campaign {
+        font-size: 0.6rem;
+        color: #9ca3af;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .doa-message {
+        font-size: 0.8rem;
+        color: #4b5563;
+        line-height: 1.6;
+        font-style: italic;
+        flex: 1;
+        margin-bottom: 0.75rem;
+    }
+
+    .doa-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 0.625rem;
+        border-top: 1px solid #f3f4f6;
+    }
+
+    .doa-date {
+        font-size: 0.6rem;
+        color: #9ca3af;
+    }
+
+    .doa-aamiin {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: none;
+        border: none;
+        color: #ef4444;
+        font-size: 0.7rem;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .doa-swiper .swiper-pagination-bullet {
+        background: #2596be;
+        opacity: 0.3;
+    }
+
+    .doa-swiper .swiper-pagination-bullet-active {
+        background: #2596be;
+        opacity: 1;
+    }
+
+    /* --- Animations --- */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+        animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .animate-delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .animate-delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
+</style>
+@endpush
+
 @section('content')
-<div class="min-h-screen bg-gray-50 pb-24">
-    <!-- Hero Section -->
-    <div class="relative h-48 bg-primary rounded-b-[2rem] overflow-hidden -mx-0">
-        <div class="absolute inset-0 bg-gradient-to-r from-primary to-primary-light opacity-90"></div>
-        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Hero" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30">
-        
-        <div class="relative h-full flex flex-col justify-center px-6 text-white pb-6">
-            <h1 class="font-bold text-2xl mb-2 leading-tight">Mari Berbagi Kebaikan</h1>
-            <p class="text-white/80 text-sm mb-4 max-w-[80%]">Salurkan infaq, sedekah, dan wakaf Anda melalui platform terpercaya.</p>
-            <a href="#campaigns" class="inline-block bg-white text-primary font-bold text-sm px-6 py-2.5 rounded-full shadow-lg self-start active:scale-95 transition-transform">
-                Mulai Donasi
-            </a>
+<div class="wakaf-app">
+
+    <!-- ===== Greeting Header ===== -->
+    <div class="greeting-section">
+        <div class="greeting-text">
+            <h2>Assalamualaikum 👋</h2>
+            <h1>Mari Berbagi <span>Kebaikan</span><br>Melalui Wakaf</h1>
         </div>
     </div>
 
-    <!-- Campaigns Section -->
-    <div id="campaigns" class="px-5 mt-8">
-        <div class="flex justify-between items-end mb-4">
-            <div>
-                <h2 class="font-bold text-lg text-gray-900">Program Pilihan</h2>
-                <p class="text-xs text-gray-500">Program kebaikan yang sedang berjalan</p>
-            </div>
-            <a href="{{ route('programs.index') }}" class="text-xs font-bold text-primary">Lihat Semua</a>
-        </div>
-
-        <div class="space-y-4">
-            @forelse($campaigns as $campaign)
-            <a href="{{ route('campaign.show', $campaign->slug) }}" class="block bg-white rounded-2xl p-3 shadow-[0_2px_15px_rgba(0,0,0,0.05)] active:scale-[0.98] transition-transform">
-                <div class="flex gap-4">
-                    <!-- Image -->
-                    <div class="w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100">
-                        <img src="{{ Str::startsWith($campaign->image_url, 'http') ? $campaign->image_url : asset('storage/' . $campaign->image_url) }}" alt="{{ $campaign->title }}" class="w-full h-full object-cover">
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="flex-1 min-w-0 py-1 flex flex-col justify-between">
-                        <div>
-                            <span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded mb-1 inline-block">
-                                {{ $campaign->category->name }}
-                            </span>
-                            <h3 class="font-bold text-sm text-gray-900 leading-tight line-clamp-2 mb-2">{{ $campaign->title }}</h3>
-                        </div>
-                        
-                        <!-- Progress -->
-                        <div>
-                            <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2 overflow-hidden">
-                                <div class="bg-primary h-1.5 rounded-full" style="width: {{ $campaign->target_amount > 0 ? min(($campaign->current_amount / $campaign->target_amount) * 100, 100) : 0 }}%"></div>
-                            </div>
-                            <div class="flex justify-between items-end">
-                                <div>
-                                    <p class="text-[10px] text-gray-400">Terkumpul</p>
-                                    <p class="text-xs font-bold text-primary">Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            @empty
-            <div class="text-center py-8 text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
-                <i class="ti ti-box text-2xl mb-2"></i>
-                <p class="text-sm">Belum ada program saat ini.</p>
-            </div>
-            @endforelse
-        </div>
+    <!-- ===== Search Bar ===== -->
+    <div class="search-bar animate-in animate-delay-1">
+        <a href="{{ route('programs.index') }}">
+            <i class="ti ti-search"></i>
+            <span>Cari program wakaf...</span>
+        </a>
     </div>
 
-    <!-- News Section -->
-    <div class="px-5 mt-10">
-        <div class="flex justify-between items-end mb-4">
-            <div>
-                <h2 class="font-bold text-lg text-gray-900">Kabar Terbaru</h2>
-                <p class="text-xs text-gray-500">Berita & artikel terkini</p>
+    <!-- ===== Quick Actions ===== -->
+    <!-- <div class="quick-actions animate-in animate-delay-2">
+        <a href="{{ route('wakaf.index') }}" class="quick-action-item">
+            <div class="quick-action-icon" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); color: #2563eb;">
+                <i class="ti ti-building-mosque"></i>
             </div>
-            <a href="{{ route('news.index') }}" class="text-xs font-bold text-primary">Lihat Semua</a>
-        </div>
+            <span class="quick-action-label">Wakaf</span>
+        </a>
+        <a href="{{ route('zakat.index') }}" class="quick-action-item">
+            <div class="quick-action-icon" style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #059669;">
+                <i class="ti ti-coin"></i>
+            </div>
+            <span class="quick-action-label">Zakat</span>
+        </a>
+        <a href="{{ route('infaq.index') }}" class="quick-action-item">
+            <div class="quick-action-icon" style="background: linear-gradient(135deg, #fef3c7, #fde68a); color: #d97706;">
+                <i class="ti ti-heart-handshake"></i>
+            </div>
+            <span class="quick-action-label">Infaq</span>
+        </a>
+        <a href="{{ route('programs.index') }}" class="quick-action-item">
+            <div class="quick-action-icon" style="background: linear-gradient(135deg, #ede9fe, #ddd6fe); color: #7c3aed;">
+                <i class="ti ti-apps"></i>
+            </div>
+            <span class="quick-action-label">Program</span>
+        </a>
+    </div> -->
 
-        <div class="swiper newsSwiper -mx-5 px-5 pb-4">
+    <!-- ===== Featured Campaign ===== -->
+    @if($campaigns->count() > 0)
+    <div class="section-header">
+        <h3>🔥 Program</h3>
+        <a href="{{ route('programs.index') }}">Lihat Semua <i class="ti ti-chevron-right"></i></a>
+    </div>
+
+    <div class="featured-wrap">
+        <div class="swiper featured-campaign !pb-8">
             <div class="swiper-wrapper">
-                @forelse($latestNews as $item)
+                @foreach($campaigns->take(3) as $campaign)
                 <div class="swiper-slide">
-                    <a href="{{ route('news.show', $item->slug) }}" class="block group">
-                        <div class="h-36 rounded-xl overflow-hidden bg-gray-100 mb-3 relative shadow-sm">
-                            @if($item->image)
-                                <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title }}" class="w-full h-full object-cover group-active:scale-105 transition-transform duration-500">
-                            @else
-                                <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
-                                    <i class="ti ti-photo-off text-2xl"></i>
+                    <a href="{{ route('campaign.show', $campaign->slug) }}" class="featured-card" style="text-decoration:none;">
+                        <img src="{{ Str::startsWith($campaign->image_url, 'http') ? $campaign->image_url : asset('storage/' . $campaign->image_url) }}" alt="{{ $campaign->title }}">
+                        <div class="overlay"></div>
+                        <div class="card-content">
+                            <div class="badge">{{ $campaign->category->name ?? 'Umum' }}</div>
+                            <div class="card-title">{{ $campaign->title }}</div>
+                            @php
+                                $pct = $campaign->target_amount > 0 ? ($campaign->current_amount / $campaign->target_amount) * 100 : 0;
+                            @endphp
+                            <div class="featured-progress">
+                                <div class="bar">
+                                    <div class="bar-fill" style="width: {{ min($pct, 100) }}%"></div>
                                 </div>
-                            @endif
-                            <div class="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm text-white text-[10px] px-2 py-1 rounded-md">
-                                {{ $item->published_at->format('d M Y') }}
+                                <div class="amount">Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}</div>
                             </div>
                         </div>
-                        <h3 class="font-bold text-sm text-gray-900 leading-tight line-clamp-2 mb-1 group-active:text-primary transition-colors">{{ $item->title }}</h3>
                     </a>
                 </div>
-                @empty
-                <div class="swiper-slide w-full">
-                    <div class="text-center py-8 text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">
-                        <p class="text-sm">Belum ada berita terbaru.</p>
-                    </div>
-                </div>
-                @endforelse
+                @endforeach
             </div>
+            <div class="swiper-pagination"></div>
         </div>
     </div>
+    @endif
 
-    <!-- Doa Carousel -->
-    <div class="mt-8 pt-8 pb-12 bg-[#F8F9FA]">
-        <div class="px-5 mb-6 text-center">
-            <h2 class="font-bold text-xl text-gray-900 mb-1">Doa-doa #OrangDermawan</h2>
-            <p class="text-sm text-gray-500">Doa tulus dari para donatur</p>
+    <!-- ===== Campaign Grid ===== -->
+    @if($campaigns->count() > 0)
+    <div class="section-header" style="padding-top: 0.5rem;">
+        <h3>Semua Program</h3>
+        <a href="{{ route('programs.index') }}">Lihat Semua <i class="ti ti-chevron-right"></i></a>
+    </div>
+
+    <div class="campaign-grid-mobile">
+        @foreach($campaigns as $campaign)
+        <a href="{{ route('campaign.show', $campaign->slug) }}" class="campaign-card-mini" style="text-decoration:none;">
+            <div class="card-img">
+                <img src="{{ Str::startsWith($campaign->image_url, 'http') ? $campaign->image_url : asset('storage/' . $campaign->image_url) }}" alt="{{ $campaign->title }}">
+            </div>
+            <div class="card-body">
+                <div class="card-cat">{{ $campaign->category->name ?? 'Umum' }}</div>
+                <div class="card-title">{{ $campaign->title }}</div>
+                @php
+                    $pct = $campaign->target_amount > 0 ? ($campaign->current_amount / $campaign->target_amount) * 100 : 0;
+                @endphp
+                <div class="mini-progress">
+                    <div class="mini-progress-fill" style="width: {{ min($pct, 100) }}%"></div>
+                </div>
+                <div class="card-amount">
+                    Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}
+                    <span> terkumpul</span>
+                </div>
+            </div>
+        </a>
+        @endforeach
+    </div>
+    @endif
+
+    <!-- ===== News Section ===== -->
+    @if($latestNews->count() > 0)
+    <div class="section-header">
+        <h3>📰 Berita Terbaru</h3>
+        <a href="{{ route('news.index') }}">Selengkapnya <i class="ti ti-chevron-right"></i></a>
+    </div>
+
+    <div class="swiper news-swiper !px-5 !pb-4">
+        <div class="swiper-wrapper">
+            @foreach($latestNews as $item)
+            <div class="swiper-slide" style="width: 280px;">
+                <a href="{{ route('news.show', $item->slug) }}" class="news-card" style="text-decoration:none;">
+                    <div class="news-img">
+                        @if($item->image)
+                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title }}">
+                        @else
+                            <div style="width:100%;height:100%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:#9ca3af;">
+                                <i class="ti ti-news" style="font-size:1.5rem;"></i>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="news-body">
+                        <div class="news-date">
+                            <i class="ti ti-calendar" style="margin-right:2px;"></i>
+                            {{ $item->published_at->format('d M Y') }}
+                        </div>
+                        <div class="news-title">{{ $item->title }}</div>
+                    </div>
+                </a>
+            </div>
+            @endforeach
         </div>
-        
-        <div class="swiper mySwiper px-5 !pb-12">
+    </div>
+    @endif
+
+    <!-- ===== Doa Donatur ===== -->
+    @if($latestDonations->count() > 0)
+    <div class="doa-section">
+        <div class="section-header">
+            <h3>🤲 Doa Para Dermawan</h3>
+        </div>
+
+        <div class="swiper doa-swiper !px-5 !pb-10">
             <div class="swiper-wrapper">
                 @foreach($latestDonations as $donation)
-                <div class="swiper-slide w-full"> 
-                    <div class="bg-white rounded-xl p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] border border-gray-100 h-full flex flex-col">
-                        <!-- Header -->
-                        <div class="flex items-start gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full bg-[#F3F4F6] flex items-center justify-center text-xs font-bold text-gray-600 shrink-0 border border-gray-200">
+                <div class="swiper-slide" style="height:auto;">
+                    <div class="doa-card">
+                        <div class="doa-header">
+                            <div class="doa-avatar">
                                 @if($donation->is_anonymous)
                                     HA
                                 @else
                                     {{ substr($donation->donor->name ?? 'G', 0, 2) }}
                                 @endif
                             </div>
-                            <div class="flex-1 min-w-0">
-                                <h4 class="font-bold text-gray-900 text-sm mb-1 truncate">
-                                    {{ $donation->is_anonymous ? 'Hamba Allah' : ($donation->donor->name ?? 'Tamu') }}
-                                </h4>
-                                <div class="flex items-center text-[10px] text-gray-500 leading-none">
-                                    <span class="truncate max-w-[120px]">{{ $donation->campaign->title }}</span>
-                                    <span class="mx-1">•</span>
-                                    <span>{{ $donation->created_at->format('Y-m-d') }}</span>
-                                </div>
+                            <div style="min-width:0;flex:1;">
+                                <div class="doa-name">{{ $donation->is_anonymous ? 'Hamba Allah' : ($donation->donor->name ?? 'Tamu') }}</div>
+                                <div class="doa-campaign">{{ $donation->campaign->title }}</div>
                             </div>
                         </div>
-                        
-                        <!-- Message -->
-                        <div class="text-gray-600 text-sm leading-relaxed mb-6 flex-1 italic text-center">
-                            "{{ Str::limit($donation->message, 150) }}"
+                        <div class="doa-message">"{{ Str::limit($donation->message, 120) }}"</div>
+                        <div class="doa-footer">
+                            <span class="doa-date">{{ $donation->created_at->diffForHumans() }}</span>
+                            <button class="doa-aamiin">
+                                <i class="ti ti-heart-filled"></i>
+                                Aamiin
+                            </button>
                         </div>
-                        
-                        <!-- Divider -->
-                        <div class="h-px bg-gray-100 w-full mb-3"></div>
-                        
-                        <!-- Footer -->
-                        <button class="w-full flex items-center justify-center gap-2 text-gray-500 hover:text-red-500 transition-colors text-xs font-bold uppercase tracking-wide py-2">
-                            <i class="ti ti-heart-filled text-lg text-red-500"></i>
-                            <span>Aamiin</span>
-                        </button>
                     </div>
                 </div>
                 @endforeach
@@ -164,50 +725,68 @@
             <div class="swiper-pagination"></div>
         </div>
     </div>
+    @endif
+
 </div>
+@endsection
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-<style>
-    .swiper-pagination-bullet {
-        width: 8px;
-        height: 8px;
-        background: #D1D5DB;
-        opacity: 1;
-        transition: all 0.3s ease;
-    }
-    .swiper-pagination-bullet-active {
-        background-color: #F5A623 !important; /* Orange to match desktop */
-        width: 20px;
-        border-radius: 10px;
-    }
-</style>
-
+@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Doa Swiper
-        var swiper = new Swiper(".mySwiper", {
-            slidesPerView: 1.1,
-            spaceBetween: 16,
-            centeredSlides: true,
+        // Featured Campaign Swiper
+        new Swiper(".featured-campaign", {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            grabCursor: true,
             loop: true,
             autoplay: {
-                delay: 4000,
+                delay: 5000,
                 disableOnInteraction: false,
             },
             pagination: {
-                el: ".swiper-pagination",
+                el: ".featured-campaign .swiper-pagination",
                 clickable: true,
             },
         });
 
         // News Swiper
-        var newsSwiper = new Swiper(".newsSwiper", {
-            slidesPerView: 1.2,
-            spaceBetween: 16,
+        new Swiper(".news-swiper", {
+            slidesPerView: 'auto',
+            spaceBetween: 12,
+            grabCursor: true,
+            freeMode: true,
+        });
+
+        // Doa Swiper
+        new Swiper(".doa-swiper", {
+            slidesPerView: 1.15,
+            spaceBetween: 12,
+            grabCursor: true,
             centeredSlides: false,
-            loop: false,
+            pagination: {
+                el: ".doa-swiper .swiper-pagination",
+                clickable: true,
+            },
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+        });
+
+        // Animate elements on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.campaign-card-mini, .section-header').forEach(el => {
+            observer.observe(el);
         });
     });
 </script>
-@endsection
+@endpush
