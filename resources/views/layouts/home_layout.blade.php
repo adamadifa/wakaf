@@ -356,18 +356,7 @@
     </footer>
 
 
-    <style>
-        /* Add safe area padding for iPhones with home indicator */
-        .pb-safe {
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-        /* Add padding to body to prevent content from being hidden behind bottom nav on mobile */
-        @media (max-width: 768px) {
-            body {
-                padding-bottom: 5rem;
-            }
-        }
-    </style>
+    @include('layouts.partials.mobile_bottom_nav')
 
     <!-- Floating WhatsApp Button -->
     @if(isset($site_settings) && $site_settings->phone_number)
