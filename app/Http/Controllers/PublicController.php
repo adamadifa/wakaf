@@ -147,12 +147,14 @@ class PublicController extends Controller
             ->take(3)
             ->get();
 
+        $mitras = \App\Models\Mitra::active()->ordered()->get();
+
         $agent = new \Jenssegers\Agent\Agent();
         if ($agent->isMobile()) {
-            return view('mobile.wakaf.index', compact('campaigns', 'latestDonations', 'latestNews'));
+            return view('mobile.wakaf.index', compact('campaigns', 'latestDonations', 'latestNews', 'mitras'));
         }
 
-        return view('welcome', compact('campaigns', 'latestDonations', 'latestNews'));
+        return view('welcome', compact('campaigns', 'latestDonations', 'latestNews', 'mitras'));
     }
 
     public function programs(Request $request)

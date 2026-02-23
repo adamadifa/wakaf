@@ -242,6 +242,29 @@
                 </div>
             </div>
         </div>
+
+        <!-- Mitra Section -->
+        @if(isset($mitras) && $mitras->count() > 0)
+        <div class="py-16 bg-[#f8fafc] border-t border-gray-100">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-10">
+                    <h2 class="font-bold text-gray-900" style="font-size: 1.75rem;">Mitra Kami</h2>
+                </div>
+                
+                <div class="swiper mitraSwiper">
+                    <div class="swiper-wrapper flex items-center">
+                        @foreach($mitras as $mitra)
+                        <div class="swiper-slide !w-auto">
+                            <div class="px-8 py-4 bg-gray-50 rounded-xl border border-gray-100 h-24 flex items-center justify-center transition-all duration-300 hover:shadow-md hover:bg-white min-w-[160px]">
+                                <img src="{{ asset('storage/' . $mitra->logo) }}" alt="{{ $mitra->name }}" class="max-h-16 max-w-[140px] object-contain filter grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 @endsection
 
@@ -261,6 +284,9 @@
     }
     .section-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .mitraSwiper .swiper-wrapper {
+        transition-timing-function: linear !important;
     }
 </style>
 @endpush
@@ -296,6 +322,18 @@
                 disableOnInteraction: false,
                 pauseOnMouseEnter: true,
             },
+        });
+
+        var mitraSwiper = new Swiper(".mitraSwiper", {
+            slidesPerView: "auto",
+            spaceBetween: 30,
+            loop: true,
+            speed: 5000,
+            autoplay: {
+                delay: 0,
+                disableOnInteraction: false,
+            },
+            grabCursor: true,
         });
     });
 </script>

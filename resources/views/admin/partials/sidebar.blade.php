@@ -136,6 +136,11 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             Tentang Kami
         </a>
+
+        <a href="{{ route('admin.mitras.index') }}" class="flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-primary transition-all duration-200 {{ request()->routeIs('admin.mitras.*') ? 'active-nav' : '' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+            Mitra
+        </a>
         
         <!-- Users -->
         <div class="pt-3 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Pengguna</div>

@@ -113,6 +113,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/albums/photos/{photo}', [App\Http\Controllers\Admin\AlbumController::class, 'destroyPhoto'])->name('albums.photos.destroy');
         Route::resource('albums', App\Http\Controllers\Admin\AlbumController::class);
 
+        // Mitra Management
+        Route::resource('mitras', App\Http\Controllers\Admin\MitraController::class)->except(['show']);
+
         Route::put('/infaq-transactions/{id}/cancel', [App\Http\Controllers\Admin\InfaqTransactionController::class, 'cancel'])->name('infaq-transactions.cancel');
         Route::resource('infaq-transactions', App\Http\Controllers\Admin\InfaqTransactionController::class)->only(['index', 'show', 'update', 'destroy']);
 

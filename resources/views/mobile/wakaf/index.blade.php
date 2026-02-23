@@ -411,6 +411,61 @@
         overflow: hidden;
     }
 
+    /* --- Mitra Section --- */
+    .mitra-section {
+        margin: 1.5rem 1.25rem 0;
+        padding: 1.25rem;
+        background: #f8fafc;
+        border-radius: 1.25rem;
+        border: 1px solid #f1f5f9;
+    }
+
+    .mitra-section .section-header {
+        margin-bottom: 0.75rem;
+    }
+
+    .mitra-section .section-header h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .mitra-swiper {
+        overflow: hidden;
+    }
+
+    .mitra-swiper .swiper-slide {
+        width: auto;
+    }
+
+    .mitra-card {
+        width: 100px;
+        height: 60px;
+        background: white;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        border: 1px solid #f3f4f6;
+    }
+
+    .mitra-card img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        filter: grayscale(30%);
+        opacity: 0.85;
+        transition: all 0.3s;
+    }
+
+    .mitra-card:hover img,
+    .mitra-card:active img {
+        filter: grayscale(0%);
+        opacity: 1;
+    }
+
     /* --- Doa Section --- */
     .doa-section {
         padding: 1.5rem 0 2rem;
@@ -727,6 +782,26 @@
     </div>
     @endif
 
+    <!-- ===== Mitra Section ===== -->
+    @if(isset($mitras) && $mitras->count() > 0)
+    <div class="mitra-section animate-in">
+        <div class="section-header">
+            <h3>🤝 Mitra Kami</h3>
+        </div>
+        <div class="swiper mitra-swiper">
+            <div class="swiper-wrapper">
+                @foreach($mitras as $mitra)
+                <div class="swiper-slide">
+                    <div class="mitra-card">
+                        <img src="{{ asset('storage/' . $mitra->logo) }}" alt="{{ $mitra->name }}" title="{{ $mitra->name }}">
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    @endif
+
 </div>
 @endsection
 
@@ -770,6 +845,19 @@
             },
             autoplay: {
                 delay: 4000,
+                disableOnInteraction: false,
+            },
+        });
+
+        // Mitra Swiper
+        new Swiper(".mitra-swiper", {
+            slidesPerView: 'auto',
+            spaceBetween: 10,
+            grabCursor: true,
+            freeMode: true,
+            loop: true,
+            autoplay: {
+                delay: 2000,
                 disableOnInteraction: false,
             },
         });
