@@ -558,7 +558,7 @@
                 <span class="label">Total Bayar</span>
                 <div class="total-value-wrap">
                     <span class="value">Rp {{ number_format($donation->total_transfer, 0, ',', '.') }}</span>
-                    <button onclick="copyAmount('{{ $donation->total_transfer }}')" class="copy-btn">
+                    <button onclick="copyAmount('{{ (int)$donation->total_transfer }}')" class="copy-btn">
                         <i class="ti ti-copy"></i>
                     </button>
                 </div>

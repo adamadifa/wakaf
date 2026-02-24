@@ -42,7 +42,7 @@
                     <span class="font-bold text-primary">Total Bayar</span>
                     <div class="flex items-center gap-2">
                         <span class="font-bold text-primary text-xl">Rp {{ number_format($transaction->total_transfer, 0, ',', '.') }}</span>
-                        <button onclick="copyToClipboard('{{ $transaction->total_transfer }}')" class="text-gray-400 hover:text-primary transition-colors">
+                        <button onclick="copyToClipboard('{{ (int)$transaction->total_transfer }}')" class="text-gray-400 hover:text-primary transition-colors">
                             <i class="ti ti-copy"></i>
                         </button>
                     </div>
