@@ -69,9 +69,12 @@
                     <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
                         <i class="ti ti-building-bank text-primary"></i> Transfer ke Rekening
                     </h3>
-                    <div class="bg-white rounded-xl p-4 border border-gray-200 flex items-center gap-4">
-                        <div class="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400">
-                            <i class="ti ti-building-bank text-2xl"></i>
+                        <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center p-2 border border-gray-100 overflow-hidden">
+                            @if($transaction->paymentMethod->logo_url)
+                                <img src="{{ asset($transaction->paymentMethod->logo_url) }}" alt="{{ $transaction->paymentMethod->bank_name }}" class="w-full h-full object-contain">
+                            @else
+                                <i class="ti ti-building-bank text-2xl text-gray-400"></i>
+                            @endif
                         </div>
                         <div class="flex-1">
                             <p class="font-bold text-gray-900 text-lg">{{ $transaction->paymentMethod->bank_name }}</p>

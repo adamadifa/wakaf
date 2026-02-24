@@ -534,8 +534,12 @@
             </div>
             <div class="info-card-body">
                 <div class="bank-card">
-                    <div class="bank-icon">
-                        <i class="ti ti-building-bank"></i>
+                    <div class="bank-icon" style="background: white; border: 1px solid #eee; padding: 5px; overflow: hidden;">
+                        @if($transaction->paymentMethod->logo_url)
+                            <img src="{{ asset($transaction->paymentMethod->logo_url) }}" alt="{{ $transaction->paymentMethod->bank_name }}" style="width: 100%; height: 100%; object-fit: contain;">
+                        @else
+                            <i class="ti ti-building-bank"></i>
+                        @endif
                     </div>
                     <div>
                         <div class="bank-name">{{ $transaction->paymentMethod->bank_name }}</div>

@@ -607,7 +607,7 @@
                 <div class="bank-card">
                     <div class="bank-logo-wrap">
                         @if($donation->paymentMethod->logo_url)
-                            <img src="{{ Storage::url($donation->paymentMethod->logo_url) }}" alt="{{ $donation->paymentMethod->bank_name }}">
+                            <img src="{{ asset($donation->paymentMethod->logo_url) }}" alt="{{ $donation->paymentMethod->bank_name }}">
                         @else
                             <span class="bank-abbr">{{ substr($donation->paymentMethod->bank_name, 0, 4) }}</span>
                         @endif

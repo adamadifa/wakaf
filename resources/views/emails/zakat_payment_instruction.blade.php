@@ -61,7 +61,7 @@
                 @if($transaction->paymentMethod)
                 <div style="border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; display: flex; align-items: center;">
                     @if($transaction->paymentMethod->logo_url)
-                        <img src="{{ asset('storage/' . $transaction->paymentMethod->logo_url) }}" alt="{{ $transaction->paymentMethod->bank_name }}" style="height: 30px; margin-right: 15px;">
+                        <img src="{{ asset($transaction->paymentMethod->logo_url) }}" alt="{{ $transaction->paymentMethod->bank_name }}" style="height: 30px; margin-right: 15px;">
                     @else
                         <div style="font-weight: 700; font-size: 16px; margin-right: 15px;">{{ $transaction->paymentMethod->bank_name }}</div>
                     @endif

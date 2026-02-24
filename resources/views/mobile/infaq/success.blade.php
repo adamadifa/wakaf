@@ -100,7 +100,7 @@
                 <p class="text-sm font-bold text-gray-900 mb-4 pb-2 border-b border-gray-50">Transfer ke Rekening:</p>
                 <div class="flex items-start gap-4">
                     @if($transaction->paymentMethod->logo_url)
-                        <img src="{{ Storage::url($transaction->paymentMethod->logo_url) }}" alt="{{ $transaction->paymentMethod->bank_name }}" class="h-8 object-contain">
+                        <img src="{{ asset($transaction->paymentMethod->logo_url) }}" alt="{{ $transaction->paymentMethod->bank_name }}" class="h-8 object-contain">
                     @else
                         <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center font-bold text-gray-500">
                             {{ substr($transaction->paymentMethod->bank_name, 0, 4) }}

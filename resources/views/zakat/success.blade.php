@@ -40,7 +40,7 @@
             <div style="text-align: left; border: 1px solid #ddd; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 2rem;">
                 <p style="margin-bottom: 1rem; font-weight: 600;">Silakan transfer ke:</p>
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                    <!-- <img src="{{ Storage::url($transaction->paymentMethod->logo) }}" style="height: 40px; border-radius: 4px;"> -->
+                    <img src="{{ asset($transaction->paymentMethod->logo_url) }}" style="height: 40px; border-radius: 4px; border: 1px solid #eee; padding: 2px;">
                     <div>
                         <p style="font-weight: 700; font-size: 1.1rem;">{{ $transaction->paymentMethod->bank_name }}</p>
                         <p style="font-size: 1.25rem; font-family: monospace; letter-spacing: 1px;">{{ $transaction->paymentMethod->account_number }}</p>
