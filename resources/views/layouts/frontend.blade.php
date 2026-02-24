@@ -206,9 +206,9 @@
                                 <li>
                                     <a href="{{ route('infaq.index') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('infaq.*') ? 'text-primary font-bold' : '' }}">Infaq / Sedekah</a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a href="{{ route('about-wakaf') }}" class="block px-4 py-2 hover:bg-gray-100 {{ request()->routeIs('about-wakaf') ? 'text-primary font-bold' : '' }}">Tentang Wakaf</a>
-                                </li>
+                                </li> -->
                             </ul>
                         </div>
                     </li>
