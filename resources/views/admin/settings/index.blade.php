@@ -175,6 +175,26 @@
                 </div>
             </div>
 
+            <!-- PWA Settings -->
+            <div class="mb-8 border-t border-gray-50 pt-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Pengaturan PWA</h3>
+                <p class="text-sm text-gray-500 mb-4">Upload satu icon untuk meng-generate semua ukuran icon PWA secara otomatis.</p>
+                
+                <div class="p-6 bg-gray-50 rounded-2xl border border-gray-100">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Source Icon PWA (PNG)</label>
+                    <div class="flex items-start gap-6">
+                        <div class="p-4 bg-white rounded-xl border border-gray-200">
+                            <img src="{{ asset('pwa-icon-512.png') }}?v={{ time() }}" class="w-20 h-20 object-contain rounded-lg shadow-sm" id="pwa-preview">
+                        </div>
+                        <div class="flex-1">
+                            <input type="file" name="pwa_icon" accept="image/png" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                            <p class="text-xs text-gray-400 mt-2">Harus format PNG transparan, minimal 512x512px untuk hasil terbaik.</p>
+                            @error('pwa_icon') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Action -->
             <div class="flex items-center justify-end pt-6 border-t border-gray-50">
                 <button type="submit" class="bg-primary text-white px-8 py-2.5 rounded-xl font-semibold shadow-lg shadow-emerald-500/30 hover:bg-primary-dark hover:-translate-y-0.5 transition-all">

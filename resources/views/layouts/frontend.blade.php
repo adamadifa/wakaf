@@ -10,6 +10,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json?v={{ time() }}">
+    <meta name="theme-color" content="#8CC63F">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v={{ time() }}">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker Registered'))
+                    .catch(err => console.log('Service Worker Failed to Register', err));
+            });
+        }
+    </script>
+
     <!-- SEO & Open Graph -->
     @stack('meta')
     @if(!View::hasSection('meta_og'))
@@ -501,6 +516,7 @@
     </footer>
 
     @include('layouts.partials.mobile_bottom_nav')
+    @include('layouts.partials.pwa_install_prompt')
 
     <!-- Floating WhatsApp Button -->
     @if(isset($site_settings) && $site_settings->phone_number)

@@ -43,6 +43,7 @@ class SettingController extends Controller
             'linkedin' => 'nullable|url',
             'youtube' => 'nullable|url',
             'short_description' => 'nullable|string',
+            'pwa_icon' => 'nullable|image|mimes:png|max:5120',
         ]);
 
         $data = $request->only([
@@ -66,6 +67,41 @@ class SettingController extends Controller
                 Storage::disk('public')->delete($setting->header_image);
             }
             $data['header_image'] = $request->file('header_image')->store('settings', 'public');
+        }
+
+        if ($request->hasFile('pwa_icon')) {
+            $file = $request->file('pwa_icon');
+            $tempPath = $file->path();
+            
+            // Paths for PWA icons in public directory
+            $publicPath = public_path();
+            $iconPaths = [
+                'pwa-icon-512.png' => 512,
+                'pwa-icon-192.png' => 192,
+                'pwa-icon.png' => 512,
+                'apple-touch-icon.png' => 180,
+            ];
+
+            foreach ($iconPaths as $filename => $size) {
+                $targetPath = $publicPath . '/' . $filename;
+                // Use sips for high-quality resizing on Mac
+                $command = "sips -z $size $size " . escapeshellarg($tempPath) . " --out " . escapeshellarg($targetPath);
+                exec($command);
+            }
+
+            // Update manifest.json with cache busting timestamp
+            $manifestPath = public_path('manifest.json');
+            if (file_exists($manifestPath)) {
+                $manifest = json_decode(file_get_contents($manifestPath), true);
+                if (isset($manifest['icons'])) {
+                    $timestamp = time();
+                    foreach ($manifest['icons'] as &$icon) {
+                        $baseSrc = explode('?', $icon['src'])[0];
+                        $icon['src'] = $baseSrc . '?v=' . $timestamp;
+                    }
+                    file_put_contents($manifestPath, json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+                }
+            }
         }
 
         $setting->update($data);
