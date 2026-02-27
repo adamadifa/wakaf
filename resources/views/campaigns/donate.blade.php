@@ -10,7 +10,7 @@
     </div>
 
     <div class="card" style="background: white; padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow);">
-        <form action="{{ route('campaign.store', $campaign->slug) }}" method="POST">
+        <form action="{{ route('campaign.store', $campaign->slug) }}" method="POST" id="donation-form">
             @csrf
             
             <div style="margin-bottom: 2rem;">
@@ -103,7 +103,9 @@
                     style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 0.5rem;"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">Lanjut Pembayaran</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                <span id="btn-text">Lanjut Pembayaran</span>
+            </button>
         </form>
     </div>
 </div>
@@ -152,7 +154,43 @@
         if(checkedInput) {
             togglePaymentMethod(checkedInput.value);
         }
+
+        // Form Submission Loading State
+        const form = document.getElementById('donation-form');
+        const btn = document.getElementById('btn-submit');
+        const btnText = document.getElementById('btn-text');
+
+        if (form && btn) {
+            form.addEventListener('submit', function() {
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'not-allowed';
+                btnText.innerHTML = `<i class="ti ti-loader-2 animate-spin mr-2"></i> Memproses...`;
+                
+                // Show full-page overlay
+                const overlay = document.getElementById('loading-overlay');
+                if (overlay) overlay.style.display = 'flex';
+            });
+        }
     });
+
+    // Add animation style if not exists
+    if (!document.getElementById('animate-spin-style')) {
+        const style = document.createElement('style');
+        style.id = 'animate-spin-style';
+        style.innerHTML = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            .animate-spin {
+                animation: spin 1s linear infinite;
+                display: inline-block;
+            }
+            .mr-2 { margin-right: 0.5rem; }
+        `;
+        document.head.appendChild(style);
+    }
 
     // Add CSS for active state
     const style = document.createElement('style');

@@ -213,9 +213,11 @@
 
 <!-- Sticky Bottom Button -->
 <div id="sticky-btn" class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 p-4 pb-safe z-50 shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
-    <button type="submit" form="infaq-form" class="w-full bg-primary text-white font-bold py-3.5 rounded-xl shadow-lg shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-        <span>Salurkan Infaq</span>
-        <i class="ti ti-arrow-right"></i>
+    <button type="submit" form="infaq-form" id="btn-submit-mobile" class="w-full bg-primary text-white font-bold py-3.5 rounded-xl shadow-lg shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+        <span id="btn-text-mobile" class="flex items-center gap-2">
+            <span>Salurkan Infaq</span>
+            <i class="ti ti-arrow-right"></i>
+        </span>
     </button>
 </div>
 
@@ -275,9 +277,38 @@
             navigator.clipboard.writeText(window.location.href).then(() => alert('Link berhasil disalin!'));
         }
     }
+
+    // Form Submission Loading State
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('infaq-form');
+        const btn = document.getElementById('btn-submit-mobile');
+        const btnText = document.getElementById('btn-text-mobile');
+
+        if (form && btn) {
+            form.addEventListener('submit', function() {
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'not-allowed';
+                btnText.innerHTML = `<i class="ti ti-loader-2 animate-spin mr-2"></i> Memproses...`;
+                
+                // Show full-page overlay
+                const overlay = document.getElementById('loading-overlay');
+                if (overlay) overlay.style.display = 'flex';
+            });
+        }
+    });
 </script>
 
 <style>
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .animate-spin {
+        animation: spin 1s linear infinite;
+        display: inline-block;
+    }
+    .mr-2 { margin-right: 0.5rem; }
     .pb-safe { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
 </style>
 @endsection

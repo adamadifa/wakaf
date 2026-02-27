@@ -622,6 +622,26 @@
     </style>
     @endif
 
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99999; flex-direction: column; align-items: center; justify-content: center; color: white;">
+        <div class="loader-container" style="text-align: center;">
+            <i class="ti ti-loader-2 animate-spin" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+            <p style="font-size: 1.25rem; font-weight: 600;">Mohon Tunggu...</p>
+            <p style="font-size: 0.9rem; opacity: 0.8;">Transaksi Anda sedang diproses</p>
+        </div>
+    </div>
+
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+    </style>
+
     @stack('scripts')
 </body>
 </html>

@@ -163,7 +163,7 @@
             </h2>
 
             <!-- Mobile Sticky / Form Content -->
-            <form action="{{ route('zakat.store', $zakatType->id) }}" method="POST">
+            <form action="{{ route('zakat.store', $zakatType->id) }}" method="POST" id="zakat-form">
                 @csrf
                 
                 @if($errors->any())
@@ -260,8 +260,8 @@
                         <input type="email" name="email" class="form-input" placeholder="email@example.com" value="{{ old('email', auth()->user()->email ?? '') }}" required>
                     </div>
 
-                    <button type="submit" class="btn-submit">
-                        Tunaikan Zakat Sekarang
+                    <button type="submit" class="btn-submit" id="btn-submit">
+                        <span id="btn-text">Tunaikan Zakat Sekarang</span>
                     </button>
                     
                     <p class="text-center text-xs text-gray-400 mt-4">
@@ -336,6 +336,42 @@
                 zakatInput.value = zakat;
             });
         }
+
+        // Form Submission Loading State
+        const form = document.getElementById('zakat-form');
+        const btn = document.getElementById('btn-submit');
+        const btnText = document.getElementById('btn-text');
+
+        if (form && btn) {
+            form.addEventListener('submit', function() {
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'not-allowed';
+                btnText.innerHTML = `<i class="ti ti-loader-2 animate-spin mr-2"></i> Memproses...`;
+                
+                // Show full-page overlay
+                const overlay = document.getElementById('loading-overlay');
+                if (overlay) overlay.style.display = 'flex';
+            });
+        }
     });
+
+    // Add animation style if not exists
+    if (!document.getElementById('animate-spin-style')) {
+        const style = document.createElement('style');
+        style.id = 'animate-spin-style';
+        style.innerHTML = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            .animate-spin {
+                animation: spin 1s linear infinite;
+                display: inline-block;
+            }
+            .mr-2 { margin-right: 0.5rem; }
+        `;
+        document.head.appendChild(style);
+    }
 </script>
 @endsection

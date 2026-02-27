@@ -193,7 +193,7 @@
                 Salurkan Infaq
             </h2>
 
-            <form action="{{ route('infaq.store', $category->id) }}" method="POST">
+            <form action="{{ route('infaq.store', $category->id) }}" method="POST" id="infaq-form">
                 @csrf
                 
                 @if($errors->any())
@@ -298,8 +298,8 @@
                         <textarea name="message" rows="3" class="form-input" placeholder="Tulis doa atau dukungan Anda...">{{ old('message') }}</textarea>
                     </div>
 
-                    <button type="submit" class="btn-submit">
-                        Salurkan Infaq Sekarang
+                    <button type="submit" class="btn-submit" id="btn-submit">
+                        <span id="btn-text">Salurkan Infaq Sekarang</span>
                     </button>
                     
                     <p class="text-center text-xs text-gray-400 mt-4">
@@ -368,6 +368,40 @@
         if(checkedInput) {
             togglePaymentMethod(checkedInput.value);
         }
+
+        // Form Submission Loading State
+        const form = document.getElementById('infaq-form');
+        const btn = document.getElementById('btn-submit');
+        const btnText = document.getElementById('btn-text');
+
+        form.addEventListener('submit', function() {
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            btn.style.cursor = 'not-allowed';
+            btnText.innerHTML = `<i class="ti ti-loader-2 animate-spin mr-2"></i> Memproses...`;
+            
+            // Show full-page overlay
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) overlay.style.display = 'flex';
+        });
     });
+
+    // Add animation style if not exists
+    if (!document.getElementById('animate-spin-style')) {
+        const style = document.createElement('style');
+        style.id = 'animate-spin-style';
+        style.innerHTML = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            .animate-spin {
+                animation: spin 1s linear infinite;
+                display: inline-block;
+            }
+            .mr-2 { margin-right: 0.5rem; }
+        `;
+        document.head.appendChild(style);
+    }
 </script>
 @endsection

@@ -533,9 +533,11 @@
 
         <!-- Sticky CTA -->
         <div class="donate-cta">
-            <button type="submit" class="donate-btn">
-                <i class="ti ti-heart-handshake"></i>
-                Lanjut Pembayaran
+            <button type="submit" class="donate-btn" id="btn-submit-mobile">
+                <span id="btn-text-mobile" class="flex items-center gap-2">
+                    <i class="ti ti-heart-handshake"></i>
+                    Lanjut Pembayaran
+                </span>
             </button>
         </div>
     </form>
@@ -567,5 +569,37 @@
             });
         }
     }
+
+    // Form Submission Loading State
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('donation-form');
+        const btn = document.getElementById('btn-submit-mobile');
+        const btnText = document.getElementById('btn-text-mobile');
+
+        if (form && btn) {
+            form.addEventListener('submit', function() {
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'not-allowed';
+                btnText.innerHTML = `<i class="ti ti-loader-2 animate-spin mr-2"></i> Memproses...`;
+                
+                // Show full-page overlay
+                const overlay = document.getElementById('loading-overlay');
+                if (overlay) overlay.style.display = 'flex';
+            });
+        }
+    });
 </script>
+
+<style>
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .animate-spin {
+        animation: spin 1s linear infinite;
+        display: inline-block;
+    }
+    .mr-2 { margin-right: 0.5rem; }
+</style>
 @endsection
