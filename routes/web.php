@@ -16,12 +16,16 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SitemapController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
+
+// Sitemap
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 
 // Public Routes
 Route::get('/', [PublicController::class, 'home'])->name('home');
